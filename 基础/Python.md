@@ -68,7 +68,7 @@ std:
         max():
         next():
         object():
-        open():
+        open(): 打开文件
         print():
     calendar:
     cmd:
@@ -76,6 +76,7 @@ std:
     contextlib:
     csv:
     datetime:
+        date():
     enum:
     functools:
     gc:
@@ -140,6 +141,8 @@ std:
     tomllib:
     types:
     typing:
+        List:
+        Optional:
     unittest:
     urllib:
         error:
