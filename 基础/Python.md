@@ -1,7 +1,20 @@
 # Python
 
+>
+> `#TODO Python官方文档教程 Tutorial：https://docs.python.org/3/tutorial/index.html`
+>
+
 
 ## 基础介绍
+
+### python
+```yaml
+
+```
+
+#### pip
+```yaml
+```
 
 
 
@@ -133,6 +146,18 @@ std:
     zlib:
 ```
 
+### 数据结构
+
+
+
+
+### 控制流程
+
+
+
+
+
+
 
 ### 面向对象
 
@@ -150,6 +175,12 @@ type为type自身类型的对象实例，基类为object
 - object为类继承的顶点，所有类都继承自object。
 
 
+### 魔术方法&属性
+```yaml
+:
+
+```
+
 
 #### metaclass
 
@@ -160,3 +191,7 @@ metaclass继承自type
 一旦把自定义类类型 MyClass 的 metaclass 设置成 MyMeta，MyClass 就不再由原生的 ty
 
 类对象创建`__call__() -> __new__() -> __init__()` 
+
+
+
+### 模块
