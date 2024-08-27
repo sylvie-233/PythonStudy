@@ -9,11 +9,14 @@
 
 ### python
 ```yaml
+python:
 
 ```
 
 #### pip
 ```yaml
+pip:
+    freeze: 
 ```
 
 
@@ -40,7 +43,7 @@ std:
         callable():
         chr():
         dict():
-        dir():
+        dir(): 查看包中信息
         divmod():
         enumerate():
         eval():
@@ -85,6 +88,9 @@ std:
     importlib:
     io:
     ipaddress:
+    json:
+        dump():
+        load():
     logging:
         config:
         handlers:
@@ -100,6 +106,7 @@ std:
     random:
     queue:
     re: 正则表达式
+        findall():
     readline:
     select:
     shutil: 文件操作工具类
@@ -195,3 +202,6 @@ metaclass继承自type
 
 
 ### 模块
+
+
+module -> package -> library
