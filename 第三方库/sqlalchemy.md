@@ -20,6 +20,9 @@
 模型类中互相持有，就需要定义back_populates后置填充
 
 
+一个engine对应一个数据库
+
+
 
 ## 核心内容
 ```yaml
@@ -48,6 +51,10 @@ sqlalchemy:
                 first():
                 one():
         DeclarativeBase: 模型基类声明
+            _字段:
+                ==:
+                contains():
+                in_():
             __table__: 定义表名
             metadata:
             registry:
@@ -55,12 +62,16 @@ sqlalchemy:
         registry:
             metadata:
         Session:
-            add():
+            add(): 添加数据
             add_all():
-            commit():
+            begin(): 开启事务
+            commit(): 提交事务
             flush():
+            get():
+            get_one():
             query():
             update():
+        aliased(): 定义表别名
         declarative_base(): 创建模型基类
         mapped_column():
             nullable:
@@ -83,6 +94,9 @@ sqlalchemy:
             now():
         selectable:
             Select:
+                join():
+                join_from():
+                order_by():
                 where():
         and_():
         or_():
@@ -106,9 +120,13 @@ sqlalchemy:
         select_from():
         update():
     Text:
+    bindparam():
     create_engine():
         echo: 显示执行的SQL
+    delete():
+    select():
     text():
+    update():
 
 typing_extensions:
     Annotated: 字段类型变量（常用于Mapped类型）

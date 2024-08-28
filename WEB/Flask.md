@@ -10,6 +10,9 @@
 轻量级WSGI框架 
 
 
+Flask默认5000端口
+
+
 
 
 
@@ -41,6 +44,9 @@ flask:
         request_context():
         route():
             methods:
+        run(): 运行
+            debug:
+            port:
         test_request_context(): 测试请求上下文
     request: 全局请求对象
         args:
@@ -56,6 +62,8 @@ flask:
     redirect(): 重定向
     render_template(): 模板渲染
     url_for(): url反向引用
+
+
 markupsafe:
     Markup:
         escape():
