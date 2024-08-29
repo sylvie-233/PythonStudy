@@ -110,6 +110,7 @@ sqlalchemy:
     Integer: 
     Metadata: 数据库元表
         create_all(): 创建表（创建之前会查询)
+    Select:
     String: 字符串字段
     Table: 定义表信息
         c: 所有列
