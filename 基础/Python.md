@@ -3,6 +3,8 @@
 >
 > `#TODO Python官方文档教程 Tutorial：https://docs.python.org/3/tutorial/index.html`
 >
+> `#TODO B站最新用Python操作文件（快速上手）P4`
+>
 
 
 ## 基础介绍
@@ -13,7 +15,7 @@ python:
     -m:
 ```
 
-#### pip
+### pip
 ```yaml
 pip:
     freeze: 
@@ -35,6 +37,11 @@ std:
         parse():
     base64:
     builtins:
+        byte:
+            decode(): 解码
+        str:
+            format():
+            upper():
         abs():
         ascii():
         bin():
@@ -69,6 +76,12 @@ std:
         next():
         object():
         open(): 打开文件
+            encoding:
+            mode:
+            ---
+                close():
+                read():
+                write():
         print():
     calendar:
     cmd:
@@ -79,6 +92,7 @@ std:
         date():
     enum:
     functools:
+        wraps():
     gc:
     glob:
     hashlib:
@@ -100,7 +114,13 @@ std:
     numbers:
     os:
         path:
+            exists(): 文件是否存在
+        getenv():
     pathlib:
+        Path:
+            parent:
+            joinpath():
+            mkdir():
     pdb:
     pickle:
     pydoc:
@@ -222,6 +242,11 @@ metaclass继承自type
 一旦把自定义类类型 MyClass 的 metaclass 设置成 MyMeta，MyClass 就不再由原生的 ty
 
 类对象创建`__call__() -> __new__() -> __init__()` 
+
+
+#### 装饰器
+
+![Python基础装饰器](../.assets/python基础装饰器.png)
 
 
 
