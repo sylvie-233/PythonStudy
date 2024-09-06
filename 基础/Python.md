@@ -12,7 +12,10 @@
 ### python
 ```yaml
 python:
-    -m:
+    --help:
+    -m: 模块执行 # 直接执行文件 和 执行模块之间存在区别
+        pdb:
+        pydoc:
 ```
 
 ### pip

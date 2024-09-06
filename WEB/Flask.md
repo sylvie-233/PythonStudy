@@ -44,7 +44,7 @@ flask:
     --app: 指定主模块
     --debug: 开发模式
     --host: 指定ip（公网ip：0.0.0.0）
-    run:
+    run: 运行
 ```
 
 
@@ -95,6 +95,31 @@ flask:
     redirect(): 重定向
     render_template(): 模板渲染
     url_for(): url反向引用
+
+flask_restful:
+    fields: 序列化字段定义
+        String:
+    inputs: 输入检验方法
+        int_range():
+        regex():
+    reqparse:
+        RequestParser: 请求参数解析器
+            add_argument():
+                action: 同名参数处理
+                help:
+                location:
+                required:
+                type:
+            parse_args():
+    Api:
+        add_resource(): 资源路由注册
+            endpoint: 路由命名
+        representation(): 响应数据处理
+    Resource:
+        method_decorators: 装饰器(中间件)
+        get():
+        set():
+    marshal_with(): Resource响应序列化定义
 
 flask_sqlalchemy:
     SQLAlchemy:
