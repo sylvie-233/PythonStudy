@@ -21,9 +21,14 @@ python:
 ### pip
 ```yaml
 pip:
+    -i: 指定镜像源
     freeze: 
+    install: 安装包
+    search: 搜索包
 ```
 
+pip镜像源：
+- `https://pypi.tuna.tsinghua.edu.cn/simple/`
 
 
 
