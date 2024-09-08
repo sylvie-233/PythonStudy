@@ -8,4 +8,6 @@ jinja2:
         loader:
         get_template():
     FileSystemLoader:
+    Template:
+        render(): 模板渲染
 ```
