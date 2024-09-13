@@ -41,12 +41,15 @@ std:
     argparse:
     array:
     asyncio:
-    ast: 抽象语法树
+    ast: # 抽象语法树
         parse():
     base64:
     builtins:
         byte:
             decode(): 解码
+        dict:
+            get():
+            update():
         str:
             format():
             upper():
@@ -57,7 +60,6 @@ std:
         bytearray():
         callable():
         chr():
-        dict():
         dir(): 查看包中信息
         divmod():
         enumerate():
@@ -162,6 +164,10 @@ std:
         setdefaultencoding():
     test:
     threading:
+        Thread:
+            getName():
+        current_thread():
+        local(): # ThreadLocal
     time:
     tkinter:
         colorchooser:
@@ -170,7 +176,7 @@ std:
     types:
     typing:
         List:
-        Optional:
+        Optional: # 可选参数
     unittest:
     urllib:
         error:
