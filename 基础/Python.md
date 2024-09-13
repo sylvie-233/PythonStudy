@@ -3,7 +3,7 @@
 >
 > `#TODO Python官方文档教程 Tutorial：https://docs.python.org/3/tutorial/index.html`
 >
-> `#TODO B站最新用Python操作文件（快速上手）P4`
+> `#TODO B站最新用Python操作文件（快速上手）P6`
 >
 
 
@@ -42,7 +42,9 @@ std:
     array:
     asyncio:
     ast: # 抽象语法树
-        parse():
+        get_event_loop():
+            run_forever():
+            run_until_complete():
     base64:
     builtins:
         byte:
@@ -51,7 +53,7 @@ std:
             get():
             update():
         str:
-            format():
+            format(): # 格式化字符串
             upper():
         abs():
         ascii():
@@ -86,11 +88,20 @@ std:
         next():
         object():
         open(): 打开文件
-            encoding:
-            mode:
-            ---
+            encoding: # 编码
+            mode: # 打开模式
+                r: # 
+                w:
+                x:
+                a: # 添加、写
+                b: # 二进制模式
+                t: # 文本模式
+            --- # file对象
                 close():
-                read():
+                read(): # 读取（会移动光标）
+                readline():
+                readlines():
+                seek(): # 移动光标
                 write():
         print():
     calendar:
@@ -145,6 +156,7 @@ std:
     socketserver:
     sqlite3:
     string: 字符串
+    struct:
     sys:
         argv:
         builtin_module_names:
