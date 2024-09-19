@@ -3,7 +3,7 @@
 >
 > `#TODO Python官方文档教程 Tutorial：https://docs.python.org/3/tutorial/index.html`
 >
-> `#TODO B站最新用Python操作文件（快速上手）P6`
+> `#TODO B站最新用Python操作文件（快速上手）P11`
 >
 
 
@@ -40,7 +40,19 @@ std:
     abc:
     argparse:
     array:
-    asyncio:
+    asyncio: # 异步
+        Runner:
+        Task:
+            cancel():
+        TaskGroup:
+        all_tasks():
+        create_task():
+        current_task():
+        gather():
+        get_event_loop():
+        run():
+        sleep():
+        wait():
     ast: # 抽象语法树
         get_event_loop():
             run_forever():
@@ -52,9 +64,14 @@ std:
         dict:
             get():
             update():
+        list:
         str:
             format(): # 格式化字符串
-            upper():
+            replace():
+            split():
+            startswith():
+            strip(): # 剔除空白符
+            upper(): # 转大写
         abs():
         ascii():
         bin():
@@ -68,7 +85,7 @@ std:
         eval():
         exce():
         filter():
-        float():
+        float(): # 浮点数转换
         format():
         getattr():
         globals():
@@ -87,7 +104,7 @@ std:
         max():
         next():
         object():
-        open(): 打开文件
+        open(): # 打开文件
             encoding: # 编码
             mode: # 打开模式
                 r: # 
@@ -97,12 +114,13 @@ std:
                 b: # 二进制模式
                 t: # 文本模式
             --- # file对象
-                close():
+                close(): # 关闭文件
                 read(): # 读取（会移动光标）
-                readline():
+                readline(): # 读取一行
                 readlines():
                 seek(): # 移动光标
-                write():
+                tell(): # 光标位置
+                write(): # 写入内容（缓冲区）
         print():
     calendar:
     cmd:
@@ -127,7 +145,7 @@ std:
     json:
         dump():
         load():
-    logging:
+    logging: # 日志库
         config:
         handlers:
     math:
@@ -135,8 +153,9 @@ std:
     numbers:
     os:
         path:
-            exists(): 文件是否存在
+            exists(): # 文件是否存在
         getenv():
+        makedirs(): # 创建目录
     pathlib:
         Path:
             parent:
@@ -152,6 +171,7 @@ std:
     readline:
     select:
     shutil: 文件操作工具类
+        move():
     socket:
     socketserver:
     sqlite3:
@@ -181,6 +201,8 @@ std:
         current_thread():
         local(): # ThreadLocal
     time:
+        perf_counter(): # 执行计数
+        sleep(): # 线程睡眠
     tkinter:
         colorchooser:
         font:
