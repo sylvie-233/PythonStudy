@@ -26,6 +26,8 @@ numpy:
         sum(): # 数组求和
         transpose(): # 矩阵转置
         vstack(): # 竖直合并
+    random:
+        randn():
     version:
         version:
     arange(): 序列数组生成（左闭右开）
@@ -37,6 +39,7 @@ numpy:
     ones():
     save(): 文件保存
     savetxt():
+    sin(): # 正弦函数
     zeros():
 
 pandas:
@@ -75,5 +78,38 @@ pandas:
     merge(): # 合并表
     read_csv():
     read_excel():
+
+matplotlib:
+    pyplot:
+        rcParams: # 资源属性配置
+        style: # 图象样式
+            use():
+        bar(): # 柱状图
+            yerr: # 波动值
+            set():
+        boxplot(): # 盒图
+        barh(): # 条形图
+        fill_between(): # 填充
+        hist(): # 直方图
+        legend(): # 图象图例
+        pie(): # 绘制饼图
+        plot(): # 绘制
+            label: # 曲线标签
+            linewidth: 
+        savefig(): # 保存图象
+        scatter(): # 绘制散点图
+            c:
+            s:
+            alpha:
+        show(): # 显示图象
+        subplot(): # 子画布区域 221：2行2列 第1个位置
+        subplots(): # 生成子画布区域
+            nrows:
+            ncols:
+        title(): # 标题
+        xlabel(): # x轴标签
+        xticks(): # x轴刻度标签
+        ylabel(): # y轴标签
+        ylim(): # y轴数值限制
 ```
 
