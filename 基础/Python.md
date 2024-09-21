@@ -38,8 +38,22 @@ pip镜像源：
 ```yaml
 std:
     abc:
-    argparse:
-    array:
+    argparse: # 命令行解析工具
+        ArgumentParser:
+            description:
+            add_argument(): # 添加命令行参数
+            parse_args(): # 参数解析返回args
+    array: # 相同元素数组
+        array(): 
+            typecode: # 元素类型
+            append():
+            extend():
+            insert():
+            pop():
+            remove():
+            reverse():
+            tobytes():
+            tolist():
     asyncio: # 异步
         Runner:
         Task:
@@ -57,41 +71,82 @@ std:
         get_event_loop():
             run_forever():
             run_until_complete():
-    base64:
+    base64: # base64编码
+        b64decode():
+        b64encode():
     builtins:
+        __builtins__:
+        __debug__:
+        __doc__:
+        __file__:
+        __name__:
+        __package__:
         byte:
             decode(): 解码
+        complex:
         dict:
+            clear():
+            copy():
             get():
+            items():
+            keys():
+            pop():
+            popitem():
             update():
+            values():
+        int:
         list:
+            append(): # 添加元素
+            clear():
+            copy():
+            count():
+            extend():
+            index():
+            insert():
+            pop():
+            remove():
+            reverse():
+            sort():
+        set:
+            add():
+            clear():
+            difference():
+            intersection():
+            issubset():
+            pop():
+            remove():
+            update():
         str:
+            encode(): # 编码
             format(): # 格式化字符串
             replace():
             split():
             startswith():
             strip(): # 剔除空白符
             upper(): # 转大写
-        abs():
-        ascii():
-        bin():
-        bool():
+        abs(): # 取绝对值
+        all(): # 判定是否全部为True
+        any(): # 判定是否存在True
+        ascii(): # 转ascii码
+        bin(): # 转二进制
+        bool(): # 转布尔值
         bytearray():
-        callable():
-        chr():
-        dir(): 查看包中信息
-        divmod():
+        callable(): # 判定对象是否可以调用
+        chr(): # 转字符
+        dir(): # 获取对象属性、方法
+        divmod(): # 整除取余
         enumerate():
-        eval():
+        eval(): # 执行表达式
         exce():
-        filter():
+        exit(): # 程序退出
+        filter(): # 元素过滤
         float(): # 浮点数转换
         format():
         getattr():
         globals():
         hasattr():
-        help():
-        hex():
+        help(): # 获取帮助信息
+        hex(): # 转16进制
         id():
         input():
         int():
@@ -122,40 +177,117 @@ std:
                 tell(): # 光标位置
                 write(): # 写入内容（缓冲区）
         print():
-    calendar:
-    cmd:
+        set(): # 集合
+        zip():
+    calendar: # 日历
+        TextCalendar:
+            formatmonth():
+        day_name:
+        firstweekday():
+        isleap():
+        prcal(): # 打印一年的日历
+        setfirstweekday():
     collections:
+        Counter: # 计数器
+        defaultdict: # 默认字典 
+        deque:
+            append():
+            appendleft():
+        namedtuple:
+        UserDict:
+        UserList:
+        UserString:
+    concurrent: # 并发库
+        futures:
+            ThreadPoolExecutor: # 线程池
+                max_workers:
+                submit(): # 提交执行任务Task
+                    cancel():
+                    done():
+            as_completed(): # Task完成迭代
+            wait(): # Task等待
     contextlib:
     csv:
     datetime:
+        datetime:
+            now(): # 当前时间
+            strftime(): # 格式化时间
         date():
     enum:
-    functools:
+    functools: # 函数工具库
+        reduce(): # 迭代计数
         wraps():
     gc:
-    glob:
+    glob: # 文件索引
+        escape():
+        glob():
+            recursive():
     hashlib:
+        md5(): # md5加密
+            digest(): # 
+            hexdigest(): # 
+        new():
+        sha1():
+        sha224():
     html:
     http:
         cookies:
         server:
     importlib:
+        util:
+        import_module(): # 动态导入模块
     io:
     ipaddress:
+    itertools: # 迭代工具库
+        chain(): # 合并
+        permutations(): # 
     json:
-        dump():
-        load():
-    logging: # 日志库
+        dump(): # json序列化
+        load(): # json反序列化
+    logging: # 日志库（Logger、Handler、Formatter、Filter）
         config:
         handlers:
+        FileHandler: # 日志处理器Handler
+            addFilter(): # 添加日志过滤器
+            setFormatter(): # 添加日志格式化器
+            setLevel():
+        Filter: # 日志过滤器
+            filter():
+        Formatter: # 日志格式化器Formatter
+        Handler:
+        basicConfig(): # 日志基础配置
+            filename:
+            filemode:
+            format: # 日志格式化
+            level:
+        debug():
+        error():
+        getLogger(): # 返回日志记录器Logger
+            addHandler(): # 添加日志处理器
+            setLevel():
+        info():
     math:
-    multiprocessing:
+        pi:
+        sqrt(): # 平方根
+    multiprocessing: # 多进程
     numbers:
     os:
+        curdir:
+        pardir:
         path:
+            abspath():
             exists(): # 文件是否存在
+            getatime():
+            isdir(): # 是否为目录
+        chdir():
+        getcwd(): # 获取当前工作路径
+        getcwdb():
         getenv():
+        listdir(): # 列出目录列表
         makedirs(): # 创建目录
+        rmdir(): # 删除目录
+        removedirs():
+        rename():
     pathlib:
         Path:
             parent:
@@ -165,20 +297,34 @@ std:
     pickle:
     pydoc:
     random:
+        randint(): # 随机整数
+        random(): # 随机浮点数
     queue:
     re: 正则表达式
         findall():
+        search():
+            group():
     readline:
     select:
     shutil: 文件操作工具类
         move():
-    socket:
+    socket: # socket
     socketserver:
-    sqlite3:
-    string: 字符串
+    sqlite3: # Connection、Cursor
+        connect(): # 连接数据库 返回连接Connection
+            :memory: # 内存数据库
+            close():
+            commit(): # 提交执行
+            cursor(): # 获取Cursor游标对象
+                rowcount: # 获取受影响的行数
+                execute(): # 执行sql语句 
+                executemany():
+                fetchall(): # 获取所有数据
+
+    string: # 字符串
     struct:
     sys:
-        argv:
+        argv: # 程序参数
         builtin_module_names:
         copyright:
         maxsize:
@@ -188,14 +334,14 @@ std:
         stderr:
         stdin:
         stdout:
-        version:
+        version: # python版本
         exc_info():
         exit():
         getdefaultencoding():
         getfilesystemencoding():
         setdefaultencoding():
     test:
-    threading:
+    threading: # 多线程
         Thread:
             getName():
         current_thread():
@@ -207,12 +353,26 @@ std:
         colorchooser:
         font:
     tomllib:
-    types:
-    typing:
-        List:
+    types: # 类型类
+        FunctionType:
+        MethodType:
+    typing: # 类型注解
+        Any:
+        Callable:
+        Dict: # 字典
+        List: # 列表
+        Mapping:
+        NamedTuple:
+        NewType: # 自定义类型
+        NoReturn:
         Optional: # 可选参数
-    unittest:
-    urllib:
+        Sequence:
+        Set: # 几何
+        Tuple: # 元组
+        TypeVar: # 类型变量T
+        Union:
+    unittest: # 单元测试
+    urllib: # 网络请求
         error:
         parse:
         request:
@@ -244,6 +404,9 @@ str = """
 
 # 模板字符串
 str = f"{ var }"
+
+# 原串
+str = r"xxx"
 ```
 
 
@@ -253,7 +416,7 @@ str = f"{ var }"
 ### 控制流程
 
 
-
+#### 异常处理
 
 
 
@@ -302,3 +465,7 @@ metaclass继承自type
 
 
 module -> package -> library
+
+
+### 多线程
+
