@@ -7,11 +7,11 @@ requests:
     models:
         Response:
             content:
-            encoding:
+            encoding: # 文档编码
             headers:
             request:
             status_code:
-            text:
+            text: # 文档内容
             json():
     delete():
     get():

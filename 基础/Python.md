@@ -81,7 +81,8 @@ std:
         __file__:
         __name__:
         __package__:
-        byte:
+        bool:
+        bytes:
             decode(): 解码
         complex:
         dict:
@@ -94,6 +95,7 @@ std:
             popitem():
             update():
             values():
+        float:
         int:
         list:
             append(): # 添加元素
@@ -123,7 +125,9 @@ std:
             split():
             startswith():
             strip(): # 剔除空白符
+            title(): # 首字母大写转换
             upper(): # 转大写
+        tuple:
         abs(): # 取绝对值
         all(): # 判定是否全部为True
         any(): # 判定是否存在True
@@ -306,7 +310,7 @@ std:
             group():
     readline:
     select:
-    shutil: 文件操作工具类
+    shutil: # 文件操作工具类
         move():
     socket: # socket
     socketserver:
@@ -342,9 +346,23 @@ std:
         setdefaultencoding():
     test:
     threading: # 多线程
+        Barrie:
+        Condition:
+        Event:
+        Lock:
+        RLock:
+        Semaphore
         Thread:
             getName():
+            is_alive():
+            isDaemon():
+            join():
+            setDaemon():
+            start():
+        Timer:
+        activeCount():
         current_thread():
+        enumerate():
         local(): # ThreadLocal
     time:
         perf_counter(): # 执行计数
@@ -355,7 +373,7 @@ std:
     tomllib:
     types: # 类型类
         FunctionType:
-        MethodType:
+        MethodType: # 方法类型
     typing: # 类型注解
         Any:
         Callable:
@@ -370,7 +388,7 @@ std:
         Set: # 几何
         Tuple: # 元组
         TypeVar: # 类型变量T
-        Union:
+        Union: # 联合参数
     unittest: # 单元测试
     urllib: # 网络请求
         error:
@@ -415,6 +433,49 @@ str = r"xxx"
 
 ### 控制流程
 
+#### 函数
+
+
+##### 生成器
+```python
+def simple_generator():
+    yield 1
+    yield 2
+    yield 3
+
+gen = simple_generator() # 获取生成器对象
+print(next(gen))  # 输出: 1
+print(next(gen))  # 输出: 2
+print(gen.__next__())  # 输出: 3
+next(gen)  # 如果再调用 next(gen)，将抛出 StopIteration 异常
+
+
+
+def simple_coroutine():
+    print("Start coroutine")
+    x = yield 1
+    print(f"Received: {x}")
+    y = yield 2
+    print(f"Received: {y}")
+
+gen = simple_coroutine() # 获取生成器对象
+# 首次调用生成器时，必须传递 None，因为生成器还没有遇到任何 yield 表达式。传其他值会报错
+print(gen.send(None)) # 输出: Start coroutine, 然后输出: 1
+print(gen.send(10))  # 输出: Received: 10, 然后输出: 2
+print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 StopIteration 异常
+```
+
+每一次next()、send()都执行到yield（之前的语句）为止
+
+
+
+##### 装饰器
+
+高阶函数
+
+![Python基础装饰器](../.assets/python基础装饰器.png)
+
+
 
 #### 异常处理
 
@@ -437,11 +498,45 @@ type为type自身类型的对象实例，基类为object
 - object为类继承的顶点，所有类都继承自object。
 
 
+
+
+类对象无法修改类变量的值，通过类对象对类变量赋值，只会修改自己对象中的变量值
+
+
+
 #### 魔术方法&属性
 ```yaml
 :
-
+    __del__(): # 析构犯法
+    __delete__():
+    __dict__(): # 查看类属性字典
+    __dir__(): # 查看类方法、属性
+    __get__():
+    __init__(): # 构造方法
+    __next__():
+    __new__(): # 实例化对象时调用
+    __repr__(): # 类对象打印信息
+    __set__():
+    __str__():
+    super():
 ```
+
+
+#### 装饰器
+```yaml
+:
+    @classmethod:
+    @property: # 属性
+        fdel:
+        fdoc:
+        fget:
+        fset:
+        deleter:
+        setter:
+    @staticmethod:
+```
+
+![Property装饰器](../.assets/Property装饰器.png)
 
 
 #### metaclass
@@ -450,14 +545,12 @@ metaclass影响类本身的创建行为
 
 metaclass继承自type
 
-一旦把自定义类类型 MyClass 的 metaclass 设置成 MyMeta，MyClass 就不再由原生的 ty
+一旦把自定义类类型 MyClass 的 metaclass 设置成 MyMeta，MyClass 就不再由原生的 type生成
 
 类对象创建`__call__() -> __new__() -> __init__()` 
 
 
-#### 装饰器
 
-![Python基础装饰器](../.assets/python基础装饰器.png)
 
 
 

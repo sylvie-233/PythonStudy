@@ -1,6 +1,17 @@
 # FastAPI
 
+>
+>`FastAPI官方文档：https://fastapi.tiangolo.com/async/#burger-conclusion`
+>
+
 ## 基础介绍
+
+### fastapi
+```yaml
+fastapi:
+    dev:
+    run:
+```
 
 
 ### uvicorn
@@ -12,7 +23,7 @@ uvicorn:
 ```
 
 
-ASGI服务器
+ASGI服务器：基于Starlette、Pydantic
 
 
 
@@ -34,12 +45,12 @@ fastapi:
         add_task():
     Body: # 请求体参数校验
     Cookie:     
-    FastAPI: # 项目应用
+    FastAPI: # 项目应用APP
         descriptioin:
         title:
         version:
         add_middleware(): # 添加中间件
-        get():
+        get(): # GET处理方法定理
             description:
             response_class:
             response_model: # 响应模型类
@@ -76,6 +87,9 @@ fastapi:
 uvicorn: # ASGI服务器
     run(): # 运行主程序
 
+starlette: # ASGI开发工具集
+
+
 pydantic: # 请求参数映射
     BaseModel: # 参数映射基类
         Config:
@@ -83,6 +97,9 @@ pydantic: # 请求参数映射
                 example:
         dict():
     Field:
+
+typing_extensions:
+    Annotated: # 注解
 ```
 
 
@@ -96,3 +113,9 @@ pydantic: # 请求参数映射
 ### Swagger
 
 `/docs`: swagger文档链接
+
+
+
+
+### ReDoc
+`/redoc`: redoc文档链接
