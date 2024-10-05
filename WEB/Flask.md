@@ -141,10 +141,11 @@ flask_login:
     logout_user(): 用户登出
 
 flask_wtf:
-    FlaskForm: 表单组件
+    FlaskForm: # 表单组件
         csrf_token():
         hidden_tag(): csrf
         validate_on_submit():
+        
 wtforms:
     validators:
         DataRequired:

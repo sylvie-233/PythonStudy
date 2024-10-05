@@ -1,7 +1,7 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/async/#burger-conclusion`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/path-params/`
 >
 
 ## 基础介绍
@@ -41,6 +41,11 @@ fastapi:
         Jinja2Templates:
             directory:
             TemplateResponse():
+    APIRouter: # 子路由
+        prefix:
+        tags:
+        get():
+        post():
     BackgroundTasks: # 后台任务
         add_task():
     Body: # 请求体参数校验
@@ -50,15 +55,17 @@ fastapi:
         title:
         version:
         add_middleware(): # 添加中间件
-        get(): # GET处理方法定理
+        get(): # GET handle
             description:
             response_class:
             response_model: # 响应模型类
             summary:
             tags: # 标签
+        inclue_router(): # include子路由
         middleware(): # 中间件
-        mount(): # 挂载目录
-        post():
+        mount(): # 挂载子应用（可实现子路由）
+        post(): # POST handle
+        websocket(): # websocket handle
     File:
     Form: # 请求体校验
     Header:
@@ -84,10 +91,13 @@ fastapi:
         seek():
         write():
 
+starlette: # ASGI开发工具集
+    middleware:
+        base:
+    responses:
+
 uvicorn: # ASGI服务器
     run(): # 运行主程序
-
-starlette: # ASGI开发工具集
 
 
 pydantic: # 请求参数映射
@@ -102,6 +112,26 @@ typing_extensions:
     Annotated: # 注解
 ```
 
+### Request
+
+#### Path Parameters
+
+
+#### Query Parameters
+
+
+#### Request Body
+
+
+#### Form
+
+
+#### Cookie
+
+
+#### Header
+
+
 
 ### Pydantic
 
@@ -110,12 +140,33 @@ typing_extensions:
 
 
 
+
+
+### Templates
+
+HTML模板
+
+
+
+### Dependency Injection
+
+
+
+
+
+
+
+
 ### Swagger
 
 `/docs`: swagger文档链接
+`/openapi.json`: OpenAPI的Schema json文档
 
 
-
-
-### ReDoc
+####  ReDoc
 `/redoc`: redoc文档链接
+
+
+### Security
+
+#### OAuth2

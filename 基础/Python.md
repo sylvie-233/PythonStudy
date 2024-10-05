@@ -139,7 +139,7 @@ std:
         chr(): # 转字符
         dir(): # 获取对象属性、方法
         divmod(): # 整除取余
-        enumerate():
+        enumerate(): # 带索引迭代
         eval(): # 执行表达式
         exce():
         exit(): # 程序退出
@@ -210,8 +210,22 @@ std:
                     done():
             as_completed(): # Task完成迭代
             wait(): # Task等待
+    configparser: 
+        ConfigParser: # ini配置文件解析(段落 -> 选项)
+            add_section(): # 添加节点
+            get(): # 获取value值
+            has_section():
+            items(): # 获取指定段落的k-v
+            read(): # 读入配置
+            remove_option():
+            remove_section():
+            sections(): # ini段落
+            set(): # 设置value值
+            write(): # 写出配置
     contextlib:
     csv:
+    dataclasses:
+        dataclass: # 数据类dataclass
     datetime:
         datetime:
             now(): # 当前时间
@@ -286,7 +300,7 @@ std:
         chdir():
         getcwd(): # 获取当前工作路径
         getcwdb():
-        getenv():
+        getenv(): # 获取环境变量
         listdir(): # 列出目录列表
         makedirs(): # 创建目录
         rmdir(): # 删除目录
@@ -399,6 +413,34 @@ std:
     warnings:
     wsgiref:
     xml:
+        dom:
+        etree:
+            ElementTree:
+                Element: # 标签元素
+                    attrib:
+                    tag:
+                    text:
+                    append():
+                    extend():
+                    find():
+                    findall():
+                    findtext():
+                    getchildren():
+                    getiterator():
+                    insert():
+                    iter():
+                    iterfind():
+                    itertext():
+                    remove():
+                    set(): # 修改标签attr
+                find():
+                findall():
+                findtext():
+                iter():
+                getroot(): # 获取根标签
+                parse(): # 解析文件
+                write():
+        parsers:
     zlib:
 ```
 

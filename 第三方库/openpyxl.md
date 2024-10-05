@@ -29,22 +29,37 @@ openpyxl:
             fill_type:
         Side:
             style:
+    utils:
+        column_index_from_string():
+        get_column_letter():
     worksheet:
         worksheet:
             WorkSheet: # 工作表对象
+                column_dimensions: # 列对象
+                    index: # 列索引
+                    width: # 列宽
+                columns: # 所有列数据
                 fill: # 填充
                 max_column: # 最大列数
                 max_row: # 最大行数
+                row_dimentsions: # 行对象
+                    height: # 行高
+                rows: # 所有行数据
                 title: # 标题
                 values: # 所有行数据
                 append(): # 添加一行数据
                 cell(): # 获取单元格
+                    alignment:
+                    border:
                     coordinate: # 单元格坐标
-                    data_type: # 数据类型
-                    column:
+                    column: # 列号
                     column_letter:
-                    number_format:
-                    row:
+                    data_type: # 数据类型
+                        s: # 字符串类型
+                    fill:
+                    font:
+                    number_format: # 数字类型
+                    row: # 行号
                     value: # 单元格值
                 iter_cols(): # 迭代列
                 iter_rows(): # 迭代行
