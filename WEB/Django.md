@@ -13,7 +13,7 @@ MVT模式
 ### 项目结构
 ```yaml
 django项目:
-    /app:
+    /app: # 应用目录
         /migrations:
             __init__.py:
         __init__.py:
@@ -23,7 +23,7 @@ django项目:
         tests.py:
         urls:
         views.py:
-    /project:
+    /project: # 项目目录
         __init__.py:
         asgi.py:
         settings.py:

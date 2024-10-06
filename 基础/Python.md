@@ -293,10 +293,12 @@ std:
         curdir:
         pardir:
         path:
-            abspath():
+            abspath(): # 绝对路径
+            dirname(): # 上级目录名
             exists(): # 文件是否存在
             getatime():
             isdir(): # 是否为目录
+            join(): # 路径合并
         chdir():
         getcwd(): # 获取当前工作路径
         getcwdb():
@@ -325,7 +327,16 @@ std:
     readline:
     select:
     shutil: # 文件操作工具类
+        copy():
+        copytree():
+        make_archive(): # 压缩包生成
+            base_name:
+            format:
+                zip:
+            root_dir:
         move():
+        retree():
+        uppack_archive(): # 解压压缩包
     socket: # socket
     socketserver:
     sqlite3: # Connection、Cursor
@@ -415,32 +426,35 @@ std:
     xml:
         dom:
         etree:
-            ElementTree:
-                Element: # 标签元素
-                    attrib:
-                    tag:
-                    text:
-                    append():
-                    extend():
-                    find():
-                    findall():
-                    findtext():
-                    getchildren():
-                    getiterator():
-                    insert():
-                    iter():
-                    iterfind():
-                    itertext():
-                    remove():
-                    set(): # 修改标签attr
+            ElementTree: # 标签树类 （根标签）（可迭代遍历）
                 find():
                 findall():
                 findtext():
-                iter():
                 getroot(): # 获取根标签
+                iter():
+                makeelement(): # 创建标签元素
                 parse(): # 解析文件
-                write():
+                write(): # xml内容写出
+                XML():
         parsers:
+        Element: # 标签元素类
+            attrib:
+            tag: # 标签名
+            text: # 标签文本内容
+            append(): # 添加子标签
+            extend():
+            find():
+            findall():
+            findtext():
+            getchildren():
+            getiterator():
+            insert():
+            iter(): # 迭代指定标签
+            iterfind():
+            itertext():
+            remove(): # 删除标签
+            set(): # 修改标签attr
+        SubElement: # 创建子标签
     zlib:
 ```
 
