@@ -67,10 +67,10 @@ std:
         run():
         sleep():
         wait():
-    ast: # 抽象语法树
         get_event_loop():
             run_forever():
             run_until_complete():
+    ast: # 抽象语法树
     base64: # base64编码
         b64decode():
         b64encode():
@@ -172,14 +172,15 @@ std:
                 a: # 添加、写
                 b: # 二进制模式
                 t: # 文本模式
-            --- # file对象
-                close(): # 关闭文件
-                read(): # 读取（会移动光标）
-                readline(): # 读取一行
-                readlines():
-                seek(): # 移动光标
-                tell(): # 光标位置
-                write(): # 写入内容（缓冲区）
+            # file对象，可迭代遍历每行
+            close(): # 关闭文件
+            flush(): 
+            read(): # 读取（会移动光标）
+            readline(): # 读取一行
+            readlines():
+            seek(): # 移动光标
+            tell(): # 光标位置
+            write(): # 写入内容（缓冲区）
         print():
         set(): # 集合
         zip():
@@ -210,12 +211,12 @@ std:
                     done():
             as_completed(): # Task完成迭代
             wait(): # Task等待
-    configparser: 
+    configparser: # ini配置文件解析
         ConfigParser: # ini配置文件解析(段落 -> 选项)
             add_section(): # 添加节点
             get(): # 获取value值
             has_section():
-            items(): # 获取指定段落的k-v
+            items(): # 根据名称获取指定段落的k-v
             read(): # 读入配置
             remove_option():
             remove_section():
@@ -225,7 +226,8 @@ std:
     contextlib:
     csv:
     dataclasses:
-        dataclass: # 数据类dataclass
+        dataclass(): # 数据类dataclass
+        asdict():
     datetime:
         datetime:
             now(): # 当前时间
@@ -316,11 +318,11 @@ std:
     pdb:
     pickle:
     pydoc:
+    queue:
     random:
         randint(): # 随机整数
         random(): # 随机浮点数
-    queue:
-    re: 正则表达式
+    re: # 正则表达式
         findall():
         search():
             group():
@@ -337,6 +339,9 @@ std:
         move():
         retree():
         uppack_archive(): # 解压压缩包
+            filename: # 解压文件名
+            extract_dir: # 解压目录
+            format: # 解压格式
     socket: # socket
     socketserver:
     sqlite3: # Connection、Cursor
@@ -395,6 +400,8 @@ std:
     tkinter:
         colorchooser:
         font:
+        Tk: # 窗口程序
+            title():
     tomllib:
     types: # 类型类
         FunctionType:
@@ -488,11 +495,28 @@ str = r"xxx"
 
 
 ### 控制流程
+```yaml
+:
+    for ... else:
+    for ... in:
+    if ... elif ... else:
+    while ... else:
+        break:
+        continue:
+    with ... as:
+```
 
-#### 函数
 
 
-##### 生成器
+
+
+#### 异常处理
+
+
+### 函数
+
+
+#### 生成器
 ```python
 def simple_generator():
     yield 1
@@ -525,16 +549,11 @@ print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 Stop
 
 
 
-##### 装饰器
+#### 装饰器
 
 高阶函数
 
 ![Python基础装饰器](../.assets/python基础装饰器.png)
-
-
-
-#### 异常处理
-
 
 
 
