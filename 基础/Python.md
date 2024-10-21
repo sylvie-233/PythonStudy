@@ -416,8 +416,8 @@ std:
         NewType: # 自定义类型
         NoReturn:
         Optional: # 可选参数
-        Sequence:
-        Set: # 几何
+        Sequence: # 只读列表
+        Set: # 集合
         Tuple: # 元组
         TypeVar: # 类型变量T
         Union: # 联合参数
@@ -557,6 +557,11 @@ print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 Stop
 
 
 
+
+#### 泛型
+
+
+
 ### 面向对象
 
 Class为type类型的对象实例，基类为object
@@ -625,6 +630,7 @@ metaclass继承自type
 类对象创建`__call__() -> __new__() -> __init__()` 
 
 
+#### 泛型
 
 
 
