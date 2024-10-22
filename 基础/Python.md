@@ -611,7 +611,9 @@ type为type自身类型的对象实例，基类为object
     __dict__(): # 查看类属性字典
     __dir__(): # 查看类方法、属性
     __get__():
+    __getitem__():
     __init__(): # 构造方法
+    __iter__():
     __next__():
     __new__(): # 实例化对象时调用
     __repr__(): # 类对象打印信息
@@ -636,6 +638,17 @@ type为type自身类型的对象实例，基类为object
 ```
 
 ![Property装饰器](../.assets/Property装饰器.png)
+
+
+#### 迭代器
+
+`__getitem__`
+
+`__iter__`->`__next__()`，iter生成迭代器、next实现元素迭代
+
+
+
+
 
 
 #### metaclass
