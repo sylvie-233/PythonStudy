@@ -266,7 +266,11 @@ std:
         load(): # json反序列化
     logging: # 日志库（Logger、Handler、Formatter、Filter）
         config:
+            fileConfig():
         handlers:
+            RotatingFileHandler: # 循环覆盖日志
+        DEBUG:
+        INFO:
         FileHandler: # 日志处理器Handler
             addFilter(): # 添加日志过滤器
             setFormatter(): # 添加日志格式化器
@@ -275,17 +279,32 @@ std:
             filter():
         Formatter: # 日志格式化器Formatter
         Handler:
+        StreamHandler:
+            setFormatter():
+            setLevel():
         basicConfig(): # 日志基础配置
             filename:
             filemode:
             format: # 日志格式化
+                asctime: # 时间
+                filename: # 文件名
+                funcName:
+                levelname:
+                lineno:
+                message: # 日志内容
+                pathname:
+                process:
+                thread:
+                threadName:
             level:
+        critical():
         debug():
         error():
         getLogger(): # 返回日志记录器Logger
             addHandler(): # 添加日志处理器
             setLevel():
         info():
+        warning():
     math:
         pi:
         sqrt(): # 平方根
