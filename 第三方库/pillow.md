@@ -26,5 +26,7 @@ PIL:
         line():
         multiline_text():
         rectangle():
+    ImageFilter:
     ImageFont:
+    ImageQt:
 ```

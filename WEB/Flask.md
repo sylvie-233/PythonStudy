@@ -54,10 +54,10 @@ flask:
 flask:
     wrappers:
         Request:
-        Response: 响应对象
+        Response: # 响应对象
             set_cookie():
-    Blueprint:
-    Flask:
+    Blueprint: # 蓝图（子路由）
+    Flask: # 主应用
         config:
             SECRET_KEY:
             SQLALCHEMY_DATABASE_URI:
@@ -67,20 +67,20 @@ flask:
         after_request():
         before_first_request():
         before_request():
-        errorhandler(): 错误处理
+        errorhandler(): # 错误处理
         get():
         post():
-        register_blueprint(): 注册蓝图
+        register_blueprint(): # 注册蓝图
         request_context():
         route():
             methods:
-        run(): 运行
+        run(): # 运行
             debug:
             port:
         send_static_file():
         teardown_request():
-        test_request_context(): 测试请求上下文
-    request: 全局请求对象
+        test_request_context(): # 测试请求上下文
+    request: # 全局请求对象
         args:
         cookies:
         files:
@@ -91,40 +91,40 @@ flask:
     abort():
     flash():
         category:
-    make_response(): 生成响应对象
-    redirect(): 重定向
-    render_template(): 模板渲染
-    url_for(): url反向引用
+    make_response(): # 生成响应对象
+    redirect(): # 重定向
+    render_template(): # 模板渲染
+    url_for(): # url反向引用
 
 flask_restful:
-    fields: 序列化字段定义
+    fields: # 序列化字段定义
         String:
-    inputs: 输入检验方法
+    inputs: # 输入检验方法
         int_range():
         regex():
     reqparse:
-        RequestParser: 请求参数解析器
+        RequestParser: # 请求参数解析器
             add_argument():
-                action: 同名参数处理
+                action: # 同名参数处理
                 help:
                 location:
                 required:
                 type:
             parse_args():
     Api:
-        add_resource(): 资源路由注册
-            endpoint: 路由命名
-        representation(): 响应数据处理
+        add_resource(): # 资源路由注册
+            endpoint: # 路由命名
+        representation(): # 响应数据处理
     Resource:
-        method_decorators: 装饰器(中间件)
+        method_decorators: # 装饰器(中间件)
         get():
         set():
-    marshal_with(): Resource响应序列化定义
+    marshal_with(): # Resource响应序列化定义
 
 flask_sqlalchemy:
     SQLAlchemy:
-        Model: 模型基类
-        session: 会话
+        Model: # 模型基类
+        session: # 会话
             get():
 
 flask_migrate:

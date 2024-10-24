@@ -3,7 +3,7 @@
 >
 > `#TODO Python官方文档教程 Tutorial：https://docs.python.org/3/tutorial/index.html`
 >
-> `#TODO B站最新用Python操作文件（快速上手）P11`
+> ``
 >
 
 
@@ -13,7 +13,7 @@
 ```yaml
 python:
     --help:
-    -m: 模块执行 # 直接执行文件 和 执行模块之间存在区别
+    -m: # 模块执行 直接执行文件 和 执行模块之间存在区别
         pdb:
         pydoc:
 ```
@@ -31,6 +31,25 @@ pip镜像源：
 - `https://pypi.tuna.tsinghua.edu.cn/simple/`
 
 
+### pdb
+```yaml
+pdb:
+    break: # 断点
+    clear:
+    continue: # 下一个断点
+    disable: # 禁用断点
+    down:
+    enable:
+    help:
+    list:
+    longlist:
+    next:
+    print:
+    step: # 步入
+    until:
+    up: # 上下文切换
+    where: # 函数调用堆栈
+```
 
 
 ## 核心内容
@@ -55,17 +74,21 @@ std:
             tobytes():
             tolist():
     asyncio: # 异步
+        Event: # 事件
+            set(): # 事件触发
+            wait():
         Runner:
         Task:
             cancel():
         TaskGroup:
         all_tasks():
-        create_task():
+        create_task(): # 根据co对象创建task
         current_task():
-        gather():
+        gather(): # task聚合
         get_event_loop():
         run():
-        sleep():
+        sleep(): # 异步sleep
+        to_thread(): # 异步多线程包装
         wait():
         get_event_loop():
             run_forever():
@@ -82,8 +105,8 @@ std:
         __name__:
         __package__:
         bool:
-        bytes:
-            decode(): 解码
+        bytes: # 字节数组
+            decode(): # 解码
         complex:
         dict:
             clear():
@@ -128,6 +151,7 @@ std:
             title(): # 首字母大写转换
             upper(): # 转大写
         tuple:
+        StopIteration: # 停止迭代异常
         abs(): # 取绝对值
         all(): # 判定是否全部为True
         any(): # 判定是否存在True
@@ -224,6 +248,7 @@ std:
             set(): # 设置value值
             write(): # 写出配置
     contextlib:
+        contextmanager:
     csv:
     dataclasses:
         dataclass(): # 数据类dataclass
@@ -234,6 +259,10 @@ std:
             strftime(): # 格式化时间
         date():
     enum:
+        Enum:
+        Flag: # 按位枚举
+        IntFlag:
+        unique:
     functools: # 函数工具库
         reduce(): # 迭代计数
         wraps():
@@ -309,7 +338,18 @@ std:
         pi:
         sqrt(): # 平方根
     multiprocessing: # 多进程
+        Pool: # 进程池
+            starmap():
+        Process:
+            target:
+            join():
+            start():
+        Value: # 共享内存
+            value:
     numbers:
+    operator:
+        attrgetter:
+        itemgetter:
     os:
         curdir:
         pardir:
@@ -382,7 +422,7 @@ std:
         copyright:
         maxsize:
         modules:
-        path:
+        path: # path模块搜索路径
         platform:
         stderr:
         stdin:
@@ -412,6 +452,7 @@ std:
         activeCount():
         current_thread():
         enumerate():
+        get_ident():
         local(): # ThreadLocal
     time:
         perf_counter(): # 执行计数
@@ -448,6 +489,11 @@ std:
         response:
     venv:
     warnings:
+    weakref:
+        WeakKeyDictionary:
+        WeakSet:
+        WeakValueDictionary: # 弱引用字典
+        ref():
     wsgiref:
     xml:
         dom:
@@ -532,6 +578,25 @@ str = r"xxx"
 #### 异常处理
 
 
+
+#### 上下文管理
+
+with语句，`__enter__()`、`__exit__()`
+
+上下文管理可以与装饰器结合起来
+```python
+@contextmanager
+def change_dir(path: str):
+    old_path = os.getcwd()
+    os.chdir(path)
+    yield old_path  # yield之前为__enter__()内部实现，yield返回值为__enter__()返回值
+    os.chdir(old_path) # yield之后为__exit__()内部实现
+
+with change_dir("/xxx") as old_path:
+    pass
+```
+
+
 ### 函数
 
 
@@ -565,6 +630,8 @@ print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 Stop
 ```
 
 每一次next()、send()都执行到yield（之前的语句）为止
+
+带yield返回值的函数
 
 
 
@@ -610,6 +677,11 @@ type为type自身类型的对象实例，基类为object
     __delete__():
     __dict__(): # 查看类属性字典
     __dir__(): # 查看类方法、属性
+    __enter__(): # 上下文管理（进入），返回值为with接收值
+    __exit__(): # 上下文管理（退出），可进行异常处理
+        exc_type:
+        exc_value:
+        traceback:
     __get__():
     __getitem__():
     __init__(): # 构造方法
@@ -672,6 +744,26 @@ metaclass继承自type
 
 module -> package -> library
 
+import生成module实例 ，import只会执行一次（同一个实例）
+
+
+同名目录 比 同名文件模块 优先级要高
+
 
 ### 多线程
 
+event事件、semaphore信号、lock锁、Barrier、Condition条件变量
+
+
+
+
+
+
+
+#### 异步IO
+
+ event loop -> executor  -> coroutine -> task
+
+ async函数返回corouotine协程对象
+
+可根据coroutine对象创建task
