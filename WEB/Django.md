@@ -107,6 +107,9 @@ django:
         messages:
         sessions:
         staticfiles:
+    core:
+        serializers:
+            serialize():
     db:
         backends:
         migrations:
@@ -182,16 +185,32 @@ django:
         include():
         path(): # 定义路径 视图函数映射
             name: # 路由命名
+        re_path():
         reverse(): # 路由反转
             kwargs:
     VERSION: # 版本
     get_version():
 
 rest_framework:
+    response:
+        Response:
     routers:
         DefaultRouter:
     serializers:
-        Serializer:
+        CharField:
+            error_messages:
+            max_length:
+        IntegerField:
+        Serializer: # 序列化器（模型）,
+            data:
+            many:
+            validate():
+            validate_field():
+        ValidationError:
+    views:
+        APIView: # API控制器类
+            as_view(): # 转换为视图函数
+            get():
 ```
 
 <br />
@@ -229,7 +248,7 @@ urls嵌套 -> include()引入 （实现路由嵌套）
 
 ### 参数校验
 
-
+DRF的序列化器可实现参数校验
 
 ### 中间件
 
