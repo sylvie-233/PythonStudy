@@ -1,7 +1,7 @@
 # Django
 
 >
->`知了传课Django5教程：P24`
+>`知了传课Django5教程：P26`
 >
 
 
