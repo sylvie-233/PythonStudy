@@ -207,6 +207,7 @@ std:
             write(): # 写入内容（缓冲区）
         print():
         set(): # 集合
+        type():
         zip():
     calendar: # 日历
         TextCalendar:
@@ -732,6 +733,35 @@ metaclass继承自type
 一旦把自定义类类型 MyClass 的 metaclass 设置成 MyMeta，MyClass 就不再由原生的 type生成
 
 类对象创建`__call__() -> __new__() -> __init__()` 
+
+`__new__()`生成一个空对象 
+
+
+类实例化对象，本质上在调用元类的`__call__()`
+
+
+
+```python
+# 通过type()创建类对象
+
+MyClass = type("MyClass", (object,), {"column": "value"})
+
+# 自定义metaclass
+class MyType(type):
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __new__(cls, *args, **kwargs):
+        new_cls = super().__new__(cls, *args, **kwargs)
+
+    def __call__(self, *args, **kwargs):
+        empty_object = self.__new__(self)
+        self.__init__(empty_object, *args, **kwargs)
+        return empty_object
+```
+
+自定义metaclass，执行其中的__new__()方法生成类对象，也会执行元类中的__init__()初始化对象
+
 
 
 #### 泛型
