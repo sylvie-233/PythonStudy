@@ -1,7 +1,7 @@
 # Django
 
 >
->`知了传课Django5教程：P26`
+>`知了传课Django5教程：P35`
 >
 
 
@@ -67,7 +67,7 @@ settings.py:
 #### urls.py
 ```yaml
 urls.py:
-    app_name: # 路由命名空间
+    app_name: # 路由命名空间(数据库迁移时带上app_name前缀)
     urlpatterns: # 定义url视图路径映射
 ```
 
@@ -88,7 +88,7 @@ manage.py:
     makemigrations: # 数据库迁移
     migrate: # 生成数据库迁移文件
     runserver: # 开发服务器运行
-    startapp:
+    startapp: # 生成项目app
 ```
 
 
@@ -125,24 +125,56 @@ django:
             CharField:
                 max_length:
             DateTimeField:
-            ForeignKey:
-                to:
+            ForeignKey: # 模型外键
+                on_delete:
+                    CASCADE:
+                related_name: # 反向引用字段名(默认xxx_set)
+                to: # 关联的模型
                 to_field:
             ImageField:
             IntegerField:
+            ManyToManyField: # 多对多关联字段
+                to:
+                related_name: # 反向引用字段名
             Model: # 模型基类
-                objects: # 模型操作类
+                Meta: # 模型元信息
+                    db_table: # 模型表名
+                    ordering:
+                objects: # 模型操作类 Queryset
+                    aggregate(): # 聚合查询
                     all(): # 所有数据
+                    annotate(): # 查询结果添加字段（常用于聚合查询）
                     create():
                     delete():
                     filter(): # 条件过滤
+                        query: # SQL查询语句
+                        __contains: ## like %% 模糊查询
+                        __date: # 日期
+                        __endwith:
+                        __exact: # 精确查询
+                        __gt: # >
+                        __iexact: # like模糊查询
+                        __in:
+                        __range:
+                        __regex:
+                        __startwith:
                     first():
                     get():
                     order_by():
                     update():
                 delete():
                 save(): # 添加数据
+            OneToOneField: # 一对一关联字段
+                on_delete:
+                to:
             SmallIntegerField:
+            Avg(): # 平均数
+            Count(): # 个数
+            F(): # 字段计算
+            Max(): # 最大值
+            Min(): # 最小值
+            Q(): # 查询语句（规范查询嵌套）
+            Sum(): # 求和
         connection:
             cursor():
                 close():
@@ -262,20 +294,65 @@ DRF的序列化器可实现参数校验
 ### ORM
 
 
-#### 一对一
+#### QuerySet
 
+`filter()`、`exclude()`、`get()`
+
+`字段名__condition`条件查询
+
+
+
+
+#### 一对一
+```python
+class User(models.Model):
+    name = models.CharField()
+
+class Article(models.Model):
+    content = models.TextField()
+    author = models.ForeignKey("User")
+
+article = Article(content="内容")
+article.author = User(name="名称")
+article.save()
+```
+
+`OneToOneField`
+
+外键关联自动生成`author_id`外键字段
+
+
+
+<br />
+<br />
 
 
 #### 一对多
 
+```python
+articles = user.article_set.all()
+```
+
+
+一对多使用对应外键字段：`xxx_set`
+
+
+<br />
+<br />
 
 
 
 
 #### 多对多
 
+`ManyToManyField`
+
+自动生成中间表：`table1_table2`
 
 
+
+<br />
+<br />
 
 ### 模板引擎
 
