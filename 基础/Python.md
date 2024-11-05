@@ -416,6 +416,7 @@ std:
                 fetchall(): # 获取所有数据
 
     string: # 字符串
+        digits:
     struct:
     sys:
         argv: # 程序参数
@@ -441,7 +442,7 @@ std:
         Event:
         Lock:
         RLock:
-        Semaphore
+        Semaphore:
         Thread:
             getName():
             is_alive():
@@ -461,8 +462,69 @@ std:
     tkinter:
         colorchooser:
         font:
+        messagebox: # 消息窗口
+            askokcancel():
+            showerror():
+            showinfo():
+            showwarning():
+        ttk:
+            Combobox:
+                textvariable:
+                values:
+        Button:
+            command: # 函数绑定
+            font:
+            text:
+        CheckButton:
+            onvalue:
+            text:
+            variable:
+        Entry: # 输入框组件
+            font:
+            state:
+            textvariable: # 绑定变量
+            width:
+        IntVar: # 整型变量
+        Label: # 标签组件
+            bg:
+            fg: # 前景色
+            font:
+            text:
+            grid(): # 网格布局
+            pack(): # 填充布局
+            place(): # 自定义布局（位置）
+        ListBox:
+            insert():
+        Menu: # 菜单组件（可嵌套）
+            tearoff:
+            add_cascade():
+                label: # 菜单标签
+            add_command(): # 子功能标签
+        RadioButton: # 单选按钮
+            text:
+            value:
+            variable:
+        StringVar: # 字符串变量（组件值绑定）
+            get():
+            set():
         Tk: # 窗口程序
-            title():
+            attributes(): # 窗口属性
+                -alpha:
+                -topmost:
+            config():
+                menu: # 菜单栏
+            configure(): # 窗口配置 
+                bg: # 窗口背景颜色
+            destroy(): # 窗口销毁
+            geometry(): # 窗口大小（位置）
+            iconbitmap(): # 窗口图标
+            mainloop(): # 开启事件循环
+            maxsize(): # 屏幕尺寸
+            protocol(): # 绑定钩子函数
+            resizable(): # 屏幕缩放
+            title(): # 窗口标题
+        TopLevel: # 顶层窗口（内层窗口）
+            focus_set():
     tomllib:
     types: # 类型类
         FunctionType:
