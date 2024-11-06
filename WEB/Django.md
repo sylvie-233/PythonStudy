@@ -25,6 +25,8 @@ django项目:
         apps.py:
         forms.py:
         models.py:
+        permissioins.py:
+        serializers.py:
         tests.py:
         urls:
         views.py:
@@ -86,6 +88,8 @@ django-admin:
 ### manage.py
 ```yaml
 manage.py:
+    createsuperuser: # 创建admin超级管理员
+    drf_create_token:
     makemigrations: # 数据库迁移
     migrate: # 生成数据库迁移文件
     runserver: # 开发服务器运行
@@ -96,13 +100,26 @@ manage.py:
 ## 核心内容
 ```yaml
 django:
+    apps:
+        AppConfig:
+            name:
+            verbose_name:
     conf:
-        settings:
+        settings: # 项目配置项引用
         urls:
             static:
                 static():
     contrib:
         admin:
+            site:
+                url:
+            ModelAdmin: # Admin管理模型（与Model绑定）
+                Meta:
+                    verbose_name: # 显示名称
+                list_display: # 展示字段（Model模型）
+                list_filter:
+                search_fields:
+            @register():
         auth: # django内置登录校验
             context_processors:
                 auth:
@@ -131,7 +148,7 @@ django:
                 smtp:
                     EmailBackend:
             send_mail(): # 发送邮件
-        serializers:
+        serializers: # 序列化
             serialize():
         validators: # 表单校验器
             RegexValidator:
@@ -148,6 +165,8 @@ django:
                 name:
                 fields:
         models:
+            signals:
+                post_save():
             BigAutoField:
             CharField:
                 max_length:
@@ -211,6 +230,9 @@ django:
                 execute():
                 fetchall():
                 rowcount():
+    dispatch: # 信号机制
+        @receiver():
+            sender:
     forms: # 表单模型
         BooleanField:
         CharField:
@@ -253,10 +275,12 @@ django:
                 COOKIES:
                 GET: # 字典
                 POST:
+                auth:
                 method: # 请求方法
                 session:
                     get():
                     set_expiry():
+                user:
         response:
             JsonResponse:
         HttpResponse:
@@ -290,31 +314,103 @@ django:
             kwargs:
     views:
         decorators:
+            csrf:
+                @csrf_exempt():
+                @csrf_protect():
             http:
                 @require_http_methods():
+        View:
     VERSION: # 版本
     get_version():
 
 rest_framework:
+    authentication:
+        BasicAuthentication:
+    authtoken: # token存储在数据库中
+        models:
+            Token:
+        views:
+            obtain_auth_token:
+    decorators:
+        @api_view():
+        @authentication_classes():
+        @permission_classes():
+    generics:
+        ListAPIView:
+        ListCreateAPIView:
+            queryset:
+            serializer_class:
+            perform_create():
+    mixins:
+        DestroyModelMixin:
+        UpdateModelMixin:
+    pagination:
+    parsers:
+        FormParser:
+        JSONParser:
+        MultiPartParser:
+    permissions:
+        BasePermission: # 权限基类
+            has_object_permission():
+                request:
+                view:
+                obj:
+        IsAdminUser:
+        IsAuthenticated:
+        IsAuthenticatedOrReadOnly:
+    renders:
+        BrowsableAPIRenderer:
+        JSONRenderer:
     response:
-        Response:
+        Response: # 响应对象
     routers:
         DefaultRouter:
+    schemas:
+        AutoSchema:
+        get_schema_view():
     serializers:
         CharField:
             error_messages:
             max_length:
+        HyperlinkedModelSerializer:
         IntegerField:
+        ModelSerializer: # 序列化模型基类
+            Meta:
+                fields:
+                model: # 关联的模型Model
+            data:
+            errors:
+            instance: # 模型实例
+            many:
+            is_valid(): # 字段校验
+            save():
+        ReadOnlyField:
+            source:
         Serializer: # 序列化器（模型）,
             data:
             many:
             validate():
             validate_field():
         ValidationError:
+    status:
+    urls:
     views:
         APIView: # API控制器类
+            authentication_classes: # 认证校验器
+            permission_classes:
             as_view(): # 转换为视图函数
+            delete():
             get():
+            post():
+    viewsets:
+        ModelViewSet: # 视图集基类
+            queryset:
+            serializer_class:
+            as_view():
+                get:
+                post:
+            perform_create():
+                serializer:
 ```
 
 <br />
@@ -487,16 +583,105 @@ Django内置模板引擎
 ModelForm：将Form和Model结合起来的模型
 
 
-### 权限校验
+### 认证/权限
 
 
 contrib.auth
 
 
 
+### 信号
+
+
+
 ### Contrib
 
+#### Django-Admin
+
+`/admin`：访问admin管理后台
 
 
 
+## DRF
 
+Django Rest API
+
+- 序列化
+- 视图
+- 路由
+- 配置
+- 认证
+- 权限
+- 解析器
+- 验证
+- 分页
+- 异常处理
+- 缓存
+- 测试
+
+
+### 项目配置
+
+#### settings.py
+```yaml
+REST_FRAMEWORK:
+    DEFAULT_AUTHENTICATION_CLASSES:
+    DEFAULT_PAGINATION_CLASS:
+    DEFAULT_PERMISSION_CLASS:
+    DEFAULT_RENDER_CLASSES:
+```
+
+
+DRF项目配置
+
+
+#### urls.py
+```python
+router = DefaultRouter()
+router.register(prefix, viewset)
+
+urlpatterns = [
+    path("/", include("rest_framework.urls"))
+    path("/", router.urls)
+]
+```
+
+可使用Router注册路由
+
+
+
+### 序列化器
+
+可实现字段校验
+
+ModelSerializer
+
+
+### 视图函数
+
+原生视图函数
+- 函数视图 `func(request)`
+- 类视图 `View::get(request)`
+
+DRF视图函数
+```python
+@api_view(["GET"])
+def course_list(request):
+    return Response(data, status)
+
+class MyApi(APIView):
+    def get(self, request):
+        return Response(data, status)
+```
+
+函数视图、类视图、通用视图、视图集
+
+### 认证/权限
+
+authtoken、中间件
+
+`permissions.BasePermission::has_object_permission()`
+
+
+
+### API文档
