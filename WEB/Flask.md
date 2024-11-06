@@ -3,6 +3,9 @@
 >
 > `#TODO Flask官方文档：https://flask.palletsprojects.com/en/latest/quickstart/#about-responses`
 >
+> `知了传课Flask教程：P17`
+>
+>
 
 ## 基础介绍
 
@@ -21,7 +24,7 @@ flask_wtf提供了表单页面、表单模型类、表单字段校验
 
 
 
-### 开发目录结构
+### 项目结构
 ```yaml
 flask:
     /models:
@@ -58,30 +61,34 @@ flask:
             set_cookie():
     Blueprint: # 蓝图（子路由）
     Flask: # 主应用
-        config:
-            SECRET_KEY:
-            SQLALCHEMY_DATABASE_URI:
+        config: # 应用配置
+            SECRET_KEY: # 秘钥
+            SQLALCHEMY_DATABASE_URI: # 数据库信息
         static_folder:
         static_url_path:
         template_folders:
-        after_request():
-        before_first_request():
-        before_request():
-        errorhandler(): # 错误处理
-        get():
-        post():
+        @after_request():
+        @before_first_request():
+        @before_request():
+        @errorhandler(): # 错误处理
+        @get():
+        @post():
+        @route():
+            methods:
+        add_template_filter(): # 添加过滤器
+        app_context(): # 应用上下文
         register_blueprint(): # 注册蓝图
         request_context():
-        route():
-            methods:
-        run(): # 运行
-            debug:
+        run(): # 服务运行
+            debug: # 调试模式
+            host: # 主机名
             port:
         send_static_file():
         teardown_request():
         test_request_context(): # 测试请求上下文
     request: # 全局请求对象
-        args:
+        args: # query参数
+            get():
         cookies:
         files:
         form:
@@ -89,7 +96,7 @@ flask:
         path:
     session:
     abort():
-    flash():
+    flash(): # 一次性传递上下文变量
         category:
     make_response(): # 生成响应对象
     redirect(): # 重定向
@@ -122,10 +129,29 @@ flask_restful:
     marshal_with(): # Resource响应序列化定义
 
 flask_sqlalchemy:
-    SQLAlchemy:
-        Model: # 模型基类
-        session: # 会话
+    query:
+        Query:
+            all():
+            filter_by():
+            first():
             get():
+    SQLAlchemy: # db
+        Column: # 模型字段
+            autoincrement:
+            nullable:
+            primary_key:
+        Integer:
+        Model: # 模型基类
+            __tablename__: 表名
+            query: # 查询对象
+        String:
+        engine: # 数据库引擎
+        session: # 会话（操作对象）
+            add():
+            commit():
+            delete():
+            get():
+        create_all(): # 创建表
 
 flask_migrate:
 
@@ -171,17 +197,34 @@ markupsafe:
 
 ### Route
 
-url变量converter：
+url_path路径参数converter：
 - int
 - float
 - string
 - path
 - uuid
 
+query查询参数
+
+
 
 
 ### Blueprint
 
+子路由实现
+
+
+
+
+### SQLAlchemy
+
+ORM框架
+
+db -> engine -> connection -> cursor
+
+db -> Model -> session
+
+`app.config[SQLALCHEMY_DATABASE_URI]`：配置数据库链接
 
 
 
@@ -190,36 +233,46 @@ url变量converter：
 
 Jinja2模板引擎
 
-模板语法：
-- `{{ var }}`
-- `{%  %}`
-- `block`
-- `extends`
-- `if`
+#### 模板语法：
+- `{{ var }}`: 模板变量
+- `{%  %}`: 模板语句
+- `block | endblock`: 模板插槽
+- `extends`: 模板继承
+- `if | elif | else | endif`
 - `include`
-- `for in`
+- `for in | endfor`
 - `with`
 
 
-内置模板变量：
+#### 内置模板变量：
 ```yaml
 :
     config:
-    current_user: flask_login混入进来的UserMixin
+    current_user: # flask_login混入进来的UserMixin
         is_authenticated:
     g:
     request:
     session:
-    get_flashed_messages(): 获取flash消息
-        with_categories: 消息类别
-    url_for():
+    get_flashed_messages(): # 获取flash消息
+        with_categories: # 消息类别
+    url_for(): # 反向引用
 ```
 
 
-内置过滤器：
+#### 内置过滤器：
 ```yaml
 :
+    abs:
+    length:
     safe:
+```
+
+自定义过滤器
+```python
+def my_filter(value, args):
+    return xxx
+
+app.add_template_filter(my_filter, "my_filter")
 ```
 
 
@@ -227,6 +280,8 @@ Jinja2模板引擎
 
 
 ### 错误处理
+
+`@errorhandle()`
 
 
 
