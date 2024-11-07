@@ -3,7 +3,7 @@
 >
 > `#TODO Flask官方文档：https://flask.palletsprojects.com/en/latest/quickstart/#about-responses`
 >
-> `知了传课Flask教程：P17`
+> `知了传课Flask教程：P33`
 >
 >
 
@@ -11,6 +11,8 @@
 
 
 轻量级WSGI框架 
+
+werkzeug提供基础套件
 
 
 Flask默认5000端口
@@ -27,12 +29,18 @@ flask_wtf提供了表单页面、表单模型类、表单字段校验
 ### 项目结构
 ```yaml
 flask:
-    /models:
+    /migrations: # 数据库迁移
+        /versions:
+        alembic.ini:
+        env.py:
+        scrip.py.mako:
+    /models: # 模型文件
     /routes:
     /services:
-    /static:
-    /templates:
+    /static: # 静态文件
+    /templates: # 模板页面
     app.py:
+    config.py:
 ```
 
 
@@ -47,6 +55,10 @@ flask:
     --app: 指定主模块
     --debug: 开发模式
     --host: 指定ip（公网ip：0.0.0.0）
+    db:
+        init:
+        migrate: # 生成数据库迁移文件
+        upgrade: # 数据库迁移 
     run: 运行
 ```
 
@@ -60,16 +72,21 @@ flask:
         Response: # 响应对象
             set_cookie():
     Blueprint: # 蓝图（子路由）
+        url_prefix: # 子路由url
+        @route():
     Flask: # 主应用
         config: # 应用配置
-            SECRET_KEY: # 秘钥
+            MAIL_SERVER:
+            SECRET_KEY: # 秘钥（session使用）
             SQLALCHEMY_DATABASE_URI: # 数据库信息
+            from_object():
         static_folder:
         static_url_path:
         template_folders:
         @after_request():
         @before_first_request():
         @before_request():
+        @context_processor(): # 模板上下文处理器（返回上下文变量）
         @errorhandler(): # 错误处理
         @get():
         @post():
@@ -86,23 +103,26 @@ flask:
         send_static_file():
         teardown_request():
         test_request_context(): # 测试请求上下文
+    g: # app全局对象
     request: # 全局请求对象
         args: # query参数
             get():
         cookies:
         files:
-        form:
+        form: # 表单参数
         method:
         path:
-    session:
+    session: # flask的session经过加密存储在客户端cookie中
+        clear():
+        get():
     abort():
     flash(): # 一次性传递上下文变量
         category:
+    jsonify():
     make_response(): # 生成响应对象
     redirect(): # 重定向
     render_template(): # 模板渲染
     url_for(): # url反向引用
-
 flask_restful:
     fields: # 序列化字段定义
         String:
@@ -138,23 +158,32 @@ flask_sqlalchemy:
     SQLAlchemy: # db
         Column: # 模型字段
             autoincrement:
+            default:
             nullable:
             primary_key:
+            unique:
+        DateTime:
+        ForeignKey: # 外键字段
         Integer:
         Model: # 模型基类
             __tablename__: 表名
             query: # 查询对象
         String:
+        Text:
         engine: # 数据库引擎
         session: # 会话（操作对象）
             add():
+            add_all():
             commit():
             delete():
             get():
         create_all(): # 创建表
-
+        init_app(): # 从APP中读取配置，初始化引擎
+        relationship(): # 定义关联字段（直接操作外键对象）
+            back_popolates: # 定义反向引用字段
+            backref:
 flask_migrate:
-
+    Migrate: # 数据库迁移类
 
 flask_login:
     LoginManager:
@@ -170,24 +199,41 @@ flask_wtf:
     FlaskForm: # 表单组件
         csrf_token():
         hidden_tag(): csrf
-        validate_on_submit():
-        
+        validate_on_submit():      
 wtforms:
-    validators:
+    validators: # 校验器
         DataRequired:
+        Email:
+            message:
+        EqualTo:
+        Length:
+            max:
+            min:
+    Form: # 表单基类（页面组件渲染、表单字段校验）
+        errors:
+        validate(): # 表单校验
+        validate_[field]():
     HiddenField:
         value():
     PasswordField: 
-    StringField:
+    StringField: # 字符串字段
         class:
-        data:
+        data: # 字段值
         label:
         placeholder:
-        validators: 字段校验器
+        validators: # 字段校验器
         label():
     SubmitField:
+    ValidationError: # 字段校验异常
+        message:
 
 flask_mail:
+    Mail: # 邮箱工具类
+        init_app(): # 初始化邮箱（和sqlalchemy一样）
+        send():
+    Message: # 消息类
+        recipients:
+        subject:
 
 markupsafe:
     Markup:
@@ -225,6 +271,8 @@ db -> engine -> connection -> cursor
 db -> Model -> session
 
 `app.config[SQLALCHEMY_DATABASE_URI]`：配置数据库链接
+
+反向引用：一对多
 
 
 
@@ -277,8 +325,6 @@ app.add_template_filter(my_filter, "my_filter")
 
 
 
-
-
 ### 错误处理
 
 `@errorhandle()`
@@ -290,16 +336,22 @@ app.add_template_filter(my_filter, "my_filter")
 
 wtforms
 
+flask_wtf
 
+wtforms自定义字段校验
+
+
+
+### 信号
+
+
+### 命令行工具
 
 
 
 
 ### 日志
 
-
-
-### 信号
 
 
 
@@ -310,7 +362,6 @@ wtforms
 
 
 
-### 命令行工具
 
 
 

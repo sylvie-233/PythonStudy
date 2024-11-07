@@ -23,6 +23,10 @@ werkzeug:
             match():
         Rule:
             endpoint:
+    security:
+        check_password_hash():s
+        gen_salt():
+        generate_password_hash():
     serving:
         run_simple(): 服务运行
             use_debugger:
