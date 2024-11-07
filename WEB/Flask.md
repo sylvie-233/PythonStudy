@@ -3,7 +3,7 @@
 >
 > `#TODO Flask官方文档：https://flask.palletsprojects.com/en/latest/quickstart/#about-responses`
 >
-> `知了传课Flask教程：P33`
+>
 >
 >
 
@@ -155,6 +155,7 @@ flask_sqlalchemy:
             filter_by():
             first():
             get():
+            order_by():
     SQLAlchemy: # db
         Column: # 模型字段
             autoincrement:
@@ -162,6 +163,7 @@ flask_sqlalchemy:
             nullable:
             primary_key:
             unique:
+            desc():
         DateTime:
         ForeignKey: # 外键字段
         Integer:
@@ -177,6 +179,8 @@ flask_sqlalchemy:
             commit():
             delete():
             get():
+        backref(): # 反向引用
+            order_by:
         create_all(): # 创建表
         init_app(): # 从APP中读取配置，初始化引擎
         relationship(): # 定义关联字段（直接操作外键对象）
