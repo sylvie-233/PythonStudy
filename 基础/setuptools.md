@@ -5,18 +5,32 @@
 
 二进制包：`.egg`、`.whl`
 
+
+
+
+
+
+
+
 ### setup.py
 ```yaml
 setup.py:
     --formats: # 压缩格式
-    bdist:
+    bdist: # 二进制打包（）
+        bdist_egg:
+        bdist_wheel:
     build:
     build_ext:
+    check: # 配置错误检查
     clean:
-    install:
-    sdist:
+    install: # 打包、安装（本地仓库）
+    sdist: # 生成dist目录（.tar.gz、.egg-info）
     upload:
 ```
+
+打包主配置文件
+
+
 
 ### MANIFEST.in
 ```yaml
@@ -35,10 +49,10 @@ setuptools:
         name:
         sources:
         include_dirs:
-    find_packages(): # 递归寻找子目录
+    find_packages(): # 递归寻找子目录（packages）
     setup(): # 构建主函数
-        author:
-        author_email:
+        author: # 作者
+        author_email: # 作者邮箱
         classifiers:
         cmdclass:
         description:
@@ -52,7 +66,7 @@ setuptools:
         license:
         long_description:
         long_description_content_type:
-        name:
+        name: # 模块名
         packages: # 指定源码目录
         package_data: # 指定打包文件
         python_requires: # python版本限定
@@ -63,6 +77,6 @@ setuptools:
         version:
 
 
-wheel:
+wheel: # 构建whl二进制包
 
 ```

@@ -1,9 +1,9 @@
 # Python
 
 >
-> `#TODO Python官方文档教程 Tutorial：https://docs.python.org/3/tutorial/index.html`
+> `Python官方文档教程：https://docs.python.org/3/tutorial/index.html`
 >
-> ``
+> `Python常用模块6小时详细教程：P11`
 >
 
 
@@ -12,23 +12,35 @@
 ### python
 ```yaml
 python:
-    --help:
     -m: # 模块执行 直接执行文件 和 执行模块之间存在区别
         pdb:
         pydoc:
+    --help:
+    --version:
 ```
 
 ### pip
 ```yaml
 pip:
-    -i: 指定镜像源
-    freeze: 
-    install: 安装包
-    search: 搜索包
+    -i: # 指定镜像源
+    --trusted-host: # 指定信赖主机
+    check:
+    config:
+    download:
+    freeze: # 输出已安装包（requirements format）
+    hash:
+    install: # 安装包
+    list: # 列出已安装包
+    search: # 搜索包
+    show:
+    uninstall:
+    wheel:
 ```
 
-pip镜像源：
+pip镜像源
 - `https://pypi.tuna.tsinghua.edu.cn/simple/`
+
+
 
 
 ### pdb
@@ -50,6 +62,8 @@ pdb:
     up: # 上下文切换
     where: # 函数调用堆栈
 ```
+
+python调试工具
 
 
 ## 核心内容
@@ -182,7 +196,7 @@ std:
         issubclass():
         iter():
         len():
-        list():
+        list(): # 生成list列表
         map():
         max():
         next():
@@ -205,7 +219,7 @@ std:
             seek(): # 移动光标
             tell(): # 光标位置
             write(): # 写入内容（缓冲区）
-        print():
+        print(): # 控制台输出
         set(): # 集合
         type():
         zip():
@@ -254,11 +268,31 @@ std:
     dataclasses:
         dataclass(): # 数据类dataclass
         asdict():
-    datetime:
+    datetime: # 日期相关
+        date:
+            fromtimestamp(): # 时间戳转换date
+            timetuple(): # 获取时间元组struct_time
+            today():
         datetime:
+            month:
+            year:
+            fromtimestamp(): # 时间戳转换datetime
             now(): # 当前时间
+            replace(): # 时间替换
+                hour:
+                minute:
+                month:
+                year:
             strftime(): # 格式化时间
+            timestamp(): # 时间戳
+            timetuple(): 
+            today(): # 今天
+        time:
+        timedelta: # 时间间隔
+            days:
+            hours:
         date():
+        time():
     enum:
         Enum:
         Flag: # 按位枚举
@@ -351,25 +385,43 @@ std:
     operator:
         attrgetter:
         itemgetter:
-    os:
-        curdir:
-        pardir:
+    os: # 操作系统相关（文件、路径）
         path:
             abspath(): # 绝对路径
-            dirname(): # 上级目录名
-            exists(): # 文件是否存在
+            basename(): # 基础文件名
+            dirname(): # 获取目录名
+            exists(): # 文件存在
             getatime():
+            getsize(): # 获取文件大小
+            isabs(): # 绝对路径判断
             isdir(): # 是否为目录
+            isfile(): # 文件判断
             join(): # 路径合并
-        chdir():
+            split(): # 路径分隔（dirname、basename）
+            splitext():
+        curdir:
+        environ: # 环境变量
+            setdefault():
+        linesep: # 行结束符
+        name:
+        pardir:
+        chdir(): # 修改当前工作目录
+        chmod():
+        get_terminal_size():
         getcwd(): # 获取当前工作路径
         getcwdb():
         getenv(): # 获取环境变量
+        kill(): # 结束进程
         listdir(): # 列出目录列表
         makedirs(): # 创建目录
+        mkdir():
         rmdir(): # 删除目录
-        removedirs():
-        rename():
+        remove(): # 删除文件
+        removedirs(): # 删除多个目录
+        rename(): # 文件重命名（移动文件）
+        replace():
+        stat(): # 获取文件属性
+        system(): # 执行shell命令
     pathlib:
         Path:
             parent:
@@ -380,8 +432,12 @@ std:
     pydoc:
     queue:
     random:
+        choice(): # 随机返回一个字符
         randint(): # 随机整数
+        randrange():
         random(): # 随机浮点数
+        sample(): # 采样（随机返回多个字符）
+        shuffle(): # 随机排列
     re: # 正则表达式
         findall():
         search():
@@ -416,25 +472,31 @@ std:
                 fetchall(): # 获取所有数据
 
     string: # 字符串
-        digits:
+        ascii_lowercase:
+        digits: # 数字
     struct:
-    sys:
+    sys: # 程序参数相关
         argv: # 程序参数
         builtin_module_names:
         copyright:
+        maxint:
         maxsize:
         modules:
-        path: # path模块搜索路径
-        platform:
-        stderr:
-        stdin:
-        stdout:
+        path: # 模块搜索路径 PATH
+        platform: # 操作系统平台
+        stderr: # 标准异常
+        stdin: # 标准输入
+            readline():
+        stdout: # 标准输出流
+            write():
         version: # python版本
         exc_info():
-        exit():
-        getdefaultencoding():
-        getfilesystemencoding():
+        exit(): # 程序退出
+        getdefaultencoding(): # 获取解释器默认编码
+        getfilesystemencoding(): # 获取文件默认编码
+        getrecursionlimit(): # 获取最大递归层数
         setdefaultencoding():
+        setrecursionlimit(): # 设置最大递归层数
     test:
     threading: # 多线程
         Barrie:
@@ -456,9 +518,28 @@ std:
         enumerate():
         get_ident():
         local(): # ThreadLocal
-    time:
+    time: # 时间戳相关
+        struct_time: # 时间元组
+            tm_mday:
+            tm_mon:
+            tm_year:
+        asctime(): # 字符显示时间（struct_time转换）
+        ctime(): # 时间戳转asctime
+        gmtime(): # 获取格林威治时间（0时区）
+        localtime(): # 获取本地时间 struct_time
+        mktime(): # 标准时间转时间戳
         perf_counter(): # 执行计数
         sleep(): # 线程睡眠
+        strftime(): # 格式化显示时间
+        strptime(): # 格式化转换时间
+            %d: # 日
+            %m: # 月
+            %p: # AM PM
+            %z: # 时区
+            %H: # 时
+            %M: # 分
+            %Y: # 年
+        time(): # 获取时间戳（1970.1.1）
     tkinter:
         colorchooser:
         font:
@@ -550,7 +631,7 @@ std:
         parse:
         request:
         response:
-    venv:
+    venv: # 虚拟环境模块
     warnings:
     weakref:
         WeakKeyDictionary:
@@ -594,13 +675,17 @@ std:
 ```
 
 ### 数据类型
-
-
-内置变量:
 ```yaml
-内置变量:
-    __file__: 当前文件名
-    __name__: 当前模块名（执行模块为__main__）
+DataTypes:
+
+```
+
+
+#### 内置变量
+```yaml
+:
+    __file__: # 当前文件名
+    __name__: # 当前模块名（执行模块为__main__）
 ```
 
 
@@ -833,6 +918,12 @@ class MyType(type):
 
 ### 模块
 
+- 系统内置模块（标准库）
+- 第三方模块（site-package）
+- 自定义模块
+
+一个文件就是一个模块
+
 
 module -> package -> library
 
@@ -841,8 +932,11 @@ import生成module实例 ，import只会执行一次（同一个实例）
 
 同名目录 比 同名文件模块 优先级要高
 
+`__init__.py`：模块初始化文件（默认执行）
+不必显示声明当前模块（基于文件夹、文件结构形成模块结构）
 
-### 多线程
+
+### 多并发
 
 event事件、semaphore信号、lock锁、Barrier、Condition条件变量
 
