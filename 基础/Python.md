@@ -3,7 +3,7 @@
 >
 > `Python官方文档教程：https://docs.python.org/3/tutorial/index.html`
 >
-> `Python常用模块6小时详细教程：P11`
+> `Python常用模块6小时详细教程：P13`
 >
 
 
@@ -67,10 +67,11 @@ python调试工具
 
 
 ## 核心内容
-
 ```yaml
 std:
     abc:
+        ABCMeta: # 标注为抽象类
+        abstractmethod: # 抽象方法
     argparse: # 命令行解析工具
         ArgumentParser:
             description:
@@ -327,7 +328,9 @@ std:
         permutations(): # 
     json:
         dump(): # json序列化
+        dumps(): 
         load(): # json反序列化
+        loads():
     logging: # 日志库（Logger、Handler、Formatter、Filter）
         config:
             fileConfig():
@@ -428,7 +431,11 @@ std:
             joinpath():
             mkdir():
     pdb:
-    pickle:
+    pickle: # python序列化
+        dump(): # 序列化到文件
+        dumps(): # 序列化
+        load(): # 从文件中反序列化
+        loads(): # 反序列化
     pydoc:
     queue:
     random:
@@ -615,6 +622,7 @@ std:
         Callable:
         Dict: # 字典
         List: # 列表
+        Literal: # 字面量
         Mapping:
         NamedTuple:
         NewType: # 自定义类型
@@ -624,6 +632,7 @@ std:
         Set: # 集合
         Tuple: # 元组
         TypeVar: # 类型变量T
+        TypedDict:
         Union: # 联合参数
     unittest: # 单元测试
     urllib: # 网络请求
