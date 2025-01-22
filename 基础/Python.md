@@ -3,7 +3,7 @@
 >
 > `Python官方文档教程：https://docs.python.org/3/tutorial/index.html`
 >
-> `Python常用模块6小时详细教程：P13`
+> ``
 >
 
 
@@ -76,6 +76,10 @@ std:
         ArgumentParser:
             description:
             add_argument(): # 添加命令行参数
+                action:
+                default: # 默认值
+                help:
+                type:
             parse_args(): # 参数解析返回args
     array: # 相同元素数组
         array(): 
@@ -160,7 +164,7 @@ std:
             encode(): # 编码
             format(): # 格式化字符串
             replace():
-            split():
+            split(): # 字符串分隔
             startswith():
             strip(): # 剔除空白符
             title(): # 首字母大写转换
@@ -309,11 +313,16 @@ std:
             recursive():
     hashlib:
         md5(): # md5加密
-            digest(): # 
-            hexdigest(): # 
+            digest(): # 加密
+            hexdigest(): # 16进制加密
+            update(): # 添加字节
         new():
         sha1():
+            digest(): # 加密
+            hexdigest(): # 16进制加密
+            update():
         sha224():
+        sha256():
     html:
     http:
         cookies:
@@ -425,6 +434,7 @@ std:
         replace():
         stat(): # 获取文件属性
         system(): # 执行shell命令
+        walk(): # 文件浏览（dfs）
     pathlib:
         Path:
             parent:
@@ -446,21 +456,46 @@ std:
         sample(): # 采样（随机返回多个字符）
         shuffle(): # 随机排列
     re: # 正则表达式
-        findall():
-        search():
+        I: # 忽略大小写
+        M: # 多行模式
+        S: # . 匹配特殊字符
+        X:
+        compile(): # 正则编译
+            match():
+            search():
+        findall(): # 查找所有
+        fullmatch(): # 匹配所有
+        match(): # 匹配(从头匹配)
+        search(): # 搜索
+        split(): # 分隔
+        sub(): # 字符串替换
+            (?P<name>...): # 分组匹配命名
+            \d: # 数字
+            \s: # 空白符
+            \w: # 字母数字字符
+            \A: # 字符开头
+            \W:
             group():
+            groupdict():
+            groups():
     readline:
     select:
     shutil: # 文件操作工具类
-        copy():
-        copytree():
+        copy(): # 文件拷贝(文件、权限)
+        copy2(): # 文件拷贝(文件、状态)
+        copyfile():
+        copyfileobj():
+        copymode():
+        copystat():
+        copytree(): # 递归拷贝文件夹
         make_archive(): # 压缩包生成
             base_name:
             format:
                 zip:
-            root_dir:
-        move():
-        retree():
+            owner:
+            root_dir: # 压缩根目录
+        move(): # 移动文件
+        rmtree(): # 递归删除文件
         uppack_archive(): # 解压压缩包
             filename: # 解压文件名
             extract_dir: # 解压目录
@@ -681,6 +716,12 @@ std:
             set(): # 修改标签attr
         SubElement: # 创建子标签
     zlib:
+    zipfile:
+        ZipFile:
+            close():
+            extractall(): # 解压
+                path:
+            write(): # 添加文件
 ```
 
 ### 数据类型
