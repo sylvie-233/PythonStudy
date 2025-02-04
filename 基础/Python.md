@@ -683,6 +683,9 @@ std:
         WeakValueDictionary: # 弱引用字典
         ref():
     wsgiref:
+        simple_server:
+            make_server():
+                serve_forever():
     xml:
         dom:
         etree:
@@ -1003,3 +1006,56 @@ event事件、semaphore信号、lock锁、Barrier、Condition条件变量
  async函数返回corouotine协程对象
 
 可根据coroutine对象创建task
+
+
+
+## WSGI
+```python
+def simple_app(environ, start_response):
+    status = '200 OK'
+    headers = [('Content-Type', 'text/plain')]
+    start_response(status, headers)
+    return [b'Hello, WSGI World!']
+
+if __name__ == '__main__':
+    from wsgiref.simple_server import make_server
+
+    httpd = make_server('', 8000, simple_app)
+    print("Serving on port 8000...")
+    httpd.serve_forever()
+```
+
+Web Server Gateway Interface
+
+
+
+## 设计模式
+```yaml
+设计模式:
+    一、创建型模式（Creational Patterns）:
+        1. 单例模式（Singleton）:
+        2. 工厂模式（Factory Method）:
+        3. 抽象工厂模式（Abstract Factory）:
+        4. 生成器模式（Builder）:
+        5. 原型模式（Prototype）:
+    二、结构型模式（Structural Patterns）:
+        6. 适配器模式（Adapter）:
+        7. 桥接模式（Bridge）:
+        8. 组合模式（Composite）:
+        9. 装饰器模式（Decorator）:
+        10. 外观模式（Facade）:
+        11. 享元模式（Flyweight）:
+        12. 代理模式（Proxy）:
+    三、行为型模式（Behavioral Patterns）:
+        13. 模板方法模式（Template Method）:
+        14. 命令模式（Command）:
+        15. 迭代器模式（Iterator）:
+        16. 观察者模式（Observer）:
+        17. 中介者模式（Mediator）:
+        18. 备忘录模式（Memento）:
+        19. 解释器模式（Interpreter）:
+        20. 策略模式（Strategy）:
+        21. 状态模式（State）:
+        22. 责任链模式（Chain of Responsibility）:
+        23. 访问者模式（Visitor）:
+```
