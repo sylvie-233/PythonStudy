@@ -127,7 +127,7 @@ std:
         bytes: # 字节数组
             decode(): # 解码
         complex:
-        dict:
+        dict: # 字典
             clear():
             copy():
             get():
@@ -139,7 +139,7 @@ std:
             values():
         float:
         int:
-        list:
+        list: # 列表
             append(): # 添加元素
             clear():
             copy():
@@ -170,6 +170,7 @@ std:
             title(): # 首字母大写转换
             upper(): # 转大写
         tuple:
+        Enum:
         StopIteration: # 停止迭代异常
         abs(): # 取绝对值
         all(): # 判定是否全部为True
@@ -668,7 +669,7 @@ std:
         Tuple: # 元组
         TypeVar: # 类型变量T
         TypedDict:
-        Union: # 联合参数
+        Union: # 联合类型
     unittest: # 单元测试
     urllib: # 网络请求
         error:
@@ -730,8 +731,14 @@ std:
 ### 数据类型
 ```yaml
 DataTypes:
-
+    bool:
+    int:
+    str:
+    Enum:
+    None:
 ```
+
+可选类型：`type | None`
 
 
 #### 内置变量
@@ -757,7 +764,9 @@ str = r"xxx"
 ```
 
 
+#### 枚举
 
+Enum
 
 
 ### 控制流程

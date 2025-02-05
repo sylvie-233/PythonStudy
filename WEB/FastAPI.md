@@ -1,10 +1,14 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/path-params/`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/query-params-str-validations/`
 >
 
 ## 基础介绍
+
+内置工具集：Starlette
+
+
 
 ### fastapi
 ```yaml
@@ -91,6 +95,16 @@ fastapi:
         seek():
         write():
 
+
+
+pydantic: # 请求参数映射
+    BaseModel: # 参数映射基类
+        Config:
+            schema_extra:
+                example:
+        dict(): # 获取属性字典
+    Field:
+
 starlette: # ASGI开发工具集
     middleware:
         base:
@@ -99,15 +113,6 @@ starlette: # ASGI开发工具集
 uvicorn: # ASGI服务器
     run(): # 运行主程序
 
-
-pydantic: # 请求参数映射
-    BaseModel: # 参数映射基类
-        Config:
-            schema_extra:
-                example:
-        dict():
-    Field:
-
 typing_extensions:
     Annotated: # 注解
 ```
@@ -115,12 +120,32 @@ typing_extensions:
 ### Request
 
 #### Path Parameters
+```python
+@app.get("/items/{item_id}")
+async def read_item(item_id: int):
+    return {"item_id": item_id}
+```
+
+path路径参数
+
+##### Path convertor
+```yaml
+Path convertor:
+    path:
+```
+
 
 
 #### Query Parameters
 
+url请求参数
+
 
 #### Request Body
+
+body请求体
+
+数据绑定、校验
 
 
 #### Form
@@ -137,8 +162,7 @@ typing_extensions:
 
 请求参数映射
 
-
-
+数据验证
 
 
 
@@ -146,6 +170,10 @@ typing_extensions:
 
 HTML模板
 
+
+### Error Handler
+
+异常处理
 
 
 ### Dependency Injection

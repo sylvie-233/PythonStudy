@@ -2,10 +2,151 @@
 
 ## 基础介绍
 
+### code
+```yaml
+code:
+
+```
+
+#### settings.json
+```yaml
+内置变量:
+    command:
+        python:
+            interpreterPath:
+        PickProcess:
+    workspaceFolder:
+    <node_internals>:
+
+settings.json:
+    [<file_type>]: # 文件类型匹配
+    debug:
+        javascript:
+            autoAttachFilter:
+    editor:
+        codeActionsOnSave:
+        defaultFormatter:
+        formatOnSave:
+        tabSize:
+    eslint:
+        enable:
+        options:
+    explorer:
+        fileNesting:
+            patterns:
+    files:
+        associations:
+        exclude:
+    prettier:
+        configPath:
+        requireConfig:
+        semi:
+    python:
+        analysis:
+            diagnosticMode:
+            typeCheckingMode:
+                basic:
+        formatting:
+            provider:
+        linting: # 
+            lintOnSave:
+            pylintEnabled:
+        testing:
+            pytestArgs:
+            pytestEnabled:
+    workbench:
+        colorTheme:
+        iconTheme:
+```
+
+编辑器配置文件
 
 
 
+#### launch.json
+```yaml
+launch.json:
+    configuraions: # 启动配置（可多个）
+        address:
+        args:
+        autoAttachChildProcesses:
+        console:
+        cwd:
+        env: # 环境变量
+        environment:
+        envFile:
+        miDebuggerPath:
+        module: # 要运行的python模块
+        name:
+        outFiles:
+        outputCapture:
+        port:
+        preLaunchTask: # 预执行任务命令
+        program: # 启动项目入口文件
+        protocol:
+        python:
+        request:
+            attach: # 附加
+            launch: # 启动
+        resolveSourceMapLocations:
+        restart:
+        runtimeArgs:
+        runtimeExecutable:
+        setupCommands: # 启动注释参数
+            description:
+            ignoreFailures:
+            text:
+        skipFiles:
+        timeout:
+        trace:
+        type:
+            cppdbg:
+            pwa-node:
+            python:
+        url:
+        webRoot:
+        MIMode:
+    version:
 
+
+```
+
+调试启动配置
+
+
+#### tasks.json
+```yaml
+tasks.json:
+    tasks:
+        args:
+        command:
+        dependsOn: # 任务依赖
+        group: # 任务分组
+            isDefault:
+            kind:
+                build:
+        isBackground:
+        label: # 任务名称
+        options:
+            cwd:
+        problemMatcher:
+        script:
+        type:
+            npm:
+            shell:
+    version:
+```
+
+vscode 任务执行（类似npm脚本中的script）
+
+
+#### extensions.json
+```yaml
+extensions.json:
+    recommendations: # 推荐插件
+```
+
+插件配置目录
 
 
 
@@ -124,7 +265,7 @@ vscode-hook:
 
 
 
-### Plugin
+### 插件
 ```yaml
 package.json:
     activationEvents:
@@ -152,7 +293,7 @@ package.json:
     publisher:
     version:
 ```
-`vscode`
+`vscode`Plugin
 
 
 
@@ -162,7 +303,7 @@ yo:
     code:
 ```
 
-vscode脚手架
+vscode插件开发脚手架
 
 
 
@@ -173,3 +314,22 @@ vsce:
 ```
 
 vscode打包
+
+
+
+### 工作区
+```yaml
+.code-workspace:
+    folders:
+        name:
+        path:
+    settings: # settings.json
+```
+
+workspace，多根工作区
+
+
+
+### 任务命令
+
+Command、Task 命令、任务
