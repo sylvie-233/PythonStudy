@@ -15,6 +15,9 @@ python:
     -m: # 模块执行 直接执行文件 和 执行模块之间存在区别
         pdb:
         pydoc:
+        unittest: # 单元测试
+            -p:
+            -s:
     --help:
     --version:
 ```
@@ -670,7 +673,25 @@ std:
         TypeVar: # 类型变量T
         TypedDict:
         Union: # 联合类型
-    unittest: # 单元测试
+    unittest: # 单元测试 test*.py
+        TestCase: # 测试用例类
+            assertEqual():
+            assertFalse():
+            assertRaises():
+            assertTrue():
+            setUp():
+            setUpClass():
+            tearDown():
+            tearDownClass():
+        @expectedFailure():
+        @skip():
+        @skipIf():
+        @skipUnless():
+        main():
+        setUpModule():
+        skipTest():
+        subTest(): # 子测试
+        tearDownModule():
     urllib: # 网络请求
         error:
         parse:
