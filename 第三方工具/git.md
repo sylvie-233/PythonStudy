@@ -1,6 +1,6 @@
 # git
 
-``
+`Git实战：P13`
 
 ## 基础介绍
 
@@ -17,6 +17,7 @@
 git:
     --version:
     add: # 缓存stash
+        .: # 当前目录所有文件
     archive: # 创建文件归档
     bisect:
     branch: # 创建分支
@@ -34,7 +35,7 @@ git:
     config:
         --list: # 列出所有配置
         --global: # 全局配置
-        user:
+        user: # 用户信息配置
             email:
             name:
     diff: # 显示文件修改差异
@@ -49,17 +50,19 @@ git:
     mv:
     pull: # 下拉（合并到本地分支）
     push: # 推送
-        -u: # 远程推送
+        -u: # 远程推送（别名 分支）
     rebase: # 切换分支（变基到指定分支）
     reflog: # 查看commit提交记录信息
         -n: # 查看数量
     remote: # 远程仓库管理
         -v: # 查看远程仓库
-        add: # 添加远程仓库（仓库别名 url）
+        add: # 添加远程仓库（仓库别名 url）（默认origin）
         rm:
         show:
-    reset:
+    reset: # commit回滚
         --hard: # 切换commit记录
+        --mix: # 回滚到暂存区之前（红色）
+        --soft: # 回滚到暂存区
     restore: # 去除文件修改
         --staged: # 移除暂存区文件
     revert: # 撤销指定提交的修改
@@ -102,8 +105,6 @@ git:
 
 
 ## 核心内容
-
-
 ### branch
 
 默认分支：master

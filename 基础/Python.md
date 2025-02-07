@@ -453,6 +453,7 @@ std:
     pydoc:
     queue:
     random:
+        SystemRandom:
         choice(): # 随机返回一个字符
         randint(): # 随机整数
         randrange():
@@ -586,6 +587,7 @@ std:
             %M: # 分
             %Y: # 年
         time(): # 获取时间戳（1970.1.1）
+        time_ns(): # 纳秒时间戳
     tkinter:
         colorchooser:
         font:
