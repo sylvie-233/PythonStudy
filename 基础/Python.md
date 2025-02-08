@@ -104,11 +104,12 @@ std:
             cancel():
         TaskGroup:
         all_tasks():
+        as_completed():
         create_task(): # 根据co对象创建task
         current_task():
-        gather(): # task聚合
+        gather(): # task聚合结果
         get_event_loop():
-        run():
+        run(): # 运行协程、任务
         sleep(): # 异步sleep
         to_thread(): # 异步多线程包装
         wait():
@@ -134,7 +135,7 @@ std:
             clear():
             copy():
             get():
-            items():
+            items(): # 获取所有k、v键值对
             keys():
             pop():
             popitem():
@@ -163,6 +164,7 @@ std:
             pop():
             remove():
             update():
+        slice:
         str:
             encode(): # 编码
             format(): # 格式化字符串
@@ -175,6 +177,7 @@ std:
         tuple:
         Enum:
         StopIteration: # 停止迭代异常
+        ValueError:
         abs(): # 取绝对值
         all(): # 判定是否全部为True
         any(): # 判定是否存在True
@@ -230,6 +233,7 @@ std:
             write(): # 写入内容（缓冲区）
         print(): # 控制台输出
         set(): # 集合
+        slice(): # 切片（start、end、step）
         type():
         zip():
     calendar: # 日历
@@ -275,8 +279,12 @@ std:
         contextmanager:
     csv:
     dataclasses:
-        dataclass(): # 数据类dataclass
         asdict():
+        dataclass(): # 数据类dataclass
+            order:
+            __post_init():
+        field():
+            default_factory:
     datetime: # 日期相关
         date:
             fromtimestamp(): # 时间戳转换date
@@ -303,10 +311,13 @@ std:
         date():
         time():
     enum:
-        Enum:
+        Enum: # 枚举基类
         Flag: # 按位枚举
         IntFlag:
+        IntEnum:
+        StrEnum:
         unique:
+        auto(): # 自动枚举值
     functools: # 函数工具库
         reduce(): # 迭代计数
         wraps():
@@ -655,12 +666,18 @@ std:
         TopLevel: # 顶层窗口（内层窗口）
             focus_set():
     tomllib:
+        load():
+    tracemalloc: # 内存分配跟踪
+        get_traced_memory():
+        start():
+        stop():
     types: # 类型类
         FunctionType:
         MethodType: # 方法类型
     typing: # 类型注解
         Any:
         Callable:
+        ClassVar: # 类变量（dataclass）
         Dict: # 字典
         List: # 列表
         Literal: # 字面量
@@ -676,20 +693,33 @@ std:
         TypedDict:
         Union: # 联合类型
     unittest: # 单元测试 test*.py
+        mock:
+            MagicMock:
+            Mock:
+                get:
+                    return_value:
+                get():
+            pacth():
+                return_value:
+                    json:
+                        return_value:
+                    status_code:
         TestCase: # 测试用例类
             assertEqual():
+                msg:
             assertFalse():
-            assertRaises():
+            assertIsInstance():
+            assertRaises(): # 测试异常抛出（with）
             assertTrue():
-            setUp():
+            setUp(): # 测试运行前钩子
             setUpClass():
-            tearDown():
+            tearDown(): # 测试运行结束前钩子
             tearDownClass():
         @expectedFailure():
         @skip():
         @skipIf():
         @skipUnless():
-        main():
+        main(): # 测试运行（自动扫描）
         setUpModule():
         skipTest():
         subTest(): # 子测试
@@ -786,35 +816,61 @@ str = f"{ var }"
 str = r"xxx"
 ```
 
+#### 切片
+
+Slice
+
+
 
 #### 枚举
+```python
+class Color(Enum):
+    RED = 1
+    GREEN = 2
+    BLUE = 3
+```
 
 Enum
 
 
 ### 控制流程
 ```yaml
-:
+Control Flow:
+    is:
+    raise:
     for ... else:
     for ... in:
     if ... elif ... else:
+    match ... case if ...: # switch case 进阶版
+    try ... except ... finally:
     while ... else:
         break:
         continue:
     with ... as:
 ```
 
+列表推导式、字典推导式、集合推导式
 
+参数解构：`*args`、`**kwargs`
 
 
 
 #### 异常处理
-
+```python
+try:
+    ...
+except Exception as xxx:
+    ...
+finally:
+    ... 
+```
 
 
 #### 上下文管理
 
-with语句，`__enter__()`、`__exit__()`
+with语句（类中），`__enter__()`、`__exit__()`
+`@contextmanager`+生成器函数
+
 
 上下文管理可以与装饰器结合起来
 ```python
@@ -831,6 +887,14 @@ with change_dir("/xxx") as old_path:
 
 
 ### 函数
+
+
+#### 匿名函数
+```python
+add = lambda a, b: a+b
+
+add(1, 2)
+```
 
 
 #### 生成器
@@ -862,6 +926,8 @@ print(gen.send(10))  # 输出: Received: 10, 然后输出: 2
 print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 StopIteration 异常
 ```
 
+带`yield`函数、生成器表达式：`my_gen = (i*i for i in [1, 2, 3, 4, 5])`
+
 每一次next()、send()都执行到yield（之前的语句）为止
 
 带yield返回值的函数
@@ -874,7 +940,7 @@ print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 Stop
 
 ![Python基础装饰器](../.assets/python基础装饰器.png)
 
-
+一般装饰器函数两层、带参数装饰器三层
 
 
 #### 泛型
@@ -897,15 +963,18 @@ type为type自身类型的对象实例，基类为object
 - object为类继承的顶点，所有类都继承自object。
 
 
-
-
+通过类变量访问类属性
 类对象无法修改类变量的值，通过类对象对类变量赋值，只会修改自己对象中的变量值
 
+类方法：`@classmethod`
+静态方法：`@staticmethod`
 
 
 #### 魔术方法&属性
 ```yaml
 :
+    __match_args__: # match语句位置参数
+    __name__:
     __del__(): # 析构犯法
     __delete__():
     __dict__(): # 查看类属性字典
@@ -947,10 +1016,10 @@ type为type自身类型的对象实例，基类为object
 
 #### 迭代器
 
-`__getitem__`
+`__getitem__()`
 
-`__iter__`->`__next__()`，iter生成迭代器、next实现元素迭代
-
+`__iter__()`->`__next__()`，iter生成迭代器(self)、next实现元素迭代
+`StopIteration`异常停止迭代
 
 
 
@@ -1000,6 +1069,13 @@ class MyType(type):
 
 
 
+#### dataclass
+
+
+`@dataclass`
+
+
+
 
 ### 模块
 
@@ -1021,6 +1097,15 @@ import生成module实例 ，import只会执行一次（同一个实例）
 不必显示声明当前模块（基于文件夹、文件结构形成模块结构）
 
 
+### 测试
+
+内置unittest模块
+
+文件：`test_*.py`或者`*_test.py`
+类：`Test*`
+方法：`test_*()`
+
+
 ### 多并发
 
 event事件、semaphore信号、lock锁、Barrier、Condition条件变量
@@ -1033,9 +1118,13 @@ event事件、semaphore信号、lock锁、Barrier、Condition条件变量
 
 #### 异步IO
 
- event loop -> executor  -> coroutine -> task
+coroutine协程是可以暂停运行、恢复运行的函数（async定义协程函数）
+task任务是对协程的包装，使得事件循环能获取协程的状态
+coroutine包装成task的过程可自动实现、包装成task后可对coroutine进行控制
 
- async函数返回corouotine协程对象
+event loop -> executor  -> task -> coroutine
+
+async函数返回corouotine协程对象
 
 可根据coroutine对象创建task
 
