@@ -675,6 +675,7 @@ std:
         FunctionType:
         MethodType: # 方法类型
     typing: # 类型注解
+        Annotated: # 复合注解信息
         Any:
         Callable:
         ClassVar: # 类变量（dataclass）

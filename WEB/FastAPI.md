@@ -1,7 +1,7 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/query-params-str-validations/`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/extra-data-types/`
 >
 
 ## 基础介绍
@@ -58,6 +58,15 @@ fastapi:
     BackgroundTasks: # 后台任务
         add_task():
     Body: # 请求体参数
+        embed: # 内嵌字段
+        examples:
+        openapi_examples:
+            converted:
+            invalid:
+            normal:
+                description:
+                summary:
+                value:
     Cookie:     
     Depends:
     FastAPI: # 项目应用APP
@@ -88,14 +97,22 @@ fastapi:
     Form: # 请求体校验
     Header:
     HTTPException:
-    Path: # 路径参数校验
-    Query: # 请求参数校验
-        alias: # 参数别名
-        description:
-        ge:
-        max_length: 
-        regex:
+    Path: # 路径参数
         title:
+    Query: # 请求参数
+        alias: # 参数别名
+        deprecated: # 字段过期
+        description: # 文档描述
+        ge: # 大于等于
+        gt:
+        include_in_schema: # 文档字段包含
+        le:
+        lt:
+        max_length: # 最大长度
+        min_length:
+        pattern: # 正则匹配
+        regex:
+        title: # 文档标题
     Request:
         headers:
     Response:
@@ -142,14 +159,23 @@ pydantic: # 请求参数映射
         Config:
             schema_extra:
                 example:
+        model_config:
+            extra:
+                forbid:
+            json_schema_extra:
+                examples: # 请求样例
         dict(): # 获取属性字典
-    Field:
+    Field: # 字段校验
+        default:
+        description:
+        examples: # 字段样例
+        gt:
+        max_length:
+        title:
+    HttpUrl:
 
 uvicorn: # ASGI服务器
     run(): # 运行主程序
-
-typing_extensions:
-    Annotated: # 注解
 ```
 
 ### Request
