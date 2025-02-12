@@ -1,7 +1,7 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/extra-data-types/`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/extra-models/`
 >
 
 ## 基础介绍
@@ -41,7 +41,7 @@ fastapi:
             CORSMiddleware:
     responses:
         HTMLResponse:
-        RedirectResponse:
+        RedirectResponse: # 重定向响应类
         StreamingResponse:
             media_type:
     staticfiles:
@@ -55,6 +55,11 @@ fastapi:
         tags:
         get():
         post():
+            response_model: # 响应模型类
+            response_model_exclude_defaults:
+            response_model_exclude_none:
+            response_model_exclude_unset:
+            response_model_include:
     BackgroundTasks: # 后台任务
         add_task():
     Body: # 请求体参数
@@ -96,6 +101,7 @@ fastapi:
         default:
     Form: # 请求体校验
     Header:
+        convert_underscores:
     HTTPException:
     Path: # 路径参数
         title:
@@ -161,10 +167,11 @@ pydantic: # 请求参数映射
                 example:
         model_config:
             extra:
-                forbid:
+                forbid: # 禁止多余字段
             json_schema_extra:
                 examples: # 请求样例
         dict(): # 获取属性字典
+    EmailStr:
     Field: # 字段校验
         default:
         description:
@@ -228,6 +235,10 @@ body请求体
 
 数据验证
 
+
+#### Response Model
+
+响应模型：响应结果字段过滤
 
 
 ### Templates

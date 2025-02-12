@@ -21,11 +21,14 @@ code:
 settings.json:
     [<file_type>]: # 文件类型匹配
     debug:
+        console:
+            fontSize: # 调试控制台字体大小
         javascript:
             autoAttachFilter:
     editor:
         codeActionsOnSave:
         defaultFormatter:
+        fontSize: # 文本编辑器字体大小
         formatOnSave:
         tabSize:
     eslint:
@@ -54,8 +57,11 @@ settings.json:
         testing:
             pytestArgs:
             pytestEnabled:
+    terminal:
+        integrated:
+            fontSize: # 集成终端字体大小
     workbench:
-        colorTheme:
+        colorTheme: # 颜色主题
         iconTheme:
 ```
 

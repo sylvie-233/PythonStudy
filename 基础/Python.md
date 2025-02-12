@@ -290,7 +290,7 @@ std:
             fromtimestamp(): # 时间戳转换date
             timetuple(): # 获取时间元组struct_time
             today():
-        datetime:
+        datetime: # 日期时间
             month:
             year:
             fromtimestamp(): # 时间戳转换datetime
@@ -304,7 +304,7 @@ std:
             timestamp(): # 时间戳
             timetuple(): 
             today(): # 今天
-        time:
+        time: # 时间
         timedelta: # 时间间隔
             days:
             hours:
@@ -730,6 +730,8 @@ std:
         parse:
         request:
         response:
+    uuid:
+        UUID:
     venv: # 虚拟环境模块
     warnings:
     weakref:
