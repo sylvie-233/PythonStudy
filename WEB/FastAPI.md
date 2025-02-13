@@ -238,7 +238,7 @@ body请求体
 
 #### Response Model
 
-响应模型：响应结果字段过滤
+响应模型、响应结果字段过滤
 
 
 ### Templates

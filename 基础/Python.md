@@ -517,6 +517,22 @@ std:
             extract_dir: # 解压目录
             format: # 解压格式
     socket: # socket
+        AF_INET:
+        SOCK_DGRAM: # UDP协议
+        SOCK_STREAM: # 流式协议TCP
+        socket():        
+            fd:
+            type: # socket类型
+            laddr:
+            raddr:
+            accept(): # 接收socket
+            connect(): # 建立连接
+            bind(): # socket绑定
+            listen(): # socket监听
+            readfrom():
+            recv(): # 接收响应(byte字节)
+            send(): # 发送请求
+            sendto():
     socketserver:
     sqlite3: # Connection、Cursor
         connect(): # 连接数据库 返回连接Connection
@@ -528,7 +544,6 @@ std:
                 execute(): # 执行sql语句 
                 executemany():
                 fetchall(): # 获取所有数据
-
     string: # 字符串
         ascii_lowercase:
         digits: # 数字
@@ -555,7 +570,6 @@ std:
         getrecursionlimit(): # 获取最大递归层数
         setdefaultencoding():
         setrecursionlimit(): # 设置最大递归层数
-    test:
     threading: # 多线程
         Barrie:
         Condition:
@@ -887,6 +901,11 @@ def change_dir(path: str):
 with change_dir("/xxx") as old_path:
     pass
 ```
+
+
+#### 文档注释
+
+rst: reStructuredText
 
 
 ### 函数
