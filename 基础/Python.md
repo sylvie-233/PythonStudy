@@ -222,9 +222,9 @@ std:
                 a: # 添加、写
                 b: # 二进制模式
                 t: # 文本模式
-            # file对象，可迭代遍历每行
+            --- # file对象，可迭代遍历每行
             close(): # 关闭文件
-            flush(): 
+            flush(): # 刷新缓冲区 
             read(): # 读取（会移动光标）
             readline(): # 读取一行
             readlines():
@@ -340,6 +340,16 @@ std:
         sha256():
     html:
     http:
+        client:
+            HTTPResponse: # http响应
+                reason:
+                status:
+                version:
+                fileno():
+                getheader():
+                getheaders():
+                geturl():
+                read():
         cookies:
         server:
     importlib:
@@ -544,6 +554,10 @@ std:
                 execute(): # 执行sql语句 
                 executemany():
                 fetchall(): # 获取所有数据
+    ssl:
+        _create_unverified_context():
+        create_default_context():
+            cafile:
     string: # 字符串
         ascii_lowercase:
         digits: # 数字
@@ -741,8 +755,28 @@ std:
         tearDownModule():
     urllib: # 网络请求
         error:
-        parse:
-        request:
+            HTTPError: # URLError子类
+            URLError:
+        parse: # 解析模块
+            urlencode(): # url编码
+                encoding:
+            urldecode():
+        request: # 请求模块
+            ProxyHandler:
+                proxies:
+                    http: # http代理地址
+            Request: # Request请求对象
+                headers: # 请求头
+                method: # 请求方法
+                url:
+            build_opener(): # 构建自定义opener（传入handler）
+                handlers:
+                --- # 返回opener对象
+                open():
+            urlopen(): # 发送request请求，响应http.client.HTTPResponse
+                context: # SSL
+                data: # 请求体
+            urlretrieve(): # 文件下载
         response:
     uuid:
         UUID:

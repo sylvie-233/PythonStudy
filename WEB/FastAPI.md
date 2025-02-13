@@ -44,17 +44,18 @@ fastapi:
         RedirectResponse: # 重定向响应类
         StreamingResponse:
             media_type:
-    staticfiles:
-        StaticFiles:
-    templating:
+    staticfiles: # 静态文件
+        StaticFiles: # 静态文件挂载
+            directory:
+    templating: # 页面模板
         Jinja2Templates:
             directory:
-            TemplateResponse():
+            TemplateResponse:
     APIRouter: # 子路由
         prefix:
         tags:
-        get():
-        post():
+        @get():
+        @post():
             response_model: # 响应模型类
             response_model_exclude_defaults:
             response_model_exclude_none:
@@ -79,24 +80,24 @@ fastapi:
         title: # 项目文档标题
         version: # 项目文档版本
         add_middleware(): # 添加中间件
-        get(): # GET handle
+        inclue_router(): # include子路由
+            prefix:
+            responses:
+            tags:
+        mount(): # 挂载子应用（可实现子路由、静态文件）
+            name: # 子应用名称
+        @get(): # GET handle
             description:
             response_class:
             response_model: # 响应模型类
             summary:
             tags: # 标签
-        inclue_router(): # include子路由
-            prefix:
-            responses:
-            tags:
-        middleware(): # 中间件
+        @middleware(): # 中间件
             http:
-        mount(): # 挂载子应用（可实现子路由、静态文件）
-            name:
-        on_event():
+        @on_event(): # app事件
             startup:
-        post(): # POST handle
-        websocket(): # websocket handle
+        @post(): # POST handle
+        @websocket(): # websocket handle
     File: # 文件上传
         default:
     Form: # 请求体校验
@@ -119,9 +120,12 @@ fastapi:
         pattern: # 正则匹配
         regex:
         title: # 文档标题
-    Request:
+    Request: # 请求对象
         headers:
-    Response:
+        query_params:
+        form():
+        json():
+    Response: # 响应对象
         set_cookie():
             key:
             value:

@@ -7,6 +7,23 @@ python 异步ORM框架
 
 ## 核心内容
 ```yaml
-tortoise-orm:
-
+tortoise:
+    contrib:
+        fastapi:
+            register_tortoise():
+                app:
+                config:
+                    apps:
+                        models:
+                            models:
+                    connections:
+                        default:
+                            credentials:
+                                database:
+                                echo:
+                                host:
+                                password:
+                                port:
+                                user:
+                            engine:
 ```
