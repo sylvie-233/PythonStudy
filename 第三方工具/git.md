@@ -12,6 +12,11 @@
 
 版本管理、代码共享、代码整合
 
+
+pull = fetch + merge
+
+pull request: 远程代码分支合并
+
 ### git
 ```yaml
 git:
@@ -34,7 +39,14 @@ git:
         -m: # 提交备注信息
     config:
         --list: # 列出所有配置
+        --local:
         --global: # 全局配置
+        --system:
+        merge:
+            tool:
+        mergetool:
+            keepBackup:
+            path:
         user: # 用户信息配置
             email:
             name:
@@ -45,13 +57,26 @@ git:
     help:
     init: # 仓库初始化
     log: # commit日志
+        --graph:
+        --pretty-format:
     ls-files: # 列出所有文件
     merge: # 分支合并（把指定的分支合并到当前分支上）
+    mergetool: # 分支合并工具
     mv:
     pull: # 下拉（合并到本地分支，下拉到工作区）
     push: # 推送
         -u: # 远程推送（别名 分支）
-    rebase: # 切换分支（变基到指定分支）
+        --tags: # 推送标签
+    rebase: # 切换commit（变基，可合并commit、commit分支转线性、）(rebase应该在push之前)
+        --abort:
+        --continue:
+        edit:
+        exec:
+        drop:
+        fixup:
+        pick:
+        reword:
+        squash: # 合并到前一个commit
     reflog: # 查看commit提交记录信息
         -n: # 查看数量
     remote: # 远程仓库管理
@@ -76,7 +101,9 @@ git:
     submodule: # 管理子模块
     switch:
     tag: # 列出标签
+        -a: # 添加标签
         -d: # 删除标签
+        -m: # 标签描述
     worktree:
         lock:
 ```
@@ -86,6 +113,9 @@ git:
 #### .gitconfig
 ```yaml
 .gitconfig:
+    branch: # 分支配置
+        merge:
+        remote:
     core:
         excludesfile:
     credential:
@@ -97,11 +127,25 @@ git:
         smudge:
     http:
         sslVerify:
-    user:
+    merge:
+        tool:
+    mergetool:
+        path:
+    remote: # 远程仓库配置
+        fetch:
+        url:
+    user: # 用户信息配置
         email:
         name:
 ```
-`~/.gitconfig`
+
+本地配置、全局配置、系统配置
+`.git/config`、`~/.gitconfig`
+
+
+#### .gitignore
+
+git 管理忽略文件
 
 
 ## 核心内容
