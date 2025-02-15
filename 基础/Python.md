@@ -191,7 +191,7 @@ std:
         divmod(): # 整除取余
         enumerate(): # 带索引迭代
         eval(): # 执行表达式
-        exce():
+        exce(): # 执行字符串脚本文件
         exit(): # 程序退出
         filter(): # 元素过滤
         float(): # 浮点数转换
@@ -235,6 +235,7 @@ std:
         set(): # 集合
         slice(): # 切片（start、end、step）
         type():
+            class_attr:
         zip():
     calendar: # 日历
         TextCalendar:
@@ -1082,6 +1083,17 @@ type为type自身类型的对象实例，基类为object
 
 
 #### metaclass
+```python
+@staticmethod
+def __new__(mcs, *args, **kwargs):
+    # args = (ClassName, (object,), {"__module__"="__main__","__qualname__"=ClassName})
+    # args传入的参数即type()需要的参数
+    return class
+```
+
+一个metaclass就是一个用来创建其他class的类、type就是所有类默认的metaclass
+
+type()动态创建class（type也就是java中的Class类，并非Object）
 
 metaclass影响类本身的创建行为
 
@@ -1091,7 +1103,8 @@ metaclass继承自type
 
 类对象创建`__call__() -> __new__() -> __init__()` 
 
-`__new__()`生成一个空对象 
+
+`__new__()`生成一个类对象 
 
 
 类实例化对象，本质上在调用元类的`__call__()`
@@ -1167,7 +1180,7 @@ import生成module实例 ，import只会执行一次（同一个实例）
 event事件、semaphore信号、lock锁、Barrier、Condition条件变量
 
 
-
+#### 线程
 
 
 
