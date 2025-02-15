@@ -1,7 +1,7 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/dependencies/`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/middleware/`
 >
 
 ## 基础介绍
@@ -54,6 +54,18 @@ fastapi:
         RedirectResponse: # 重定向响应类
         StreamingResponse:
             media_type:
+    security: # 认证/授权模块
+        base:
+            SecurityBase:
+        oauth2:
+            OAuth2:
+        OAuth2PasswordBearer:
+            tokenUrl:
+        OAuth2PasswordRequestForm:
+            username:
+            password:
+            scope:
+            grant_type:
     staticfiles: # 静态文件
         StaticFiles: # 静态文件挂载
             directory:
@@ -86,8 +98,10 @@ fastapi:
                 summary:
                 value:
     Cookie:     
-    Depends:
+    Depends: # 依赖注入 类型
+        use_cache: # 单例注入
     FastAPI: # 项目应用APP
+        dependencies: # 全局依赖
         descriptioin: # 项目文档描述
         title: # 项目文档标题
         version: # 项目文档版本
@@ -100,6 +114,7 @@ fastapi:
             name: # 子应用名称
         @exception_handler(): # 异常处理
         @get(): # GET handle
+            dependencies: # 依赖
             deprecated: # 过期接口
             description:
             response_class:
@@ -300,9 +315,31 @@ async def unicorn_exception_handler(request: Request, exc: UnicornException):
 
 
 ### Dependency Injection
+```python
+# 类依赖
+class CommonQueryParams:
+    def __init__(self, q: str | None = None, skip: int = 0, limit: int = 100):
+        self.q = q
+        self.skip = skip
+        self.limit = limit
 
+@app.get("/items/")
+async def read_items(commons: CommonQueryParams = Depends(CommonQueryParams)):
+    ...
 
+# 装饰器使用依赖
+@app.get("/items/", dependencies=[Depends(verify_token)])
+async def read_items():
+    return [{"item": "Foo"}]
+```
 
+- 函数声明（可调用即可）、Depends调用
+- 类声明
+- path装饰器依赖
+- 全局依赖
+- yield函数依赖（yield只能用一次、yield后代码在响应发送前被调用）
+
+使用依赖注入可实现参数预处理
 
 
 

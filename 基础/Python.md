@@ -277,7 +277,8 @@ std:
             set(): # 设置value值
             write(): # 写出配置
     contextlib:
-        contextmanager:
+        @asynccontextmanager:
+        @contextmanager:
     csv:
     dataclasses:
         asdict():
