@@ -1153,9 +1153,10 @@ class MyType(type):
 - 自定义模块
 
 一个文件就是一个模块
+一个包本质上是一个包含`__init__.py`文件的目录
 
 
-module -> package -> library
+module -> package -> library （模块、包、库、框架 逐渐变大）
 
 import生成module实例 ，import只会执行一次（同一个实例）
 
@@ -1164,6 +1165,11 @@ import生成module实例 ，import只会执行一次（同一个实例）
 
 `__init__.py`：模块初始化文件（默认执行）
 不必显示声明当前模块（基于文件夹、文件结构形成模块结构）
+
+#### __init__.py
+
+包含初始化代码
+可定义`__all__`列表来指定`from xxx import *`时应该导入哪些模块
 
 
 ### 测试

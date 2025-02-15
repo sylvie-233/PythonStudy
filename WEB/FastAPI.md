@@ -1,7 +1,7 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/extra-models/`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/dependencies/`
 >
 
 ## 基础介绍
@@ -36,17 +36,29 @@ ASGI服务器：基于Starlette、Pydantic
 ## 核心内容
 ```yaml
 fastapi:
+    encoders:
+        jsonable_encoder(): # 类json字典序列化
+    exception: # 异常类
+        RequestValidationError: # 请求校验异常
+            body:
+            errors():
+    exception_handlers: # 内置异常处理器
+        http_exception_handler(): 
+        request_validation_exception_handler():
     middleware:
         cors:
             CORSMiddleware:
     responses:
-        HTMLResponse:
+        HTMLResponse: # HTML页面响应
+        PlainTextResponse: # 普通文本响应
         RedirectResponse: # 重定向响应类
         StreamingResponse:
             media_type:
     staticfiles: # 静态文件
         StaticFiles: # 静态文件挂载
             directory:
+    status: # HTTP状态码
+        HTTP_201_CREATED:
     templating: # 页面模板
         Jinja2Templates:
             directory:
@@ -86,24 +98,32 @@ fastapi:
             tags:
         mount(): # 挂载子应用（可实现子路由、静态文件）
             name: # 子应用名称
+        @exception_handler(): # 异常处理
         @get(): # GET handle
+            deprecated: # 过期接口
             description:
             response_class:
+            response_description:
             response_model: # 响应模型类
+            status_code: # 响应状态码
             summary:
-            tags: # 标签
+            tags: # openapi标签（用于文档分组）
         @middleware(): # 中间件
             http:
         @on_event(): # app事件
             startup:
         @post(): # POST handle
         @websocket(): # websocket handle
-    File: # 文件上传
+    File: # 文件上传（类型位置标注）
         default:
-    Form: # 请求体校验
-    Header:
+        description:
+    Form: # form表单
+    Header: # header类型标注
         convert_underscores:
-    HTTPException:
+    HTTPException: # HTTP异常
+        detail:
+        headers: # 响应头
+        status_code:
     Path: # 路径参数
         title:
     Query: # 请求参数
@@ -130,9 +150,9 @@ fastapi:
             key:
             value:
     UploadFile: # 上传文件
-        content_type: # 文件类型
+        content_type: # 文件类型（MIME）
         file: # python文件对象
-        filename: # 文件名 
+        filename: # 文件名（原始） 
         close():
         read():
         seek():
@@ -175,6 +195,10 @@ pydantic: # 请求参数映射
             json_schema_extra:
                 examples: # 请求样例
         dict(): # 获取属性字典
+        model_copy(): # 模型实例复制 
+            update: # 模型实例复制更新
+        model_dump(): # 获取属性字典
+            exclude_unset:
     EmailStr:
     Field: # 字段校验
         default:
@@ -261,8 +285,18 @@ HTML模板
 
 
 ### Error Handler
+```python
+@app.exception_handler(UnicornException)
+async def unicorn_exception_handler(request: Request, exc: UnicornException):
+    return JSONResponse(
+        status_code=418,
+        content={"message": f"Oops! {exc.name} did something. There goes a rainbow..."},
+    )
+```
 
 异常处理
+
+`@app.exception_handler()`
 
 
 ### Dependency Injection
