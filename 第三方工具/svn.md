@@ -6,6 +6,8 @@ SVN Server默认端口：8443
 
 集中式版本管理工具
 
+`.svn`：项目隐藏目录
+
 
 ### svn
 ```yaml
@@ -41,6 +43,7 @@ svn:
         -v:
         svn:
             ignore: # 设置忽略文件
+    resolved: # 删除工作拷贝文件或目录的“冲突”状态
     revert: # 版本回退、取消add
         -R: # 递归
     st: # status 简写
@@ -53,18 +56,54 @@ svn:
 ### svnadmin
 ```yaml
 svnadmin:
+    create: # 创建版本库
+    dump: # 将文件系统的内容转储到标准输出
+    help:
+    hotcopy: # 版本库热备份
+    list-dblogs:
+    load:
+    lstxns: # 列出所有未提交文件
+    recover: 
+    rmtxns:
+    setlog:
+    verify:
 ```
+
+版本库的管理工具
 
 ### svnlook
 ```yaml
 svnlook:
-
+    author: # 查看作者
+    cat:
+    changed:
+    date: # 时间戳
+    diff:
+    dirs-changed:
+    help:
+    history: # 历史记录
+    info: # 文件信息
+    log:
+    propget:
+    proplist:
+    tree: # 目录结构
+    uuid:
+    youngest: # 最新版本
 ```
+
+svn信息查看器
+
 
 ### svnserve
 ```yaml
 svnserve:
 
+```
+
+
+### svnversion
+```yaml
+svnversion:
 ```
 
 
