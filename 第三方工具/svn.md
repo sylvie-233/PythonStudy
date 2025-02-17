@@ -108,3 +108,23 @@ svnversion:
 
 
 ## 核心内容
+
+
+### 版本库
+
+提交：add(加入版本控制) -> commit(提交、没有push操作) 
+拉取：update(拉取更新)
+
+经典目录结构：
+- /branches:
+- /tag:
+- /trunk:
+
+
+
+
+
+
+## tortoise SVN
+
+SVN客户端GUI工具
