@@ -40,6 +40,10 @@ settings.json:
     files:
         associations:
         exclude:
+    java:
+        test:
+            config:
+                encoding: # java 调试控制台编码
     prettier:
         configPath:
         requireConfig:
