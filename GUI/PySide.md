@@ -1,4 +1,4 @@
-# PyQt
+# PySide
 
 >
 >``
@@ -6,7 +6,7 @@
 
 ## 基础介绍
 
-PyQt & PySide
+PySide
 
 
 qtdesigner、pyrcc、pyuic、
@@ -206,11 +206,6 @@ PySide6:
             setWindowFlag():
             show():
             styleSheet: # QSS样式
-
-
-
-pyqt:
-    
 ```
 
 
