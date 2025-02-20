@@ -3,7 +3,7 @@
 >
 > `Python官方文档教程：https://docs.python.org/3/tutorial/index.html`
 >
-> ``
+> `Python API文档：https://docs.python.org/3/library/index.html`
 >
 
 
@@ -616,7 +616,7 @@ std:
         gmtime(): # 获取格林威治时间（0时区）
         localtime(): # 获取本地时间 struct_time
         mktime(): # 标准时间转时间戳
-        perf_counter(): # 执行计数
+        perf_counter(): # 执行计数（秒）
         sleep(): # 线程睡眠
         strftime(): # 格式化显示时间
         strptime(): # 格式化转换时间

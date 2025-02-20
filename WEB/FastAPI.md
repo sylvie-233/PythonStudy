@@ -1,7 +1,7 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/middleware/`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/bigger-applications/`
 >
 
 ## 基础介绍
@@ -48,6 +48,13 @@ fastapi:
     middleware:
         cors:
             CORSMiddleware:
+                allow_credentials:
+                allow_headers:
+                allow_methods:
+                allow_origin_regex:
+                allow_origins:
+                expose_headers:
+                max_age:
     responses:
         HTMLResponse: # HTML页面响应
         PlainTextResponse: # 普通文本响应
@@ -126,7 +133,7 @@ fastapi:
         @middleware(): # 中间件
             http:
         @on_event(): # app事件
-            startup:
+            startup: # 应用启动时
         @post(): # POST handle
         @websocket(): # websocket handle
     File: # 文件上传（类型位置标注）
@@ -295,8 +302,22 @@ HTML模板
 事件监听
 
 ### Middleware
-
+```python
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.perf_counter()
+    response = await call_next(request)
+    process_time = time.perf_counter() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
+    return response
+```
 中间件
+
+
+
+
+
+
 
 
 ### Error Handler
@@ -341,7 +362,12 @@ async def read_items():
 
 使用依赖注入可实现参数预处理
 
+依赖yield退出代码，在中间件后面执行
 
+
+### Background Task
+
+后台任务
 
 
 
@@ -358,3 +384,20 @@ async def read_items():
 ### Security
 
 #### OAuth2
+
+
+
+
+### ORM
+
+#### SQLAlchemy
+
+
+#### SQLModel
+
+fastapi作者推出的ORM框架、基于sqlalchemy
+
+
+
+
+
