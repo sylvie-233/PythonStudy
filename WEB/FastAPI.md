@@ -1,7 +1,7 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/bigger-applications/`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/sql-databases`
 >
 
 ## 基础介绍
@@ -388,15 +388,22 @@ async def read_items():
 
 
 
-### ORM
 
-#### SQLAlchemy
-
-
-#### SQLModel
+### SQLModel
 
 fastapi作者推出的ORM框架、基于sqlalchemy
 
+
+
+#### Model
+
+
+
+#### Session
+
+
+
+#### Engine
 
 
 

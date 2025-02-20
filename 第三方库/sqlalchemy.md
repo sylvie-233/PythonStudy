@@ -1,6 +1,6 @@
 # SQLAlchemy
 
-`SQLAlchemy官方文档：https://docs.sqlalchemy.org/en/20/orm/quickstart.html#simple-select`
+`SQLAlchemy官方文档：https://docs.sqlalchemy.org/en/20/orm/mapping_styles.html#orm-mapping-styles`
 
 ## 基础介绍
 
@@ -27,7 +27,7 @@
 ## 核心内容
 ```yaml
 sqlalchemy:
-    engine:
+    engine: # 引擎包
         base:
             Connection:
                 close():
@@ -42,7 +42,12 @@ sqlalchemy:
                 inserted_primary_key:
                 fetchall():
                 fetchone():
-    orm:
+    event: # 事件包
+        @listens_for():
+            load: # 模型加载
+            refresh:
+            refresh_flush:
+    orm: # ORM包
         query:
             Query:
                 all():
@@ -50,26 +55,27 @@ sqlalchemy:
                 first():
                 one():
         DeclarativeBase: # 模型基类声明
-            _field: # 
-                ==:
-                contains():
-                in_():
-            __table__: # 定义表名
+            __table__: # Table元表信息
+            __tablename__: # 表名
             metadata:
             registry:
         Mapped: # 模型字段声明
-        registry:
+        registry(): # 命令式映射
             metadata:
         Session: # 模型操作工具类
             add(): # 添加数据
             add_all():
             begin(): # 开启事务
             commit(): # 提交事务
-            flush():
-            get():
+            delete(): # 删除数据
+            flush(): # 刷新（提交事务）
+            get(): # 根据组件查询
             get_one():
             query():
-            update():
+            scalars(): # 查询结果迭代遍历（select构造语句执行）
+                first():
+                one():
+            update(): # 更新数据
         aliased(): # 定义表别名
         declarative_base(): # 创建模型基类
         mapped_column(): # 模型字段属性定义
@@ -124,10 +130,15 @@ sqlalchemy:
     bindparam():
     create_engine(): # 创建数据库引擎
         echo: # 显示执行的SQL
-    delete():
-    select():
-    text():
-    update():
+    delete(): # 删除sql构造
+    select(): # 查询sql构造
+        join(): # 关联查询
+        where(): # 查询条件构造
+            ==:
+            contains():
+            in_():
+    text(): 
+    update(): # 更新sql构造
 ```
 
 
@@ -156,7 +167,30 @@ class Address(Base):
     user: Mapped["User"] = relationship(back_populates="addresses")
 ```
 
-模型定义
+模型定义的两种方式
+- DeclarativeBase
+- registry + Table
+
+
+#### 声明式映射
+
+
+#### 命令式映射
+```python
+mapper_registry = registry()
+
+user_table = Table(
+    "user",
+    mapper_registry.metadata,
+    Column("id", Integer, primary_key=True),
+    Column("name", String(50)),
+)
+
+class User:
+    pass
+
+mapper_registry.map_imperatively(User, user_table)
+```
 
 
 
@@ -175,6 +209,8 @@ with Session(engine) as session:
 ```
 
 模型操作工具类
+
+#### SQL构造
 
 
 
