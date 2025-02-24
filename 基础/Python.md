@@ -237,6 +237,7 @@ std:
         type():
             class_attr:
         zip():
+    bz2:
     calendar: # 日历
         TextCalendar:
             formatmonth():
@@ -245,6 +246,7 @@ std:
         isleap():
         prcal(): # 打印一年的日历
         setfirstweekday():
+    cmath:
     collections:
         Counter: # 计数器
         defaultdict: # 默认字典 
@@ -312,6 +314,8 @@ std:
             hours:
         date():
         time():
+    decimal:
+    difflib:
     enum:
         Enum: # 枚举基类
         Flag: # 按位枚举
@@ -320,6 +324,9 @@ std:
         StrEnum:
         unique:
         auto(): # 自动枚举值
+    fnmatch:
+    fractions:
+    ftplib:
     functools: # 函数工具库
         reduce(): # 迭代计数
         wraps():
@@ -328,6 +335,7 @@ std:
         escape():
         glob():
             recursive():
+    gzip:
     hashlib:
         md5(): # md5加密
             digest(): # 加密
@@ -340,6 +348,7 @@ std:
             update():
         sha224():
         sha256():
+    heapq:
     html:
     http:
         client:
@@ -408,6 +417,8 @@ std:
             setLevel():
         info():
         warning():
+    lzma:
+    marshal:
     math:
         pi:
         sqrt(): # 平方根
@@ -462,7 +473,7 @@ std:
         stat(): # 获取文件属性
         system(): # 执行shell命令
         walk(): # 文件浏览（dfs）
-    pathlib:
+    pathlib: # 面向对象的文件路径操作
         Path:
             parent:
             joinpath():
@@ -473,6 +484,7 @@ std:
         dumps(): # 序列化
         load(): # 从文件中反序列化
         loads(): # 反序列化
+    platform:
     pydoc:
     queue:
     random:
@@ -560,6 +572,7 @@ std:
         _create_unverified_context():
         create_default_context():
             cafile:
+    statistics:
     string: # 字符串
         ascii_lowercase:
         digits: # 数字
@@ -586,6 +599,9 @@ std:
         getrecursionlimit(): # 获取最大递归层数
         setdefaultencoding():
         setrecursionlimit(): # 设置最大递归层数
+    telnetlib:
+    tempfile:
+    textwrap:
     threading: # 多线程
         Barrie:
         Condition:
@@ -723,6 +739,7 @@ std:
         TypeVar: # 类型变量T
         TypedDict:
         Union: # 联合类型
+    unicodedata:
     unittest: # 单元测试 test*.py
         mock:
             MagicMock:
@@ -832,6 +849,7 @@ std:
             extractall(): # 解压
                 path:
             write(): # 添加文件
+    zoneinfo:
 ```
 
 ### 数据类型
