@@ -1,7 +1,7 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/sql-databases`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/bigger-applications/`
 >
 
 ## 基础介绍
@@ -233,9 +233,39 @@ pydantic: # 请求参数映射
 
 uvicorn: # ASGI服务器
     run(): # 运行主程序
+
+sqlmodel: # 官方主推ORM框架
+    Field: # 模型字段定义
+        default:
+        index:
+        primary_key:
+    Session:
+        add():
+        commit():
+        delete():
+        exec():
+            all():
+        get():
+        refresh():
+    SQLModel: # 模型基类
+        metadata:
+            create_all(): #建表
+        table: #  data model、table model
+        --- # 模型实例
+        sqlmodel_update(): # 字段更新
+    create_engine(): # 创建引擎 
+        connect_args:
+            check_same_thread:
+    select():
+        limit():
+        offset():
 ```
 
 ### Request
+
+
+
+
 
 #### Path Parameters
 ```python
