@@ -366,8 +366,39 @@ std:
     importlib:
         util:
         import_module(): # 动态导入模块
-    io:
-    ipaddress:
+    inspect: # 反射信息
+        Parameter:
+            default:
+            kind:
+                POSITIONAL_ONLY: # 位置参数 x
+                VAR_POSITIONAL: # 可变位置参数 *args
+                KEYWORD_ONLY: # 关键字参数 y=10
+                VAR_KEYWORD: # 可变关键字参数 **kwargs
+            name:
+        Signature:
+        currentframe(): # 当前执行的栈帧对象
+        isclass():
+        isfunction(): # 
+        ismethod(): # 
+        getdoc(): # 获取文档字符串
+        getmembers(): # 获取类所有成员  
+        getsource(): # 获取源代码
+        signature(): # 获取方法签名
+            parameters: # 参数列表
+        stack(): # 获取堆栈信息
+    io: # 内建I/O模块
+    ipaddress: #  IP地址操作
+        IPv4Address: # ipv4
+            broadcast_address: # 广播地址
+            is_private: # 私有地址
+            netmask: # 子网掩码
+            network_address: # 网络地址
+            num_addresses: # 主机数
+            hosts(): # 所有主机地址
+            subnets(): # 子网划分
+        IPv6Address: # ipv6
+        ip_address():
+            version:
     itertools: # 迭代工具库
         chain(): # 合并
         permutations(): # 
@@ -418,7 +449,11 @@ std:
         info():
         warning():
     lzma:
-    marshal:
+    marshal: # 内置对象序列化
+        dump(): # 序列化
+        dumps(): 
+        load(): # 反序列化
+        loads():
     math:
         pi:
         sqrt(): # 平方根
@@ -436,7 +471,7 @@ std:
         attrgetter:
         itemgetter:
     os: # 操作系统相关（文件、路径）
-        path:
+        path: # 路径操作
             abspath(): # 绝对路径
             basename(): # 基础文件名
             dirname(): # 获取目录名
@@ -475,9 +510,27 @@ std:
         walk(): # 文件浏览（dfs）
     pathlib: # 面向对象的文件路径操作
         Path:
-            parent:
+            name: # 文件名
+            parent: # 父目录
+            stem: # 仅文件名
+            suffix:
+            chmod():
+            exists():
+            is_dir():
+            is_file():
+            is_symlink():
+            iterdir(): # 目录迭代
             joinpath():
             mkdir():
+            read_bytes():
+            read_text(): # 读取文本内容
+            rglob(): # 文件匹配
+            rmdir():
+            samefile():
+            stat(): 
+            write_bytes():
+            write_text():
+            unlink():
     pdb:
     pickle: # python序列化
         dump(): # 序列化到文件
@@ -797,8 +850,12 @@ std:
                 data: # 请求体
             urlretrieve(): # 文件下载
         response:
-    uuid:
+    uuid: # UUID
         UUID:
+        uuid1(): # 时间戳生成
+        uuid3(): # MD5哈希生成
+        uuid4(): # 随机数生成
+        uuid5(): # 名字生成
     venv: # 虚拟环境模块
     warnings:
     weakref:
@@ -810,10 +867,17 @@ std:
         simple_server:
             make_server():
                 serve_forever():
-    xml:
+    xml: # xml操作
         dom:
+            minidom:
+                parseString():
+                    documentElement:
+                    tagName:
+                    getElementsByTagName():
+                    toprettyxml():
         etree:
             ElementTree: # 标签树类 （根标签）（可迭代遍历）
+                fromstring(): # 解析xml字符串
                 find():
                 findall():
                 findtext():
@@ -821,9 +885,17 @@ std:
                 iter():
                 makeelement(): # 创建标签元素
                 parse(): # 解析文件
+                tostring(): # xml元素转字符串
                 write(): # xml内容写出
                 XML():
         parsers:
+        sax: # 提供事件驱动的 API，xml解析器
+            ContentHandler:
+                characters():
+                endElement():
+                startElement():
+            make_parser():
+                setContentHandler():
         Element: # 标签元素类
             attrib:
             tag: # 标签名
@@ -856,8 +928,12 @@ std:
 ```yaml
 DataTypes:
     bool:
-    int:
-    str:
+    complex: # 复数
+    float:
+    int: # 整数
+    list: # 列表
+    str: # 字符串
+    tuple: # 
     Enum:
     None:
 ```
@@ -873,7 +949,7 @@ DataTypes:
 ```
 
 
-#### 字符串
+#### Str
 ```python
 # 多行字符串
 str = """
@@ -887,13 +963,29 @@ str = f"{ var }"
 str = r"xxx"
 ```
 
-#### 切片
+#### Bytes
 
-Slice
+字节
+
+#### Slice
+
+Slice切片
+
+
+#### List
+
+
+#### Tuple
+
+
+#### Set
 
 
 
-#### 枚举
+#### Dict
+
+
+#### Enum
 ```python
 class Color(Enum):
     RED = 1
@@ -1200,7 +1292,7 @@ import生成module实例 ，import只会执行一次（同一个实例）
 方法：`test_*()`
 
 
-### 多并发
+### 并发
 
 event事件、semaphore信号、lock锁、Barrier、Condition条件变量
 

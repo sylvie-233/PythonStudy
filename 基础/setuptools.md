@@ -40,6 +40,8 @@ MANIFEST.in:
 ```
 
 
+
+
 ## 核心内容
 ```yaml
 setuptools:
@@ -53,7 +55,7 @@ setuptools:
     setup(): # 构建主函数
         author: # 作者
         author_email: # 作者邮箱
-        classifiers:
+        classifiers: # 项目分类信息
         cmdclass:
         description:
         entry_points: # python文件中的函数自动生成为可执行脚本
@@ -61,7 +63,7 @@ setuptools:
         exclude_package_data: # 去除打包文件
         ext_modules: # 扩展编译
         include_package_data:
-        install_requires: # 安装依赖
+        install_requires: # 项目依赖
         keywords:
         license:
         long_description:
@@ -80,3 +82,17 @@ setuptools:
 wheel: # 构建whl二进制包
 
 ```
+
+
+
+### whl
+
+Wheel 格式的文件扩展名、是 Python 项目的二进制分发格式
+
+whl包结构：
+- /xxx: 项目源码
+- /xxx-x.x.x.dist-info: 项目源信息
+    - METADATA: 包含包的元数据（如名称、版本、依赖项等）
+    - RECORD: py源码文件hash记录
+    - WHEEL: 包含关于 wheel 文件本身的元数据（比如该包的目标 Python 版本、架构等）
+

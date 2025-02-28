@@ -19,15 +19,19 @@ python 测试库
 ### pytest
 ```yaml
 pytest:
-    -k:
+    -k: # 执行名称匹配的测试
+    -m: # 执行指定标记mark的测试
     -n:
     -r:
         f:
         s:
+    -v: # 显示详细的测试结果
     -x:
+    --ff: # 先运行上次失败的测试，再运行其他测试
+    --lf: # 只运行上次失败的测试
     --maxfail:
     --pyargs:
-    --version:
+    --version: # 版本信息
 ```
 
 #### pytest.ini
@@ -43,16 +47,16 @@ pytest.ini:
 ## 核心内容
 ```yaml
 pytest:
-    mark:
-        @flaky(): # 自动重试
+    mark: # 测试标记
+        @flaky: # 自动重试
             reruns:
             reruns_delay:
-        @parametrize():
-        @skip():
+        @parametrize: # 参数化测试
+        @skip: # 测试跳过
             reason:
-        @skipif():
-        @xfail(): # 抛出异常检测
-    @fixture():
+        @skipif:
+        @xfail: # 抛出异常检测
+    @fixture:
         autouse:
         scope:
             package:
@@ -61,19 +65,20 @@ pytest:
             function:
             session:
     main(): # 直接执行
-    raises():
+    raises(): # 异常捕获上下文测试
     skip():
 ```
 
 
 ### fixtures
 
+提供测试依赖的机制
 实现依赖注入、同名参数
 
 yield实现测试前置后置钩子
 
 
-#### conftest
+#### conftest.py
 
 `conftest.py`
 
