@@ -27,6 +27,8 @@ pydantic:
             min_anystr_length:
         dict(): # 返回字典
         json():
+        model_dump(): # 生成字典
+            exclude_none: # 排除空字段
         parse_obj(): # 字典解析
         parse_raw(): # 字符串解析
     ValidationError:

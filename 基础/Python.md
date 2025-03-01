@@ -9,6 +9,12 @@
 
 ## 基础介绍
 
+
+
+
+
+
+
 ### python
 ```yaml
 python:
@@ -67,6 +73,39 @@ pdb:
 ```
 
 python调试工具
+
+
+### mypy
+```yaml
+mypy.ini:
+```
+
+python类型检测
+
+
+
+### pylint
+```yaml
+pylint:
+    --generate-rcfile:
+```
+
+python代码格式化
+
+#### .pylintrc
+```yaml
+.pylintrc:
+    FORMAT:
+        max-line-length:
+        indent-string:
+    MAIN: # 主配置
+    MESSAGES CONTROL: # 消息控制
+        disable:
+            trailing-whitespace:
+```
+
+
+pylint配置文件
 
 
 ## 核心内容
@@ -168,6 +207,7 @@ std:
         str:
             encode(): # 编码
             format(): # 格式化字符串
+            isalpha(): # 字符判断
             replace():
             split(): # 字符串分隔
             startswith():
@@ -328,8 +368,9 @@ std:
     fractions:
     ftplib:
     functools: # 函数工具库
+        lru_cache():
         reduce(): # 迭代计数
-        wraps():
+        wraps(): # 函数包装(常用于高阶函数装饰器)
     gc:
     glob: # 文件索引
         escape():
@@ -387,6 +428,7 @@ std:
             parameters: # 参数列表
         stack(): # 获取堆栈信息
     io: # 内建I/O模块
+        BytesIO: # 二进制流
     ipaddress: #  IP地址操作
         IPv4Address: # ipv4
             broadcast_address: # 广播地址
@@ -422,7 +464,7 @@ std:
             filter():
         Formatter: # 日志格式化器Formatter
         Handler:
-        StreamHandler:
+        StreamHandler: # 控制台输出
             setFormatter():
             setLevel():
         basicConfig(): # 日志基础配置
@@ -593,7 +635,7 @@ std:
             filename: # 解压文件名
             extract_dir: # 解压目录
             format: # 解压格式
-    socket: # socket
+    socket: # socket通信
         AF_INET:
         SOCK_DGRAM: # UDP协议
         SOCK_STREAM: # 流式协议TCP
@@ -957,10 +999,14 @@ str = """
 """
 
 # 模板字符串
+str = "%s" % xxx;
 str = f"{ var }"
 
 # 原串
 str = r"xxx"
+
+# 字节串
+str = b"xxx"
 ```
 
 #### Bytes

@@ -15,7 +15,19 @@ code:
         python:
             interpreterPath:
         PickProcess:
-    workspaceFolder:
+    cwd:
+    env:
+    defaultBuildTask:
+    file: # 当前打开的文件的完整路径
+    fileBasename:
+    fileBasenameNoExtension:
+    fileDirname:
+    lineNumber:
+    relativeFile:
+    relativeFileDirname:
+    selectedText:
+    workspaceFolder: # 工作空间文件夹
+    workspaceName:
     <node_internals>:
 
 settings.json:
@@ -109,7 +121,7 @@ launch.json:
         skipFiles:
         timeout:
         trace:
-        type:
+        type: # 调试器类型
             cppdbg:
             pwa-node:
             python:
@@ -128,23 +140,31 @@ launch.json:
 ```yaml
 tasks.json:
     tasks:
-        args:
-        command:
+        args: # command命令执行参数
+        command: # 任务执行命令
         dependsOn: # 任务依赖
+        dependsOrder: # 任务依赖执行顺序
+            parallel: # 并行执行
+            sequence: # 顺序执行
         group: # 任务分组
             isDefault:
-            kind:
+            kind: # 分组类型
                 build:
+                clean:
+                none:
+                test:
         isBackground:
         label: # 任务名称
         options:
             cwd:
         problemMatcher:
+        runInBackground: # 后台运行任务
         script:
         type:
             npm:
+            process:
             shell:
-    version:
+    version: # 版本
 ```
 
 vscode 任务执行（类似npm脚本中的script）
@@ -349,3 +369,4 @@ workspace，多根工作区
 ### 任务命令
 
 Command、Task 命令、任务
+自定义脚本片段
