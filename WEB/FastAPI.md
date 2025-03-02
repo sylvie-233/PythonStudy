@@ -3,7 +3,7 @@
 >
 >`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/bigger-applications/`
 >
->`fastapi框架快速学习：P37`
+>``
 
 ## 基础介绍
 
