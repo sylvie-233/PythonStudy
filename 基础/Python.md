@@ -4,7 +4,7 @@
 > `Python官方文档教程：https://docs.python.org/3/tutorial/index.html`
 >
 > `Python API文档：https://docs.python.org/3/library/index.html`
->
+>`Python面向对象：P4`
 
 
 ## 基础介绍
@@ -127,6 +127,9 @@ std:
         __file__:
         __name__:
         __package__:
+        Enum:
+        StopIteration: # 停止迭代异常
+        ValueError:
         bool:
         bytes: # 字节数组
             decode(): # 解码
@@ -155,6 +158,7 @@ std:
             remove():
             reverse():
             sort():
+        object:
         set:
             add():
             clear():
@@ -175,15 +179,11 @@ std:
             title(): # 首字母大写转换
             upper(): # 转大写
         tuple:
-        Enum:
-        StopIteration: # 停止迭代异常
-        ValueError:
         abs(): # 取绝对值
         all(): # 判定是否全部为True
         any(): # 判定是否存在True
         ascii(): # 转ascii码
         bin(): # 转二进制
-        bool(): # 转布尔值
         bytearray():
         callable(): # 判定对象是否可以调用
         chr(): # 转字符
@@ -194,25 +194,20 @@ std:
         exce(): # 执行字符串脚本文件
         exit(): # 程序退出
         filter(): # 元素过滤
-        float(): # 浮点数转换
         format():
         getattr():
         globals():
         hasattr():
         help(): # 获取帮助信息
         hex(): # 转16进制
-        id():
-        input():
-        int():
+        id(): # 获取内存地址
+        input(): # 输入
         isinstance():
         issubclass():
         iter():
         len():
-        list(): # 生成list列表
-        map():
         max():
         next():
-        object():
         open(): # 打开文件
             encoding: # 编码
             mode: # 打开模式
@@ -232,8 +227,7 @@ std:
             tell(): # 光标位置
             write(): # 写入内容（缓冲区）
         print(): # 控制台输出
-        set(): # 集合
-        slice(): # 切片（start、end、step）
+        repr(): # 可见字符显示
         type():
             class_attr:
         zip():
@@ -860,20 +854,18 @@ DataTypes:
     str:
     Enum:
     None:
+
+BuiltinVar:
+    __file__: # 当前文件名
+    __name__: # 当前模块名（执行模块为__main__）
 ```
 
 可选类型：`type | None`
 
 
-#### 内置变量
-```yaml
-:
-    __file__: # 当前文件名
-    __name__: # 当前模块名（执行模块为__main__）
-```
 
 
-#### 字符串
+#### Str
 ```python
 # 多行字符串
 str = """
@@ -887,13 +879,27 @@ str = f"{ var }"
 str = r"xxx"
 ```
 
-#### 切片
 
-Slice
-
+#### Slice
 
 
-#### 枚举
+
+#### Tuple
+
+
+
+#### List
+
+
+#### Set
+
+
+
+#### Map
+
+
+
+#### Enum
 ```python
 class Color(Enum):
     RED = 1
@@ -908,6 +914,7 @@ Enum
 ```yaml
 Control Flow:
     is:
+    pass: # 代码省略
     raise:
     for ... else:
     for ... in:
@@ -926,7 +933,7 @@ Control Flow:
 
 
 
-#### 异常处理
+#### Exception
 ```python
 try:
     ...
@@ -937,7 +944,7 @@ finally:
 ```
 
 
-#### 上下文管理
+#### Context Manager
 
 with语句（类中），`__enter__()`、`__exit__()`
 `@contextmanager`+生成器函数
@@ -957,7 +964,7 @@ with change_dir("/xxx") as old_path:
 ```
 
 
-#### 文档注释
+#### Doc String
 
 rst: reStructuredText
 
@@ -965,7 +972,7 @@ rst: reStructuredText
 ### 函数
 
 
-#### 匿名函数
+#### Lambda
 ```python
 add = lambda a, b: a+b
 
@@ -1024,14 +1031,20 @@ print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 Stop
 
 
 ### 面向对象
+```python
+class Person:
+    age: int 
+    name: str
+
+    def __init__(self):
+        ...
+    
+```
 
 Class为type类型的对象实例，基类为object
-
 object为type类型的对象实例，没有基类
-
 type为type自身类型的对象实例，基类为object
-
-（type是type，object也是type；type继承自object，object没有继承；Class是type，继承自object）
+（type是type，object也是type，class也是type；type继承自object，class继承自object,object没有继承）
 
 `class = type(classname, superclass, attributedict)`
 
@@ -1039,14 +1052,18 @@ type为type自身类型的对象实例，基类为object
 - object为类继承的顶点，所有类都继承自object。
 
 
-通过类变量访问类属性
+通过类变量访问类属性、只允许访问，不允许修改(实则新建属性)
 类对象无法修改类变量的值，通过类对象对类变量赋值，只会修改自己对象中的变量值
 
 类方法：`@classmethod`
 静态方法：`@staticmethod`
 
+#### Property
 
-#### 魔术方法&属性
+
+
+
+#### Function
 ```yaml
 :
     __match_args__: # match语句位置参数
@@ -1071,6 +1088,19 @@ type为type自身类型的对象实例，基类为object
     __str__():
     super():
 ```
+
+
+##### Magic Method
+
+魔术方法
+
+
+##### Class Method
+
+
+
+##### Static Method
+
 
 
 #### 装饰器
@@ -1101,7 +1131,7 @@ type为type自身类型的对象实例，基类为object
 
 
 
-#### metaclass
+#### MetaClass
 ```python
 @staticmethod
 def __new__(mcs, *args, **kwargs):
@@ -1152,15 +1182,15 @@ class MyType(type):
 自定义metaclass，执行其中的__new__()方法生成类对象，也会执行元类中的__init__()初始化对象
 
 
+#### DataClass
+
+
+`@dataclass`
 
 #### 泛型
 
 
 
-#### dataclass
-
-
-`@dataclass`
 
 
 
@@ -1185,7 +1215,7 @@ import生成module实例 ，import只会执行一次（同一个实例）
 `__init__.py`：模块初始化文件（默认执行）
 不必显示声明当前模块（基于文件夹、文件结构形成模块结构）
 
-#### __init__.py
+#### `__init__.py`
 
 包含初始化代码
 可定义`__all__`列表来指定`from xxx import *`时应该导入哪些模块
@@ -1200,17 +1230,17 @@ import生成module实例 ，import只会执行一次（同一个实例）
 方法：`test_*()`
 
 
-### 多并发
+### 并发
 
 event事件、semaphore信号、lock锁、Barrier、Condition条件变量
 
 
-#### 线程
+#### Thread
 
 
 
 
-#### 异步IO
+#### Async
 
 coroutine协程是可以暂停运行、恢复运行的函数（async定义协程函数）
 task任务是对协程的包装，使得事件循环能获取协程的状态
