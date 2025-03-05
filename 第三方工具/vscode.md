@@ -15,7 +15,19 @@ code:
         python:
             interpreterPath:
         PickProcess:
-    workspaceFolder:
+    cwd:
+    env:
+    defaultBuildTask:
+    file: # 当前打开的文件的完整路径
+    fileBasename:
+    fileBasenameNoExtension:
+    fileDirname:
+    lineNumber:
+    relativeFile:
+    relativeFileDirname:
+    selectedText:
+    workspaceFolder: # 工作空间文件夹
+    workspaceName:
     <node_internals>:
 
 settings.json:
@@ -109,7 +121,7 @@ launch.json:
         skipFiles:
         timeout:
         trace:
-        type:
+        type: # 调试器类型
             cppdbg:
             pwa-node:
             python:
@@ -128,23 +140,31 @@ launch.json:
 ```yaml
 tasks.json:
     tasks:
-        args:
-        command:
+        args: # command命令执行参数
+        command: # 任务执行命令
         dependsOn: # 任务依赖
+        dependsOrder: # 任务依赖执行顺序
+            parallel: # 并行执行
+            sequence: # 顺序执行
         group: # 任务分组
             isDefault:
-            kind:
+            kind: # 分组类型
                 build:
+                clean:
+                none:
+                test:
         isBackground:
         label: # 任务名称
         options:
             cwd:
         problemMatcher:
+        runInBackground: # 后台运行任务
         script:
         type:
             npm:
+            process:
             shell:
-    version:
+    version: # 版本
 ```
 
 vscode 任务执行（类似npm脚本中的script）
@@ -160,42 +180,78 @@ extensions.json:
 
 
 
+#### .code-snippets
+```yaml
+code-snippets:
+    _snippet_name:
+        body: # 片段内容
+        prefix: # 片段使用前缀
+        scope: # 作用范围
+            css:
+            javascript:
+```
+
+代码片段
+
+
+
+
+
+#### package.json
+```yaml
+package.json: 
+    contributes:
+        commands: # 命令
+            command: # 命令注册名称
+            title: # 命令标题
+```
+
+
+自定义插件的包配置
+
+
+
 ## 核心内容
 ```yaml
 vscode:
     authnetication:
     chat:
-    commands:
+    commands: # 命令
         registerCommand(): # 注册命令(多级命令用 . 分隔)
     comments:
     debug:
     env:
-    extensions:
+    extensions: # 扩展
     i10n:
     languages:
     im:
     notebooks:
     scm:
-    tasks:
-    tests:
-    window:
+    tasks: # 任务
+    tests: # 测试
+    window: # 窗口
         activeTextEditor:
         createInputBox():
         createOutputChannel():
         createQuickPick():
-        createStatusBarItem():
+        createStatusBarItem(): # 状态栏图标对象
         createTerminal():
         createTreeView():
         createWebviewPanel():
-
+        registerFileDecorationProvider(): # 文件可视化修饰符
         registerTreeDataProvider():
         showErrorMessage():
-        showInformationMessage():
-    workspace:
-    ExtensionContext:
+        showInformationMessage(): # 右下角显示信息
+    workspace: # 工作空间
+    ExtensionContext: # 插件上下文
         asAbsolutePath():
         subscriptions:
             push():
+    FileDecoration: # 文件可视化修饰符
+    StatusBarItem: # 状态栏图标对象
+        command: # 绑定命令
+        name:
+        show():
     TextDocument:
         getText():
         lineAt():
@@ -236,6 +292,7 @@ vscode:
         getParent():
         getTreeItem():
         reveal():
+    Uri:
     ViewColumn:
         One:
     WebviePanel:
@@ -248,9 +305,9 @@ vscode:
         visible:
         webview:
             html:
-vscode-hook:
-    activate():
-    deactivate():
+vscode-hook: # 自定义Plugin生命周期
+    activate(): # 插件激活
+    deactivate(): # 插件失活
 ```
 
 
@@ -262,6 +319,8 @@ vscode-hook:
         ↓: # 移动代码行
     ctrl:
         shift:
+            [: # 折叠代码块
+            ]: # 展开代码块
             .: # 当前内容切换
             p: # 命令面板
             enter: # 向上插入行
@@ -270,6 +329,10 @@ vscode-hook:
         d: # 重复选择
         f: # 查找
         g: # 跳转行
+        k:
+            ctrl:
+                0: # 折叠所有代码块
+                j: # 展开所有代码块
         l: # 选择行
 ```
 
@@ -310,17 +373,19 @@ package.json:
 #### yo
 ```yaml
 yo:
-    code:
+    code: # 生成vscode项目模板
 ```
 
-vscode插件开发脚手架
+vscode插件开发项目脚手架
 
 
 
 #### vsce
 ```yaml
 vsce:
+    login: # 登录
     package: # 打包vscode插件
+    publish: # 发布
 ```
 
 vscode打包
@@ -343,3 +408,13 @@ workspace，多根工作区
 ### 任务命令
 
 Command、Task 命令、任务
+自定义脚本片段
+
+
+
+
+### 代码片段
+
+`.code-snippets`文件会被自动扫描
+
+片段body中使用自定义输入：`$1`、`$2`、`${3:默认值}`

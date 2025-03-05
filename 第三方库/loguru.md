@@ -5,7 +5,7 @@
 ```yaml
 loguru:
     logger:
-        add(): # 添加日志
+        add(): # 添加处理器
             format:
             level:
         bind():
@@ -14,6 +14,6 @@ loguru:
         exception():
         error():
         info():
-        remove():
+        remove(): # 移除默认的处理器
         warning():
 ```

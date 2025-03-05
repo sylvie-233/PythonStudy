@@ -1,13 +1,74 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/sql-databases`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/bigger-applications/`
 >
+>``
 
 ## 基础介绍
 
 内置工具集：Starlette
 
+- @on_event: 事件机制
+- @exception_handler: 异常处理
+    - HTTPException
+- @middleware: 中间件
+    - BaseHTTPMiddleware
+    - StaticFiles
+- @get():
+- @post():
+    - Request: 请求对象
+    - Response: 响应对象
+        - FileResponse: 文件响应
+        - HTMLResponse: 页面响应
+        - RedirectResponse: 重定向
+        - StreamingResponse: 二进制流响应
+    - File
+    - Form: 表单
+    - Header
+    - Path
+    - Query
+    - BackgroundTasks: 后台任务(异步) 
+- BaseModel: 模型基类(请求参数、响应结果)
+    - Field: 字段校验
+
+
+### 项目结构
+```txt
+my_project/
+│
+├── pyproject.toml            # Poetry 配置文件，管理依赖等
+├── poetry.lock               # 依赖锁定文件
+├── src/                      # 存放源代码
+│   └── my_project/           # 主程序包，和项目名称相同
+│       ├── __init__.py       # 主程序包的初始化文件
+│       ├── main.py           # FastAPI 的入口文件，定义应用和路由
+│       ├── api/              # 存放路由相关代码
+│       │   ├── __init__.py   # API 包初始化文件
+│       │   ├── v1/           # 路由版本目录
+│       │   │   ├── __init__.py
+│       │   │   ├── endpoints.py  # 路由定义
+│       │   │   └── models.py    # 路由相关的 Pydantic 模型
+│       │   └── ...           # 其他版本的 API 或其他模块
+│       ├── core/             # 存放项目核心逻辑
+│       │   ├── __init__.py
+│       │   ├── config.py     # 配置文件
+│       │   └── security.py   # 安全相关的代码（如 JWT 认证）
+│       ├── db/               # 数据库相关文件
+│       │   ├── __init__.py
+│       │   ├── models.py     # 数据库模型
+│       │   └── crud.py       # 数据库操作代码
+│       └── tests/            # 测试文件夹
+│           ├── __init__.py
+│           ├── test_api.py   # API 测试代码
+│           └── test_db.py    # 数据库测试代码
+├── alembic/                  # 数据库迁移文件（如果使用 Alembic）
+├── .gitignore                # Git 忽略文件
+├── README.md                 # 项目说明文件
+└── Dockerfile                # 如果需要部署容器化，这里是 Docker 配置文件
+```
+
+推荐目录结构
 
 
 ### fastapi
@@ -59,7 +120,7 @@ fastapi:
         HTMLResponse: # HTML页面响应
         PlainTextResponse: # 普通文本响应
         RedirectResponse: # 重定向响应类
-        StreamingResponse:
+        StreamingResponse: # 二进制流
             media_type:
     security: # 认证/授权模块
         base:
@@ -80,18 +141,20 @@ fastapi:
         HTTP_201_CREATED:
     templating: # 页面模板
         Jinja2Templates:
+            TemplateResponse: # 渲染结果
             directory:
-            TemplateResponse:
     APIRouter: # 子路由
+        dependencies: # 子路由依赖
         prefix:
         tags:
         @get():
         @post():
             response_model: # 响应模型类
+            response_model_exclude: # 排除字段
             response_model_exclude_defaults:
             response_model_exclude_none:
-            response_model_exclude_unset:
-            response_model_include:
+            response_model_exclude_unset: # 排除未设置的字段
+            response_model_include: # 使用字段
     BackgroundTasks: # 后台任务
         add_task():
     Body: # 请求体参数
@@ -110,6 +173,8 @@ fastapi:
     FastAPI: # 项目应用APP
         dependencies: # 全局依赖
         descriptioin: # 项目文档描述
+        docs_url: # 关闭doc文档
+        redoc_url: # 关闭redoc文档
         title: # 项目文档标题
         version: # 项目文档版本
         add_middleware(): # 添加中间件
@@ -128,15 +193,16 @@ fastapi:
             response_description:
             response_model: # 响应模型类
             status_code: # 响应状态码
-            summary:
+            summary: # 概述
             tags: # openapi标签（用于文档分组）
         @middleware(): # 中间件
             http:
         @on_event(): # app事件
             startup: # 应用启动时
+            shutdown:
         @post(): # POST handle
         @websocket(): # websocket handle
-    File: # 文件上传（类型位置标注）
+    File: # 文件上传（字节文件）
         default:
         description:
     Form: # form表单
@@ -163,15 +229,18 @@ fastapi:
         regex:
         title: # 文档标题
     Request: # 请求对象
+        client:
+            host:
         headers:
         query_params:
+        url:
         form():
         json():
     Response: # 响应对象
         set_cookie():
             key:
             value:
-    UploadFile: # 上传文件
+    UploadFile: # 上传文件（对象文件）
         content_type: # 文件类型（MIME）
         file: # python文件对象
         filename: # 文件名（原始） 
@@ -187,6 +256,7 @@ starlette: # ASGI开发工具集
         BackgroundTask:
     middleware:
         base:
+            BaseHTTPMiddleware: # 中间件基类
     requests:
         Request:
     responses:
@@ -217,6 +287,7 @@ pydantic: # 请求参数映射
             json_schema_extra:
                 examples: # 请求样例
         dict(): # 获取属性字典
+        from_dict(): # 根据字典创建
         model_copy(): # 模型实例复制 
             update: # 模型实例复制更新
         model_dump(): # 获取属性字典
@@ -233,6 +304,32 @@ pydantic: # 请求参数映射
 
 uvicorn: # ASGI服务器
     run(): # 运行主程序
+
+sqlmodel: # 官方主推ORM框架
+    Field: # 模型字段定义
+        default:
+        index:
+        primary_key:
+    Session:
+        add():
+        commit():
+        delete():
+        exec():
+            all():
+        get():
+        refresh():
+    SQLModel: # 模型基类
+        metadata:
+            create_all(): #建表
+        table: #  data model、table model
+        --- # 模型实例
+        sqlmodel_update(): # 字段更新
+    create_engine(): # 创建引擎 
+        connect_args:
+            check_same_thread:
+    select():
+        limit():
+        offset():
 ```
 
 ### Request
@@ -271,35 +368,87 @@ body请求体
 
 #### Form
 
+表单参数
+
 
 #### Cookie
 
+cookie
+
 
 #### Header
+
+请求头
 
 
 
 ### Pydantic
 
-请求参数映射
-
 数据验证
+请求参数映射、响应结果校验
+
+
+#### BaseModel
+
+数据模型
+
+
+#### Validation
+
+字段校验
+
 
 
 #### Response Model
 
-响应模型、响应结果字段过滤
+response_model响应模型、响应结果字段过滤
+
+DTO
+
+
 
 
 ### Templates
 
 HTML模板
 
+#### Jinja2Templates
+```yaml
+jinja2:
+    {{  }}: # 模板变量
+    {%  %}: # 模板语句
+    block ... endblock: # 模板插槽
+    extends: # 模板继承
+    for ... in ... endfor: # 列表渲染
+    if ... elif ... else ... endif: # 条件渲染
+    include: # 模板引入
+    macro ... endmacro: # 宏函数
+    with: # 上下文管理
+
+filter:
+    join:
+    replace:
+    trim:
+    upper:
+```
+
+##### Filter
+
+
+
+##### Macro
+
+宏
+
 
 
 ### Event
 
-事件监听
+全局事件监听：startup、shutdown
+
+
+
+
 
 ### Middleware
 ```python
@@ -313,6 +462,18 @@ async def add_process_time_header(request: Request, call_next):
 ```
 中间件
 
+默认全局中间件
+局部中间件只能自定义中间件、子路由依赖
+
+
+#### Static File
+
+StaticFiles
+
+
+#### Custom Middleware
+
+BaseHTTPMiddleware
 
 
 
@@ -333,6 +494,22 @@ async def unicorn_exception_handler(request: Request, exc: UnicornException):
 异常处理
 
 `@app.exception_handler()`
+
+
+#### Custom Error
+
+自定义异常
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### Dependency Injection
@@ -360,14 +537,17 @@ async def read_items():
 - 全局依赖
 - yield函数依赖（yield只能用一次、yield后代码在响应发送前被调用）
 
-使用依赖注入可实现参数预处理
+使用依赖注入可实现参数预处理、子路由中间件
 
 依赖yield退出代码，在中间件后面执行
 
 
+
+
 ### Background Task
 
-后台任务
+BackgroundTasks
+后台任务、异步执行
 
 
 
@@ -407,4 +587,9 @@ fastapi作者推出的ORM框架、基于sqlalchemy
 
 
 
+
+## 第三方集成
+
+
+### Tortoise ORM
 

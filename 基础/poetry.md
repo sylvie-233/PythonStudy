@@ -5,6 +5,10 @@
 python的项目包依赖管理工具（类似php的composer）
 
 
+`POETRY_VIRTUALENVS_PATH`: poetry安装虚拟环境目录
+`POETRY_VIRTUALENVS_IN_PROJECT`：在项目内创建虚拟环境
+虚拟环境目录的名称：`{project}-{hash}-{pythonversion}`
+
 
 ### poetry
 ```yaml
@@ -44,8 +48,9 @@ poetry:
     env: # 虚拟环境
         exit: # 退出虚拟环境
         ---
+        activate: # 激活虚拟环境
         info:
-        list:
+        list: # 列出所有的虚拟环境
         remove:
         use: # 创建&使用 虚拟环境(./venv)
     export: # 导出requirements.txt文件
@@ -69,7 +74,7 @@ poetry:
         update:
     shell: # 进入虚拟环境venv
         exit: # 退出虚拟环境
-    show: # 显示已安装包
+    show: # 显示项目依赖
     source: # 镜像源管理
         add:
         remove:
@@ -82,27 +87,48 @@ poetry:
 #### pyproject.toml
 ```yaml
 build-system:
-    build-backend:
+    build-backend: # 构建系统依赖
     requires:
 tool:
-    poetry:
+    poetry: # poetry构建工具配置
         authors:
         dependencies:
             python:
         descritpion:
+        dev-dependencies:
+        extras:
         group: # 配置分组
+            dev: # 开发配置
+                dependencies:
         name: # 包名(源码目录名)
-        packages:
+        packages: # 源码目录（可设置多个目录，都会被打包）
+            from:
             include:
+        plugins: # 插件
         readme:
+        scripts: # 自定义脚本片段
         version:
+project: # 项目配置
+    authors:
+        email:
+        name:
+    dependencies: # 项目模块依赖
+    description: # 项目描述
+    name: # 项目包名
+    readme:
+    requires-python: # python版本依赖
+    version: # 项目版本
 ```
 
 #### poetry.lock
 ```yaml
 poetry.lock:
-
 ```
+
+包依赖版本锁
+
+
+
 
 ## 核心内容
 
