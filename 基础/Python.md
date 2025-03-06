@@ -124,23 +124,24 @@ std:
                 type:
             parse_args(): # 参数解析返回args
     array: # 相同元素数组
-        array(): 
+        array: # 支持切片
             typecode: # 元素类型
-            append():
+            append(): # 追加元素
             extend():
             insert():
             pop():
             remove():
             reverse():
             tobytes():
-            tolist():
+            tolist(): # 转换为list
     asyncio: # 异步
         Event: # 事件
             set(): # 事件触发
             wait():
         Runner:
         Task:
-            cancel():
+            cancel(): # 取消异步任务
+            cancelled():
         TaskGroup:
         all_tasks():
         as_completed():
@@ -170,8 +171,13 @@ std:
         StopIteration: # 停止迭代异常
         ValueError:
         bool:
-        bytes: # 字节数组
+        bytearray: # 可变字节数组
+        bytes: # 不可变字节数组
+            count():
             decode(): # 解码
+            find():
+            fromhex():
+            hex(): # 十六进制字符串
         complex:
         dict: # 字典
             clear():
@@ -184,6 +190,7 @@ std:
             update():
             values():
         float:
+        frozenset: # 不可变集合
         int:
         list: # 列表
             append(): # 添加元素
@@ -212,6 +219,7 @@ std:
             encode(): # 编码
             format(): # 格式化字符串
             isalpha(): # 字符判断
+            join(): # 以指定字符串拼接数组
             replace():
             split(): # 字符串分隔
             startswith():
@@ -219,6 +227,17 @@ std:
             title(): # 首字母大写转换
             upper(): # 转大写
         tuple:
+            count():
+            index():
+        @classmethod:
+        @property:
+            @fdel:
+            @fdoc:
+            @fget:
+            @fset:
+            @deleter:
+            @setter:
+        @staticmethod:
         abs(): # 取绝对值
         all(): # 判定是否全部为True
         any(): # 判定是否存在True
@@ -273,21 +292,31 @@ std:
         zip():
     bz2:
     calendar: # 日历
-        TextCalendar:
+        SUNDAY:
+        HTMLCalendar:
             formatmonth():
-        day_name:
-        firstweekday():
+        TextCalendar: # 文本日历
+            formatmonth(): # 
+        calendar(): # 日历类
         isleap():
-        prcal(): # 打印一年的日历
+        leapdays():
+        month():
+        monthcalendar():
+        monthrange():
         setfirstweekday():
+        weekday():
     cmath:
-    collections:
+    collections: # 集合
         Counter: # 计数器
+            most_common():
+        OrderedDict:
         defaultdict: # 默认字典 
-        deque:
+        deque: # 双端队列
             append():
             appendleft():
-        namedtuple:
+            pop():
+            popleft():
+        namedtuple: # 具名元组
         UserDict:
         UserList:
         UserString:
@@ -312,24 +341,30 @@ std:
             sections(): # ini段落
             set(): # 设置value值
             write(): # 写出配置
-    contextlib:
+    contextlib: # 上下文管理
         @asynccontextmanager:
         @contextmanager:
+    copy: # 拷贝
+        deepcopy(): # 深拷贝
     csv:
     dataclasses:
-        asdict():
-        dataclass(): # 数据类dataclass
+        @dataclass(): # 数据类dataclass
             order:
             __post_init():
+        asdict():
         field():
             default_factory:
     datetime: # 日期相关
-        date:
+        date: # 日期
             fromtimestamp(): # 时间戳转换date
             timetuple(): # 获取时间元组struct_time
             today():
         datetime: # 日期时间
+            day:
+            hour:
+            minute:
             month:
+            second:
             year:
             fromtimestamp(): # 时间戳转换datetime
             now(): # 当前时间
@@ -339,18 +374,28 @@ std:
                 month:
                 year:
             strftime(): # 格式化时间
+                %Y: # 年
+                %m: # 月
+                %d: # 日
+                %H: # 时
+                %M: # 分
+                %S: # 秒
+            strptime(): # 日期事件解析
             timestamp(): # 时间戳
             timetuple(): 
             today(): # 今天
+            utcfromtimestamp(): # UTC 时间戳转换
         time: # 时间
         timedelta: # 时间间隔
             days:
             hours:
-        date():
-        time():
+            weeks:
+            total_seconds(): # 总共秒数
+        timezone: # 时区
+            utc:
     decimal:
     difflib:
-    enum:
+    enum: # 枚举
         Enum: # 枚举基类
         Flag: # 按位枚举
         IntFlag:
@@ -364,14 +409,14 @@ std:
     functools: # 函数工具库
         lru_cache():
         reduce(): # 迭代计数
-        wraps(): # 函数包装(常用于高阶函数装饰器)
+        @wraps(): # 函数包装(常用于高阶函数装饰器).可以将原函数的元数据（如 __name__ 和 __doc__）复制到包装函数上
     gc:
     glob: # 文件索引
         escape():
         glob():
             recursive():
     gzip:
-    hashlib:
+    hashlib: # 哈希
         md5(): # md5加密
             digest(): # 加密
             hexdigest(): # 16进制加密
@@ -398,7 +443,7 @@ std:
                 read():
         cookies:
         server:
-    importlib:
+    importlib: # 模块导入
         util:
         import_module(): # 动态导入模块
     inspect: # 反射信息
@@ -423,6 +468,10 @@ std:
         stack(): # 获取堆栈信息
     io: # 内建I/O模块
         BytesIO: # 二进制流
+        StringIO: # 字符串流
+            getvalue():
+            seek():
+            write():
     ipaddress: #  IP地址操作
         IPv4Address: # ipv4
             broadcast_address: # 广播地址
@@ -438,7 +487,7 @@ std:
     itertools: # 迭代工具库
         chain(): # 合并
         permutations(): # 
-    json:
+    json: # JSON
         dump(): # json序列化
         dumps(): 
         load(): # json反序列化
@@ -576,7 +625,7 @@ std:
     platform:
     pydoc:
     queue:
-    random:
+    random: # 随机数
         SystemRandom:
         choice(): # 随机返回一个字符
         randint(): # 随机整数
@@ -607,7 +656,12 @@ std:
             group():
             groupdict():
             groups():
-    readline:
+    readline: # 交互式命令行体验增强
+        get_current_history_length():
+        parse_and_bind():
+        read_history_file():
+        set_completer(): # 命令补全
+        write_history_file():
     select:
     shutil: # 文件操作工具类
         copy(): # 文件拷贝(文件、权限)
@@ -686,6 +740,7 @@ std:
         getdefaultencoding(): # 获取解释器默认编码
         getfilesystemencoding(): # 获取文件默认编码
         getrecursionlimit(): # 获取最大递归层数
+        getsizeof(): # 获取对象内存大小
         setdefaultencoding():
         setrecursionlimit(): # 设置最大递归层数
     telnetlib:
@@ -825,6 +880,7 @@ std:
         Sequence: # 只读列表
         Set: # 集合
         Tuple: # 元组
+        TypeAlias: # 类型别名
         TypeVar: # 类型变量T
         TypedDict:
         Union: # 联合类型
@@ -979,6 +1035,24 @@ BuiltinVar:
 ```
 
 可选类型：`type | None`
+类型别名：`typing.TypeAlias`
+
+
+#### Bytes
+```python
+# 字节数据声明
+b = b"hello"
+
+# 构造函数声明
+b2 = bytes([72, 101, 108, 108, 111])
+
+# 可变字节数组
+b = bytearray(b"hello")
+b[0] = 72  # 修改第一个字节
+```
+
+不可变的二进制数据
+使用字符串切片、拼接实现字符串修改
 
 
 
@@ -1002,23 +1076,66 @@ str = b"xxx"
 ```
 
 
-#### Slice
+不可变字符串
+
 
 
 
 #### Tuple
+```python
+# 元组字面量声明
+t1 = (1, 2, 3)
+t2 = ("hello", True, 3.14)
+
+# 构造方法声明
+t6 = tuple([1, 2, 3])
+```
+
+不可变序列
+支持切片索引、解构
 
 
 
 #### List
+```python
+# 字面量声明
+lst = [1, 2, 3, "hello", True]
+
+# 构造声明
+lst = list((1, 2, 3))  # 从元组转换
+
+
+# 列表推导式
+lst = [x for x in range(10) if x % 2 == 0]
+```
+
+可变序列
+支持切片索引、
 
 
 #### Set
+```python
+# 字面量声明
+s = {1, 2, 3, 4}
+
+# 构造声明
+s = set([1, 2, 3, 3, 2])
+```
+
+无序、不重复 的数据结构
+支持集合运算、
 
 
+#### Dict
+```python
+# 字面量声明
+d = {"name": "Alice", "age": 25}
 
-#### Map
+# 构造声明
+d = dict(name="Alice", age=25)
+```
 
+字典K-V映射
 
 
 #### Enum
@@ -1027,19 +1144,41 @@ class Color(Enum):
     RED = 1
     GREEN = 2
     BLUE = 3
+    def describe(self):
+        return f"{self.name} ({self.value})"
+
+# 带构造枚举
+class Status(Enum):
+    SUCCESS = (200, "Operation successful")
+    NOT_FOUND = (404, "Resource not found")
+    SERVER_ERROR = (500, "Internal server error")
+
+    def __init__(self, code, msg):
+        self.code = code
+        self.msg = msg
 ```
 
-Enum
+Enum枚举
+
+
+支持名称索引、值索引、遍历
+auto()自动赋值
+
 
 
 ### 控制流程
 ```yaml
 Control Flow:
+    as: # 别名
+    in:
     is:
     pass: # 代码省略
     raise:
     for ... else:
     for ... in:
+        enumerate(): # 带索引遍历
+        range(): # 数值遍历（可逆序）
+        reversed(): # 逆序遍历
     if ... elif ... else:
     match ... case if ...: # switch case 进阶版
     try ... except ... finally:
@@ -1057,13 +1196,33 @@ Control Flow:
 
 #### Exception
 ```python
+# 异常捕获
 try:
     ...
 except Exception as xxx:
     ...
+else:
+    ...
 finally:
     ... 
+
+# 自定义异常
+class MyCustomError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        self.message = message
+
+# 使用自定义异常
+try:
+    raise MyCustomError("Something went wrong!")
+except MyCustomError as e:
+    print(f"Custom Error: {e}")
 ```
+
+
+异常处理
+
+
 
 
 #### Context Manager
@@ -1087,8 +1246,28 @@ with change_dir("/xxx") as old_path:
 
 
 #### Doc String
+```python
+def multiply(a, b):
+    """
+    Multiplies two numbers and returns the result.
+
+    :param a: The first number to multiply.
+    :type a: int
+    :param b: The second number to multiply.
+    :type b: int
+    :return: The product of a and b.
+    :rtype: int
+    :raises ValueError: If any parameter is not an integer.
+    """
+    if not isinstance(a, int) or not isinstance(b, int):
+        raise ValueError("Both parameters must be integers.")
+    return a * b
+```
 
 rst: reStructuredText
+
+文档字符串
+
 
 
 ### 函数
@@ -1102,7 +1281,7 @@ add(1, 2)
 ```
 
 
-#### 生成器
+#### Generator
 ```python
 def simple_generator():
     yield 1
@@ -1139,7 +1318,26 @@ print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 Stop
 
 
 
-#### 装饰器
+#### Decorator
+```python
+def count_calls(message="Function called"):
+
+    def decorator(func):
+        count = 0
+
+        @functools.wraps(func)  # 保持原函数的元数据
+        def wrapper(*args, **kwargs):
+            nonlocal count
+            count += 1
+            print(f"{message}: {count} times")
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+@count_calls("add function called")
+def add(a, b):
+    return a + b
+```
 
 高阶函数
 
@@ -1148,19 +1346,55 @@ print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 Stop
 一般装饰器函数两层、带参数装饰器三层
 
 
-#### 泛型
+#### Generaic
+```python
+from typing import TypeVar, List
+
+# 定义泛型类型参数 TypeVar
+T = TypeVar('T')
+
+# 泛型函数声明
+def first_item(items: List[T]) -> T:
+    return items[0]
+```
+
+
+函数泛型
+函数的泛型支持可以通过 类型提示（Type Hinting）来实现，特别是借助于 typing 模块的 泛型类型
 
 
 
 ### 面向对象
 ```python
 class Person:
-    age: int 
-    name: str
+    # 类变量
+    species = "Homo sapiens"
 
-    def __init__(self):
-        ...
-    
+    # 构造函数，初始化实例对象的属性
+    def __init__(self, name, age):
+        # 实例变量
+        self.name = name
+        self.age = age
+
+    # 实例方法
+    def greet(self):
+        return f"Hello, my name is {self.name} and I am {self.age} years old."
+
+    # 类方法
+    @classmethod
+    def car_count(cls):
+        return f"species: {cls.species}"
+
+    # 静态方法
+    @staticmethod
+    def fuel_efficiency(miles, gallons):
+        return miles / gallons
+        
+# 创建类的实例
+person1 = Person("Alice", 30)
+
+# 访问实例方法
+print(person1.greet())  # 输出：Hello, my name is Alice and I am 30 years old. 
 ```
 
 Class为type类型的对象实例，基类为object
@@ -1177,17 +1411,51 @@ type为type自身类型的对象实例，基类为object
 通过类变量访问类属性、只允许访问，不允许修改(实则新建属性)
 类对象无法修改类变量的值，通过类对象对类变量赋值，只会修改自己对象中的变量值
 
-类方法：`@classmethod`
-静态方法：`@staticmethod`
+
+
 
 #### Property
+```python
+class Square:
+    def __init__(self, side_length):
+        self._side_length = side_length
+
+    @property
+    def side_length(self):
+        return self._side_length
+
+    @side_length.setter
+    def side_length(self, value):
+        if value <= 0:
+            raise ValueError("Side length must be positive")
+        self._side_length = value
+
+    @side_length.deleter
+    def side_length(self):
+        print("Deleting side length...")
+        del self._side_length
+
+# 创建 Square 实例
+square = Square(4)
+
+# 访问属性
+print(square.side_length)  # 输出：4
+
+# 删除属性
+del square.side_length  # 输出：Deleting side length...
+```
+
+实例属性、类属性、@property装饰器
 
 
+##### Class Property
+
+类属性
 
 
 #### Function
 ```yaml
-:
+魔术方法:
     __match_args__: # match语句位置参数
     __name__:
     __del__(): # 析构犯法
@@ -1211,6 +1479,8 @@ type为type自身类型的对象实例，基类为object
     super():
 ```
 
+实例方法、魔术方法、类方法、静态方法
+
 
 ##### Magic Method
 
@@ -1219,33 +1489,138 @@ type为type自身类型的对象实例，基类为object
 
 ##### Class Method
 
+类方法：`@classmethod`，默认传入cls类变量
 
 
 ##### Static Method
 
+静态方法：`@staticmethod`，无默认传入
 
 
-#### 装饰器
+#### Decorator
 ```yaml
-:
+装饰器:
     @classmethod:
     @property: # 属性
-        fdel:
-        fdoc:
-        fget:
-        fset:
-        deleter:
-        setter:
     @staticmethod:
 ```
 
 ![Property装饰器](../.assets/Property装饰器.png)
 
 
-#### 迭代器
+
+##### Class Decorator
+```python
+def with_prefix(prefix: str):
+    def decorator(cls):
+        class PrefixedClass(cls):
+            def __init__(self, name: str):
+                self.name = f"{prefix} {name}"
+        
+        return PrefixedClass
+    return decorator
+
+@with_prefix("Mr.")
+class Person:
+    def __init__(self, name: str):
+        self.name = name
+
+    def __repr__(self):
+        return f"Person(name={self.name})"
+
+# 创建实例
+person = Person("John")
+print(person)  # 输出：Person(name=Mr. John)
+```
+
+类装饰器
+可修改类的行为
+
+
+
+##### Property Decorator
+```python
+def cache_property(func):
+    """缓存属性的值"""
+    def wrapper(self):  # 传入self
+        if not hasattr(self, '_cached_' + func.__name__):
+            value = func(self)
+            setattr(self, '_cached_' + func.__name__, value)
+        return getattr(self, '_cached_' + func.__name__)
+    return wrapper
+
+class Circle:
+    def __init__(self, radius: float):
+        self._radius = radius
+
+    @property
+    @cache_property
+    def area(self) -> float:
+        """计算圆的面积并缓存"""
+        print("Calculating area...")
+        return 3.14 * self._radius ** 2
+```
+
+属性装饰器
+需借助@property（本质上还是函数装饰器）
+
+
+##### Method Decorator
+```python
+def requires_permission(permission: str):
+    """一个权限检查装饰器"""
+    def decorator(func):
+        def wrapper(self, *args, **kwargs):
+            if permission not in self.permissions:
+                raise PermissionError(f"Permission '{permission}' is required to execute this method.")
+            return func(self, *args, **kwargs)
+        return wrapper
+    return decorator
+
+class User:
+    def __init__(self, name: str, permissions: list):
+        self.name = name
+        self.permissions = permissions
+
+    @requires_permission("admin")
+    def delete_account(self):
+        """删除账户"""
+        print(f"Account for {self.name} has been deleted.")
+```
+
+方法装饰器
+
+
+
+#### Iterator
+```python
+class Countdown:
+    def __init__(self, start):
+        self.start = start
+        self.current = start
+
+    def __iter__(self):
+        # 返回自身作为迭代器对象
+        return self
+
+    def __next__(self):
+        if self.current <= 0:
+            raise StopIteration  # 当没有更多元素时，抛出 StopIteration 异常
+        self.current -= 1
+        return self.current
+
+# 创建一个 Countdown 对象并使用它进行迭代
+countdown = Countdown(5)
+
+# 遍历迭代器
+for number in countdown:
+    print(number)  # 输出 4, 3, 2, 1, 0
+```
+
+
+迭代器
 
 `__getitem__()`
-
 `__iter__()`->`__next__()`，iter生成迭代器(self)、next实现元素迭代
 `StopIteration`异常停止迭代
 
@@ -1305,14 +1680,62 @@ class MyType(type):
 
 
 #### DataClass
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Person:
+    name: str
+    age: int
+
+# 创建 Person 实例
+person1 = Person("Alice", 30)
+
+# 自动生成的 __repr__ 方法
+print(person1)  # 输出：Person(name='Alice', age=30)
+```
 
 
+数据类
 `@dataclass`
 
-#### 泛型
+使用 @dataclass 装饰器后，Python 会自动为类生成以下常用方法：
+- __init__：根据类定义的字段生成构造函数。
+- __repr__：为类生成友好的字符串表示，通常用于调试。
+- __eq__：为类生成比较方法，支持对象之间的相等性比较。
+- __hash__：如果类是不可变的（如 frozen=True），会自动生成哈希值。
+- __post_init__：如果需要在初始化后执行一些操作，可以定义一个 __post_init__ 方法。
 
 
 
+
+#### Generaic
+```python
+from typing import TypeVar, Generic
+
+# 定义多个类型变量
+T = TypeVar('T')
+U = TypeVar('U')
+
+class Pair(Generic[T, U]):
+    def __init__(self, first: T, second: U):
+        self.first = first
+        self.second = second
+
+    def get_first(self) -> T:
+        return self.first
+
+    def get_second(self) -> U:
+        return self.second
+
+# 创建不同类型的 Pair 实例
+pair1 = Pair(42, "Hello")
+print(pair1.get_first())  # 输出：42
+print(pair1.get_second())  # 输出：Hello
+```
+
+
+泛型类
 
 
 
@@ -1325,6 +1748,9 @@ class MyType(type):
 
 一个文件就是一个模块
 一个包本质上是一个包含`__init__.py`文件的目录
+
+
+支持绝对路径、相对路径
 
 
 module -> package -> library （模块、包、库、框架 逐渐变大）
@@ -1363,16 +1789,18 @@ event事件、semaphore信号、lock锁、Barrier、Condition条件变量
 
 
 #### Async
+```python
+```
+
+event loop -> executor  -> task -> coroutine
 
 coroutine协程是可以暂停运行、恢复运行的函数（async定义协程函数）
 task任务是对协程的包装，使得事件循环能获取协程的状态
 coroutine包装成task的过程可自动实现、包装成task后可对coroutine进行控制
 
-event loop -> executor  -> task -> coroutine
+async函数返回corouotine协程对象、可根据coroutine对象创建task
 
-async函数返回corouotine协程对象
-
-可根据coroutine对象创建task
+`asyncio.create_task()`相当于`new Promise()`
 
 
 

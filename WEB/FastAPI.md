@@ -1,7 +1,7 @@
 # FastAPI
 
 >
->`FastAPI官方文档：https://fastapi.tiangolo.com/tutorial/bigger-applications/`
+>`FastAPI官方文档：https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/`
 >
 >``
 
@@ -143,6 +143,11 @@ fastapi:
         Jinja2Templates:
             TemplateResponse: # 渲染结果
             directory:
+    testclient:
+        TestClient:
+            get():
+                json():
+                status_code():
     APIRouter: # 子路由
         dependencies: # 子路由依赖
         prefix:
