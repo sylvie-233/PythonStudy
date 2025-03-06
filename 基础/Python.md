@@ -4,7 +4,7 @@
 > `Python官方文档教程：https://docs.python.org/3/tutorial/index.html`
 >
 > `Python API文档：https://docs.python.org/3/library/index.html`
->`Python面向对象：P4`
+>``
 
 
 ## 基础介绍
@@ -135,27 +135,55 @@ std:
             tobytes():
             tolist(): # 转换为list
     asyncio: # 异步
-        Event: # 事件
+        CancelledError: # 协程任务取消异常
+        Event: # 异步事件等待，顺序控制
             set(): # 事件触发
             wait():
+        Future: # Task父类，可存储结果，通常用于task内部，可await
+            add_done_callback():
+            cancel():
+            done():
+            exception():
+            result():
+            set_exception():
+            set_result():
+        Queue: # 异步队列，协程通信
+            get():
+            put():
         Runner:
-        Task:
-            cancel(): # 取消异步任务
-            cancelled():
+        Semaphore: # 异步信号量，并发量控制，配合async with异步上下文使用
+        Task: # 异步协程任务对象，Future子类
+            add_done_callback():
+            cancel(): # 取消任务
+            done():
+            exception():
+            result():
+            set_exception():
+            set_result():
         TaskGroup:
         all_tasks():
         as_completed():
+        create_future(): # 创建future
         create_task(): # 根据co对象创建task
         current_task():
-        gather(): # task聚合结果
-        get_event_loop():
-        run(): # 运行协程、任务
-        sleep(): # 异步sleep
-        to_thread(): # 异步多线程包装
-        wait():
-        get_event_loop():
+        ensure_future():
+        gather(): # 并行执行多个任务，等待多个协程完成
+        get_event_loop(): # 手动管理事件循环
             run_forever():
             run_until_complete():
+        get_running_loop(): # 获取当前线程的事件循环对象
+            close(): # 关闭事件循环
+            create_future():
+            create_task():
+            run_forever():
+            run_until_complete(): # 运行所有任务
+            stop():
+        new_event_loop(): # 新建事件循环
+        run(): # 运行一个协程/任务，等待完成
+        sleep(): # 协程睡眠
+        to_thread(): # 异步多线程包装
+        wait(): # 多个任务等待
+        wait_for(): # 限时等待
     ast: # 抽象语法树
     base64: # base64编码
         b64decode():
@@ -168,6 +196,9 @@ std:
         __name__:
         __package__:
         Enum:
+        Exceptioin: # 异常基类
+            args: # 参数
+            with_traceback():
         StopIteration: # 停止迭代异常
         ValueError:
         bool:
@@ -287,7 +318,7 @@ std:
             write(): # 写入内容（缓冲区）
         print(): # 控制台输出
         repr(): # 可见字符显示
-        type():
+        type(): # 获取对象的类型、动态创建新类
             class_attr:
         zip():
     bz2:
@@ -753,13 +784,13 @@ std:
         Lock:
         RLock:
         Semaphore:
-        Thread:
+        Thread: # 线程对象
             getName():
             is_alive():
             isDaemon():
-            join():
+            join(): # 阻塞运行
             setDaemon():
-            start():
+            start(): # 开始运行
         Timer:
         activeCount():
         current_thread():
@@ -1408,8 +1439,8 @@ type为type自身类型的对象实例，基类为object
 - object为类继承的顶点，所有类都继承自object。
 
 
-通过类变量访问类属性、只允许访问，不允许修改(实则新建属性)
-类对象无法修改类变量的值，通过类对象对类变量赋值，只会修改自己对象中的变量值
+- `__new__`: 负责创建对象，返回实例。
+- `__init__`: 负责初始化对象，接收 self 进行赋值等初始化操作。
 
 
 
@@ -1448,14 +1479,23 @@ del square.side_length  # 输出：Deleting side length...
 实例属性、类属性、@property装饰器
 
 
+实例属性可动态添加
+
+
+
+
 ##### Class Property
 
 类属性
 
 
+通过类、类实例对象访问类属性
+类对象无法修改类变量的值，通过类对象对类变量赋值，只会修改自己对象中的变量值
+
 #### Function
 ```yaml
 魔术方法:
+    __class__: # 类实例获取类对象
     __match_args__: # match语句位置参数
     __name__:
     __del__(): # 析构犯法
@@ -1630,6 +1670,29 @@ for number in countdown:
 
 #### MetaClass
 ```python
+class MyMeta(type):
+    def __new__(cls, name, bases, dct):
+        print(f"Creating class: {name}")
+        return super().__new__(cls, name, bases, dct)
+
+    def __init__(cls, name, bases, dct):
+        print(f"Initializing class: {name}")
+        super().__init__(name, bases, dct)
+
+     def __call__(cls, *args, **kwargs):
+        print(f"Creating instance of {cls.__name__}")
+        return super().__call__(*args, **kwargs)
+
+class MyClass(metaclass=MyMeta):
+    def __new__(cls, *args, **kwargs):
+        instance = super().__new__(cls, *args, **kwargs)
+        return instance
+    def __init__(self, name):
+        self.name = name
+
+
+
+
 @staticmethod
 def __new__(mcs, *args, **kwargs):
     # args = (ClassName, (object,), {"__module__"="__main__","__qualname__"=ClassName})
@@ -1637,16 +1700,29 @@ def __new__(mcs, *args, **kwargs):
     return class
 ```
 
+- `metaclass.__new__`: 创建MyClass类
+- `metaclass.__init__`: 初始化MyClass类
+- `metaclass.__call__`: 拦截obj的创建obj
+- `MyClass.__init__`: 初始化MyClass实例obj
+
+
+类实例化顺序：
+1. 元类的 `__new__` 先创建类对象（MyClass）。
+2. 元类的 `__init__` 初始化类（MyClass）。
+3. 当 MyClass() 被调用时，会触发 `metaclass.__call__`。
+4. 在 `metaclass.__call__` 里，会调用 `MyClass.__new__` 生成实例对象。
+5. 随后调用 `MyClass.__init__` 进行实例的初始化。
+
+注意区分元类中的`__new__`和自定义中的`__new__`（一个用来创建类本身、一个用来创建类实例）
+
+
+
+
 一个metaclass就是一个用来创建其他class的类、type就是所有类默认的metaclass
-
 type()动态创建class（type也就是java中的Class类，并非Object）
-
 metaclass影响类本身的创建行为
-
 metaclass继承自type
-
 一旦把自定义类类型 MyClass 的 metaclass 设置成 MyMeta，MyClass 就不再由原生的 type生成
-
 类对象创建`__call__() -> __new__() -> __init__()` 
 
 
@@ -1780,25 +1856,33 @@ import生成module实例 ，import只会执行一次（同一个实例）
 
 ### 并发
 
+
+- `asyncio`
+- `concurrent`
+
 event事件、semaphore信号、lock锁、Barrier、Condition条件变量
 
 
 #### Thread
 
-
+线程
 
 
 #### Async
 ```python
 ```
 
-event loop -> executor  -> task -> coroutine
+async函数创建协程对象
+
+event loop -> executor  -> task -> coroutine(async)
+
+每个线程只能有一个事件循环，可新建事件循环手动管理，默认不需要
 
 coroutine协程是可以暂停运行、恢复运行的函数（async定义协程函数）
 task任务是对协程的包装，使得事件循环能获取协程的状态
 coroutine包装成task的过程可自动实现、包装成task后可对coroutine进行控制
 
-async函数返回corouotine协程对象、可根据coroutine对象创建task
+async函数返回corouotine协程对象、可根据coroutine对象创建task、task为future子类
 
 `asyncio.create_task()`相当于`new Promise()`
 
