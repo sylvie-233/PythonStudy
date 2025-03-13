@@ -2,6 +2,12 @@
 
 ## 基础介绍
 
+
+
+![vscode快捷键大全](../.assets/vscode_keyboard.png)
+
+
+
 ### code
 ```yaml
 code:
