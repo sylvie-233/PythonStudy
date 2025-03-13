@@ -189,12 +189,32 @@ extensions.json:
 #### .code-snippets
 ```yaml
 code-snippets:
-    _snippet_name:
-        body: # 片段内容
-        prefix: # 片段使用前缀
-        scope: # 作用范围
-            css:
-            javascript:
+    body: # 片段内容
+    prefix: # 片段使用前缀
+    scope: # 作用范围
+        css:
+        javascript:
+
+内置变量:
+    CURRENT_DATE:
+    CURRENT_MONTH:
+    CURRENT_TIME:
+    CURRENT_USER:
+    CURRENT_YEAR:
+    TM_DIRECTORY:
+    TM_FILENAME:
+    TM_FILENAME_BASE:
+    TM_LINE_INDEX:
+    TM_LINE_NUMBER:
+
+内置处理函数:
+    camelcase:
+    capitalize:
+    kebabcase:
+    lowercase:
+    pascalcase:
+    snakecase:
+    uppercase:
 ```
 
 代码片段
@@ -424,3 +444,5 @@ Command、Task 命令、任务
 `.code-snippets`文件会被自动扫描
 
 片段body中使用自定义输入：`$1`、`$2`、`${3:默认值}`
+
+
