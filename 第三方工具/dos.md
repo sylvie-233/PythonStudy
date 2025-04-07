@@ -72,3 +72,38 @@ goto :eof
 ```
 
 函数没有返回值
+
+
+
+## Windows
+
+### 注册表
+```yaml
+regedit:
+    /HKEY_CLASSES_ROOT: # 	存放文件关联、COM 组件等信息，决定某种文件类型用哪个程序打开
+        /*:
+            /shell:
+                /VSCode:
+                    /command: # 命令执行
+                        (默认):
+                    (默认):
+                    Icon:
+    /HKEY_CURRENT_USER: # 当前登录用户的个性化设置（如桌面、壁纸、快捷方式等）
+        /Software:
+            /Microsoft:
+                /Windows:
+                    /CurrentVersion:
+                        /Run: # 这个路径下的项会在用户登录时自动启动
+    /HKEY_LOCAL_MACHINE: # 	整个计算机的设置（适用于所有用户），包括驱动、服务、硬件等
+        /SYSTEM:
+            /CurrentControlSet:
+                /Services: # 包含了所有系统服务的注册信息（如启动类型、依赖项等）
+    /HKEY_USERS: # 系统中所有用户的设置，HKCU 实际上就是其中当前用户的子项
+    /HKEY_CURRENT_CONFIG: # 当前硬件配置的快捷方式（如显示器、打印机配置），从 HKLM 派生
+```
+
+
+
+### COM
+
+COM(Component Object Model) 就是 Windows 的跨语言组件系统：你可以写一个功能模块（组件），注册到系统里，其他程序就能调用它，就像调用自己的代码一样
