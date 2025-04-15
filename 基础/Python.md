@@ -4,7 +4,7 @@
 > `Python官方文档教程：https://docs.python.org/3/tutorial/index.html`
 >
 > `Python API文档：https://docs.python.org/3/library/index.html`
->``
+> `Python开发编程高级进阶教程：P8`
 
 
 ## 基础介绍
@@ -75,37 +75,12 @@ pdb:
 python调试工具
 
 
-### mypy
-```yaml
-mypy.ini:
-```
-
-python类型检测
 
 
 
-### pylint
-```yaml
-pylint:
-    --generate-rcfile:
-```
-
-python代码格式化
-
-#### .pylintrc
-```yaml
-.pylintrc:
-    FORMAT:
-        max-line-length:
-        indent-string:
-    MAIN: # 主配置
-    MESSAGES CONTROL: # 消息控制
-        disable:
-            trailing-whitespace:
-```
 
 
-pylint配置文件
+
 
 
 ## 核心内容
@@ -808,7 +783,7 @@ std:
         localtime(): # 获取本地时间 struct_time
         mktime(): # 标准时间转时间戳
         perf_counter(): # 执行计数（秒）
-        sleep(): # 线程睡眠
+        sleep(): # 线程睡眠，秒
         strftime(): # 格式化显示时间
         strptime(): # 格式化转换时间
             %d: # 日
@@ -1053,6 +1028,7 @@ DataTypes:
     bool:
     complex: # 复数
     float:
+    function: # 函数
     int: # 整数
     list: # 列表
     str: # 字符串
@@ -1311,6 +1287,9 @@ add = lambda a, b: a+b
 add(1, 2)
 ```
 
+匿名函数
+
+
 
 #### Generator
 ```python
@@ -1371,6 +1350,9 @@ def add(a, b):
 ```
 
 高阶函数
+接收函数作为参数、返回一个新函数，@执行
+
+
 
 ![Python基础装饰器](../.assets/python基础装饰器.png)
 
@@ -1481,6 +1463,10 @@ del square.side_length  # 输出：Deleting side length...
 
 实例属性可动态添加
 
+#### Extends
+
+继承
+
 
 
 
@@ -1519,7 +1505,11 @@ del square.side_length  # 输出：Deleting side length...
     super():
 ```
 
-实例方法、魔术方法、类方法、静态方法
+类中方法：
+- 实例方法
+- 魔术方法
+- 类方法
+- 静态方法
 
 
 ##### Magic Method
