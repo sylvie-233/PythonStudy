@@ -4,7 +4,7 @@
 > `Python官方文档教程：https://docs.python.org/3/tutorial/index.html`
 >
 > `Python API文档：https://docs.python.org/3/library/index.html`
-> `Python开发编程高级进阶教程：P8`
+> `Python开发编程高级进阶教程：P40`
 
 
 ## 基础介绍
@@ -86,9 +86,10 @@ python调试工具
 ## 核心内容
 ```yaml
 std:
-    abc:
+    abc: # 抽象类
+        ABC: # 抽象父类
         ABCMeta: # 标注为抽象类
-        abstractmethod: # 抽象方法
+        @abstractmethod: # 抽象方法
     argparse: # 命令行解析工具
         ArgumentParser:
             description:
@@ -110,7 +111,10 @@ std:
             tobytes():
             tolist(): # 转换为list
     asyncio: # 异步
+        Barrier:
+        BoundedSemaphore:
         CancelledError: # 协程任务取消异常
+        Condition:
         Event: # 异步事件等待，顺序控制
             set(): # 事件触发
             wait():
@@ -128,36 +132,38 @@ std:
         Runner:
         Semaphore: # 异步信号量，并发量控制，配合async with异步上下文使用
         Task: # 异步协程任务对象，Future子类
-            add_done_callback():
+            add_done_callback(): # 成功回调
             cancel(): # 取消任务
             done():
             exception():
-            result():
+            result(): # 同步获取结果
             set_exception():
             set_result():
         TaskGroup:
+        @coroutine: # 装饰器定义协程函数
         all_tasks():
         as_completed():
-        create_future(): # 创建future
+        create_future(): # 创建Task
         create_task(): # 根据co对象创建task
         current_task():
         ensure_future():
-        gather(): # 并行执行多个任务，等待多个协程完成
-        get_event_loop(): # 手动管理事件循环
+        gather(): # 并行执行多个任务，不定量参数，等待多个协程完成
+        get_event_loop(): # 获取当前线程的事件循环对象，手动管理事件循环
             run_forever():
             run_until_complete():
-        get_running_loop(): # 获取当前线程的事件循环对象
+        get_running_loop(): # 获取当前线程的事件循环对象，线程和事件循环是一一绑定的
             close(): # 关闭事件循环
             create_future():
-            create_task():
+            create_task(): # 根据co对象创建task
             run_forever():
             run_until_complete(): # 运行所有任务
             stop():
         new_event_loop(): # 新建事件循环
-        run(): # 运行一个协程/任务，等待完成
+        run(): # 运行一个协程/任务，等待完成，内置事件循环（每次创建、结束销毁）
+        set_event_loop(): # 设置当前线程的事件循环
         sleep(): # 协程睡眠
-        to_thread(): # 异步多线程包装
-        wait(): # 多个任务等待
+        to_thread(): # 异步线程包装，避免阻塞事件循环
+        wait(): # 多个任务等待，list列表，多个task包装成一个task
         wait_for(): # 限时等待
     ast: # 抽象语法树
     base64: # base64编码
@@ -221,7 +227,7 @@ std:
             remove():
             update():
         slice:
-        str:
+        str: # 字符串
             encode(): # 编码
             format(): # 格式化字符串
             isalpha(): # 字符判断
@@ -249,30 +255,30 @@ std:
         any(): # 判定是否存在True
         ascii(): # 转ascii码
         bin(): # 转二进制
-        bytearray():
         callable(): # 判定对象是否可以调用
         chr(): # 转字符
+        delattr(): # 反射，删除属性
         dir(): # 获取对象属性、方法
         divmod(): # 整除取余
         enumerate(): # 带索引迭代
-        eval(): # 执行表达式
-        exce(): # 执行字符串脚本文件
+        eval(): # 执行字符串表达式，有返回值
+        exce(): # 执行字符串脚本，无返回值
         exit(): # 程序退出
         filter(): # 元素过滤
         format():
-        getattr():
+        getattr(): # 反射，访问属性
         globals():
-        hasattr():
+        hasattr(): # 反射，对象属性存在判断
         help(): # 获取帮助信息
         hex(): # 转16进制
         id(): # 获取内存地址
         input(): # 输入
-        isinstance():
+        isinstance(): # 实例化对象判断
         issubclass():
-        iter():
+        iter(): # 可迭代对象转迭代器
         len():
         max():
-        next():
+        next(): # 取出迭代器下一个元素
         open(): # 打开文件
             encoding: # 编码
             mode: # 打开模式
@@ -293,6 +299,7 @@ std:
             write(): # 写入内容（缓冲区）
         print(): # 控制台输出
         repr(): # 可见字符显示
+        setattr(): # 反射，设置属性
         type(): # 获取对象的类型、动态创建新类
             class_attr:
         zip():
@@ -313,6 +320,7 @@ std:
         weekday():
     cmath:
     collections: # 集合
+        Coroutine: # 协程
         Counter: # 计数器
             most_common():
         OrderedDict:
@@ -322,19 +330,41 @@ std:
             appendleft():
             pop():
             popleft():
+        Generator: # 生成器
+        Iterable: # 可迭代对象
         namedtuple: # 具名元组
         UserDict:
         UserList:
         UserString:
     concurrent: # 并发库
-        futures:
+        futures: # 异步
+            Executor: # 执行器
+                map(): # 直接运行，等待所有返回结果
+                shutdown(): # 关闭
+                    wait: # 等待所有任务执行完毕
+                submit():
+            Future: # 异步结果对象
+                cancel(): # 取消任务
+                done(): # 检查是否完成
+                result(): # 阻塞获取结果
+                    timeout: # 超时事件
+                exception():
+                add_done_callback():
+                set_exception():
+                set_result():
+                set_running_or_notify_cancel():
+            ProcessPoolExecutor: # 进程池
+                map():
             ThreadPoolExecutor: # 线程池
                 max_workers:
-                submit(): # 提交执行任务Task
-                    cancel():
-                    done():
-            as_completed(): # Task完成迭代
-            wait(): # Task等待
+                submit(): # 提交执行任务Task，返回future
+            as_completed(): # Future完成迭代，可遍历future结果，谁先完成就先返回谁(Future)
+            wait(): # 所有Future等待
+                return_when: # 指定等待的条件
+        shared_memory: # 共享内存
+            ShareableList:
+            SharedMemory: # 共享内存
+            SharedMemoryManager:
     configparser: # ini配置文件解析
         ConfigParser: # ini配置文件解析(段落 -> 选项)
             add_section(): # 添加节点
@@ -491,6 +521,8 @@ std:
         ip_address():
             version:
     itertools: # 迭代工具库
+        count: # 计数器，可迭代，无限
+            start:
         chain(): # 合并
         permutations(): # 
     json: # JSON
@@ -549,14 +581,28 @@ std:
         pi:
         sqrt(): # 平方根
     multiprocessing: # 多进程
-        Pool: # 进程池
-            starmap():
-        Process:
+        pool: # 进程池
+            AsyncResult: # 异步结果
+                get():
+            Pool: # 进程池
+                processes: # 进程数
+                apply():
+                apply_async(): # 执行方法，返回AsyncResult异步结果
+                    args:
+                close():
+                imap():
+                imap_unordered():
+                join():
+                map():
+                map_async():
+        Process: # 进程
             target:
             join():
             start():
+        Queue: # 进程通信队列
         Value: # 共享内存
             value:
+        cpu_count(): # cpu个数
     numbers:
     operator:
         attrgetter:
@@ -600,7 +646,7 @@ std:
         system(): # 执行shell命令
         walk(): # 文件浏览（dfs）
     pathlib: # 面向对象的文件路径操作
-        Path:
+        Path: # 路径对象
             name: # 文件名
             parent: # 父目录
             stem: # 仅文件名
@@ -630,7 +676,8 @@ std:
         loads(): # 反序列化
     platform:
     pydoc:
-    queue:
+    queue: # 队列
+        Queue: # 线程通信队列
     random: # 随机数
         SystemRandom:
         choice(): # 随机返回一个字符
@@ -753,22 +800,38 @@ std:
     tempfile:
     textwrap:
     threading: # 多线程
-        Barrie:
-        Condition:
-        Event:
+        Barrie: # 线程屏障,每一轮等满后，屏障会自动 reset（重置）
+            broken:
+            abort():
+            reset():
+            wait(): # 就绪等待， 会返回一个编号（0~N-1），编号为 0 的线程是第一个出 barrier 的线程
+        Condition: # 条件变量，控制执行顺序，基于锁机制，等待唤醒机制，可使用上下文管理
+            acquire(): # 获取锁
+            notify(): # 唤醒一个其它wait等待的 条件变量
+            notify_all():
+            release(): # 释放
+            wait(): # 等待
+        Event: # 事件，等待唤醒机制
+            clear():
+            set():
+            wait():
         Lock:
         RLock:
-        Semaphore:
+        Semaphore: # 信号量
+            acquire():
+            release():
         Thread: # 线程对象
+            name: # 线程名
             getName():
             is_alive():
             isDaemon():
             join(): # 阻塞运行
+            run(): # 主运行方法
             setDaemon():
             start(): # 开始运行
         Timer:
         activeCount():
-        current_thread():
+        current_thread(): # 当前线程对象
         enumerate():
         get_ident():
         local(): # ThreadLocal
@@ -1027,8 +1090,10 @@ std:
 DataTypes:
     bool:
     complex: # 复数
+    coroutine: # 协程对象
     float:
     function: # 函数
+    generator: # 生成器
     int: # 整数
     list: # 列表
     str: # 字符串
@@ -1177,6 +1242,7 @@ auto()自动赋值
 ```yaml
 Control Flow:
     as: # 别名
+    del: # 删除变量
     in:
     is:
     pass: # 代码省略
@@ -1320,9 +1386,11 @@ print(gen.send(10))  # 输出: Received: 10, 然后输出: 2
 print(gen.send(20))  # 输出: Received: 20, 然后生成器结束，抛出 StopIteration 异常
 ```
 
+简化迭代器对象的创建（自动创建`__iter__()`、`__next__()`）
+
 带`yield`函数、生成器表达式：`my_gen = (i*i for i in [1, 2, 3, 4, 5])`
 
-每一次next()、send()都执行到yield（之前的语句）为止
+每一次next()、send()都执行到yield（之前的语句）为止、第一次send()无效（第一次传参应该是函数传参）
 
 带yield返回值的函数
 
@@ -1459,9 +1527,11 @@ del square.side_length  # 输出：Deleting side length...
 ```
 
 实例属性、类属性、@property装饰器
-
-
 实例属性可动态添加
+私有属性：`__xxx`双下滑线开头的变量
+
+
+
 
 #### Extends
 
@@ -1478,29 +1548,34 @@ del square.side_length  # 输出：Deleting side length...
 通过类、类实例对象访问类属性
 类对象无法修改类变量的值，通过类对象对类变量赋值，只会修改自己对象中的变量值
 
-#### Function
+#### Method
 ```yaml
-魔术方法:
+Method:
     __class__: # 类实例获取类对象
+    __dict__: # 类、实例 属性、方法字典
     __match_args__: # match语句位置参数
     __name__:
-    __del__(): # 析构犯法
+    __del__(): # 析构方法
+    __delattr__(): # 删除属性
     __delete__():
     __dict__(): # 查看类属性字典
-    __dir__(): # 查看类方法、属性
+    __dir__(): # 查看类方法、属性名称
     __enter__(): # 上下文管理（进入），返回值为with接收值
     __exit__(): # 上下文管理（退出），可进行异常处理
         exc_type:
         exc_value:
         traceback:
     __get__():
+    __getattr__(): # 访问属性，且属性不存在时
+    __getattribute__(): # 属性访问拦截，设置了就会拦截属性访问
     __getitem__():
-    __init__(): # 构造方法
+    __init__(): # 构造方法，初始化类的实例
     __iter__():
     __next__():
-    __new__(): # 实例化对象时调用
+    __new__(): # 实例化类时调用，(cls, *arg, **kwargs)，最顶层走的是object.__new__()
     __repr__(): # 类对象打印信息
     __set__():
+    __setattr__(): # 属性修改拦截
     __str__():
     super():
 ```
@@ -1647,12 +1722,18 @@ for number in countdown:
     print(number)  # 输出 4, 3, 2, 1, 0
 ```
 
+for in 既可遍历可迭代对象、又可遍历迭代器、还可遍历生成器
+
+
+可迭代对象
+`__getitem__()`
+list是可迭代对象，但不是迭代器
+可通过iter()将 可迭代对象 转为 迭代器
 
 迭代器
-
-`__getitem__()`
 `__iter__()`->`__next__()`，iter生成迭代器(self)、next实现元素迭代
 `StopIteration`异常停止迭代
+迭代器无法重复迭代
 
 
 
@@ -1735,6 +1816,7 @@ class MyType(type):
 
     def __new__(cls, *args, **kwargs):
         new_cls = super().__new__(cls, *args, **kwargs)
+        return new_cls
 
     def __call__(self, *args, **kwargs):
         empty_object = self.__new__(self)
@@ -1857,16 +1939,61 @@ event事件、semaphore信号、lock锁、Barrier、Condition条件变量
 
 线程
 
+#### ThreadPoolExecutor
+
+线程池
+
+
+#### ThreadLocal
+
+本地线程，线程消息隔离
+
+
+#### Lock
+
+锁机制
+
+
+#### Event
+
+事件机制，等待唤醒
+
+
+
+#### Condition
+
+
+条件变量，执行顺序控制
+
+
+#### Semaphore
+
+信号量，并发量控制
+
+
+#### Barrie
+
+线程屏障，多线程等待
+
+
+
+#### Future
+
+线程异步响应结果
+
+
 
 #### Async
 ```python
 ```
 
-async函数创建协程对象
+async函数创建协程对象Coroutine object
+协程的运行必须依赖事件循环
+每个线程只能有一个事件循环，可新建事件循环手动管理，默认不需要
+一般使用Task封装Coroutine，管理协程生命周期（封装成Task是为了方便'并行'执行）
 
 event loop -> executor  -> task -> coroutine(async)
 
-每个线程只能有一个事件循环，可新建事件循环手动管理，默认不需要
 
 coroutine协程是可以暂停运行、恢复运行的函数（async定义协程函数）
 task任务是对协程的包装，使得事件循环能获取协程的状态
@@ -1875,6 +2002,49 @@ coroutine包装成task的过程可自动实现、包装成task后可对coroutine
 async函数返回corouotine协程对象、可根据coroutine对象创建task、task为future子类
 
 `asyncio.create_task()`相当于`new Promise()`
+
+##### Coroutine
+
+协程对象
+
+
+##### EventLoop
+
+事件循环
+
+
+##### Future
+
+异步响应结果
+
+##### Task
+
+Future子类、异步任务（封装异步响应）
+通过Task对象将Coroutine协程和Future异步响应结果关联起来
+
+
+
+#### MultiProcessing
+
+多进程
+
+
+
+#### ProcessPoolExecutor
+
+进程池
+
+
+
+
+#### Queue
+
+同步队列，可用于线程、进程间通信
+
+
+#### SharedMemory
+
+共享内存，通信
 
 
 
