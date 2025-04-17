@@ -4,7 +4,7 @@
 > `Python官方文档教程：https://docs.python.org/3/tutorial/index.html`
 >
 > `Python API文档：https://docs.python.org/3/library/index.html`
-> `Python开发编程高级进阶教程：P40`
+> ``
 
 
 ## 基础介绍
