@@ -7,6 +7,13 @@
 
 ## 基础介绍
 
+
+lua默认变量是全局的，可使用local声明局部变量
+
+
+
+
+
 ### lua
 ```yaml
 lua:
@@ -44,11 +51,11 @@ std:
         dofile():
         error(): # 抛出异常
         getmetatable():
-        ipairs(): # 索引数组遍历
+        ipairs(): # 索引数组遍历，i-v 索引
         load():
         loadfile():
         next():
-        pairs(): # 关联数组遍历
+        pairs(): # 关联数组遍历,k-v 索引
         pcall(): # 异常处理包装函数调用
         print(): # 控制台打印
         rawequal():
@@ -160,9 +167,9 @@ std:
         sub():
         unpack():
         upper():
-    table:
+    table: # 表
         concat(): # 数组元素拼接
-        insert():
+        insert(): # 插入元素
         move():
         pack():
         remove(): # 移除元素（默认最后一个）
@@ -193,7 +200,7 @@ metamethods: # 元方法
 
 ### 数据类型
 ```yaml
-:
+Data Types:
     nil:
     boolean:
     number:
@@ -226,17 +233,19 @@ local str3 = str1 .. str2
 
 ### 控制结构
 ```yaml
-:
-    #: # 返回字符串、数组长度
-    //: # 整除运算
+Control Flow:
     --: # 单行注释
     --[[]]: # 多行注释
+    #: # 返回字符串、数组长度
+    //: # 整除运算
     and or not: # 逻辑运算符
+    local: # 局部变量定义
     function ... end: # 函数定义
-    if ... then elseif else end: # 条件语句
+    if ... then ... elseif ... else ... end: # 条件语句
+    for ... do ... end:
     for ... in pair() do end: # 循环遍历
     repeat ... until ...:
-    while ... do end:
+    while ... do ... end:
 ```
 
 
@@ -277,8 +286,7 @@ local tb = {"key": "value", ...}
 
 关联数组
 可利用table实现array、set、map、object
-
-lua数组索引默认从1开始
+使用table表当lua数组使用时，索引默认从1开始
 
 
 

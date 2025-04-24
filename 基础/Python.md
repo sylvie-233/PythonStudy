@@ -1089,6 +1089,7 @@ std:
 ```yaml
 DataTypes:
     bool:
+    bytes:
     complex: # 复数
     coroutine: # 协程对象
     float:

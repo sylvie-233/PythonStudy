@@ -5,6 +5,21 @@
 控制台代码编辑器
 
 
+### 配置目录
+```yaml
+配置目录: # C:\Users\用户名\AppData\Local
+    /nvim: # 核心配置目录
+        /lua:
+            /config:
+            /plugins:
+        init.lua:
+        lazyvim.json:
+    /nvim-data: # 插件安装目录
+        /lazy:
+        mason.log:
+```
+
+
 
 
 ### nvim
@@ -246,6 +261,9 @@ nvim插件管理工具
 
 插件安装完后还要进行setup()配置
 
+#### snacks
+
+Snacks 是一种轻量级的、基于 Python 的构建工具，主要用于 构建和管理 Neovim 插件。它通过使用 Python 脚本和插件规范来简化插件的安装、配置和管理
 
 
 

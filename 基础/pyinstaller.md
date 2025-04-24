@@ -22,6 +22,7 @@ pyinstaller:
     --disable-windowed-traceback:
     --help:
     --hidden-import:
+    --onefile:
     --paths: # 指定python模块搜索路径
     --splash: # 程序启动画面
     --version:
@@ -32,16 +33,16 @@ pyinstaller:
 
 ## 核心内容
 ```yaml
-:
 ```
 
 
-### .spec
+### main.spec
 ```yaml
-Analysis:
-    datas:
-EXE:
-PYZ:
+main.spec:
+    Analysis:
+        datas:
+    EXE:
+    PYZ:
 ```
 
 pyinstaller配置
