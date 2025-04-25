@@ -10,20 +10,63 @@
 ## 基础介绍
 
 
-
-
+python标准库索引：
+- abc: 抽象基类
+- ast: 抽象语法树
+- bisect: 二分查找
+- collections: 常用数据结构
+    - defaultdict:
+    - deque:
+    - Counter:
+- csv: csv文件
+- datetime: 用于处理日期和时间
+- doctest: 文档测试
+- http: HTTP
+- importlib:
+- inspect:
+- itertools: 迭代器的工具
+- json: JSON 数据的编码和解码
+- logging: 日志
+- math: 数学运算
+- multiprocessing: 多进程
+- os: 操作文件系统相关
+    - path: 路径操作
+- pathlib: 面向对象的文件路径操作库
+- pdb: 调试器
+- platform: 操作系统信息
+- random: 随机数
+- re: 正则表达式
+- shutil: 高阶文件操作工具
+- site:
+- socket: socket通信
+- sqlite3: sqlite3数据库操作
+- statistics: 数值统计
+- threading: 多线程
+- time: 时间相关功能
+- traceback: 格式化打印异常信息
+- unittest: 单元测试
+- urllib:
 
 
 
 ### python
 ```yaml
 python:
+    -c: # "执行一段 Python 代码（字符串）"
+    -i: # "脚本执行完后进入交互模式"
     -m: # 模块执行 直接执行文件 和 执行模块之间存在区别
         pdb:
         pydoc:
         unittest: # 单元测试
             -p:
             -s:
+    -u: # 不使用 I/O 缓存，适用于日志/实时输出场景
+    -B:
+    -O: # 启用优化模式，移除断言语句 (assert)
+    -S: # 启动时不自动导入 site 模块（影响环境变量加载）
+    -V:
+    -X: # 调试和开发相关参数
+        tracemalloc:
     --help:
     --version:
 ```
@@ -165,10 +208,31 @@ std:
         to_thread(): # 异步线程包装，避免阻塞事件循环
         wait(): # 多个任务等待，list列表，多个task包装成一个task
         wait_for(): # 限时等待
-    ast: # 抽象语法树
+    ast: # 抽象语法树，提供了对 Python 代码的解析、处理和转换功能，可以用来实现源代码分析、代码生成、动态执行等操作
+        Add: # 加法运算符
+        Assign: # 赋值操作
+        BinOp: # 二元操作，如加法、减法等
+        Constant: # 常量值，如数字、字符串等
+        Load: # 读取变量
+        Module: # 模块
+        Name: # 变量名或函数名
+        NodeVisitor: # 自定义节点访问器
+            generic_visit(): # 继续遍历子节点
+            visit_Assign():
+        Store: # 写入变量
+        Sub:
+        compile(): # 编译ast，常配合exec使用
+        dump():
+        parse():
+        walk():
     base64: # base64编码
         b64decode():
         b64encode():
+    bisect: # 二分查找工具
+        bisect_left(): # 找到第一个 >= x 的位置
+        bisect_right(): # 找到第一个 > x 的位置
+        insort_left(): # 插入
+        insort_right():
     builtins:
         __builtins__:
         __debug__:
@@ -191,7 +255,7 @@ std:
             fromhex():
             hex(): # 十六进制字符串
         complex:
-        dict: # 字典
+        dict: # 字典，访问一个不存在的键时，会抛出 KeyError 异常
             clear():
             copy():
             get():
@@ -215,7 +279,7 @@ std:
             pop():
             remove():
             reverse():
-            sort():
+            sort(): # 排序
         object:
         set:
             add():
@@ -274,7 +338,7 @@ std:
         id(): # 获取内存地址
         input(): # 输入
         isinstance(): # 实例化对象判断
-        issubclass():
+        issubclass(): # 子类判断
         iter(): # 可迭代对象转迭代器
         len():
         max():
@@ -320,19 +384,28 @@ std:
         weekday():
     cmath:
     collections: # 集合
-        Coroutine: # 协程
-        Counter: # 计数器
-            most_common():
-        OrderedDict:
-        defaultdict: # 默认字典 
+        defaultdict: # 一个带有默认值的字典，（当你访问一个不存在的键时，defaultdict 会自动为你创建该键，并赋予一个默认值，而不会抛出 KeyError 异常），支持自定义默认值函数
+            int:
+            list:
+            set:
         deque: # 双端队列
             append():
             appendleft():
             pop():
             popleft():
+        namedtuple: # 结构化元组，轻量版类，支持自定义索引key
+            _asdict():
+            _fields():
+            _replace():
+        Coroutine: # 协程
+        Counter: # 计数器
+            elements(): # 返回一个迭代器，产生计数大于 0 的所有元素，元素会根据它们的计数重复输出
+            most_common(): # 输出出现次数最多的n个
+            subtract():
+            update():
         Generator: # 生成器
         Iterable: # 可迭代对象
-        namedtuple: # 具名元组
+        OrderedDict: # 保持插入顺序的字典
         UserDict:
         UserList:
         UserString:
@@ -443,8 +516,8 @@ std:
     fractions:
     ftplib:
     functools: # 函数工具库
-        lru_cache():
-        reduce(): # 迭代计数
+        @lru_cache(): # 将函数的参数 做哈希处理，作为 key，将函数返回值 存储到一个 dict-like 的结构中，如果缓存满了（达到了 maxsize），就淘汰最近最少使用的项
+        @reduce(): # 迭代计数
         @wraps(): # 函数包装(常用于高阶函数装饰器).可以将原函数的元数据（如 __name__ 和 __doc__）复制到包装函数上
     gc:
     glob: # 文件索引
@@ -464,7 +537,14 @@ std:
             update():
         sha224():
         sha256():
-    heapq:
+    heapq: # 堆（heap）操作工具，优先队列，默认实现的是 最小堆
+        heapify(): # 将列表变成最小堆
+        heappop():
+        heappush():
+        heappushpop():
+        heapreplace():
+        nlargest(): # 前k大
+        nsmallest(): # 前k小
     html:
     http:
         client:
@@ -482,6 +562,7 @@ std:
     importlib: # 模块导入
         util:
         import_module(): # 动态导入模块
+        reload():
     inspect: # 反射信息
         Parameter:
             default:
@@ -577,7 +658,7 @@ std:
         dumps(): 
         load(): # 反序列化
         loads():
-    math:
+    math: # 数学库
         pi:
         sqrt(): # 平方根
     multiprocessing: # 多进程
@@ -604,7 +685,7 @@ std:
             value:
         cpu_count(): # cpu个数
     numbers:
-    operator:
+    operator: # 运算符
         attrgetter:
         itemgetter:
     os: # 操作系统相关（文件、路径）
@@ -668,7 +749,8 @@ std:
             write_bytes():
             write_text():
             unlink():
-    pdb:
+    pdb: # Python Debugger调试器
+        set_trace(): # 进入断点
     pickle: # python序列化
         dump(): # 序列化到文件
         dumps(): # 序列化
@@ -736,6 +818,9 @@ std:
             filename: # 解压文件名
             extract_dir: # 解压目录
             format: # 解压格式
+    site: # 添加第三方库的路径到 sys.path、处理 .pth 文件、设置默认编码（早期版本）、运行用户或全局的 sitecustomize.py / usercustomize.py
+        getsitepackages(): # 查看全局 site-packages 路径
+        getusersitepackages(): # 查看用户级 site-packages 路径
     socket: # socket通信
         AF_INET:
         SOCK_DGRAM: # UDP协议
@@ -768,22 +853,28 @@ std:
         _create_unverified_context():
         create_default_context():
             cafile:
-    statistics:
+    statistics: # 数值统计
+        mean():
+        median():
     string: # 字符串
         ascii_lowercase:
         digits: # 数字
     struct:
     sys: # 程序参数相关
+        _MEIPASS: # pyinstaller 打包后资源路径
         argv: # 程序参数
         builtin_module_names:
         copyright:
         maxint:
         maxsize:
-        modules:
+        meta_path:
+        modules: # 导入的模块
         path: # 模块搜索路径 PATH
+        path_hooks:
         platform: # 操作系统平台
         stderr: # 标准异常
         stdin: # 标准输入
+            read():
             readline():
         stdout: # 标准输出流
             write():
@@ -1242,6 +1333,7 @@ auto()自动赋值
 ### 控制流程
 ```yaml
 Control Flow:
+    //: # 整除
     as: # 别名
     del: # 删除变量
     in:
@@ -1918,6 +2010,12 @@ import生成module实例 ，import只会执行一次（同一个实例）
 可定义`__all__`列表来指定`from xxx import *`时应该导入哪些模块
 
 
+
+#### importlib
+
+
+
+
 ### 测试
 
 内置unittest模块
@@ -2046,6 +2144,34 @@ Future子类、异步任务（封装异步响应）
 #### SharedMemory
 
 共享内存，通信
+
+
+
+
+### 扩展机制
+
+
+#### site
+
+
+site 模块是 Python 启动时自动导入的模块，负责设置环境路径、处理 .pth 文件和加载初始化代码，确保你能 import 到安装的包
+
+可通过`python -S`禁用site
+
+虚拟环境背后就是修改了 sys.path 和 PYTHONPATH
+
+
+#### pyc
+
+.pyc 是 Python Compiled 文件的缩写，是 Python 源文件 .py 编译后的字节码文件（为了 加快程序启动速度，避免每次都从源代码重新解析）
+- .pyc 文件是与 Python 版本强相关的，但与平台无关（只要解释器版本一致）
+- 默认生成在`__pycache__`目录下，文件名类似`__pycache__/xxx.cpython-311.pyc`
+
+
+#### pth
+
+
+
 
 
 
