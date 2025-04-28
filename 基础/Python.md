@@ -98,21 +98,23 @@ pip镜像源
 ### pdb
 ```yaml
 pdb:
-    break: # 断点
+    break: # 设置断点
     clear:
-    continue: # 下一个断点
+    continue: # c 下一个断点
     disable: # 禁用断点
     down:
     enable:
     help:
-    list:
+    list: # l 列出上下附近代码片段
     longlist:
-    next:
+    next: # 步过
     print:
+    quit: # q 退出
+    return: # 运行到return前
     step: # 步入
     until:
     up: # 上下文切换
-    where: # 函数调用堆栈
+    where: # w 函数调用堆栈
 ```
 
 python调试工具
@@ -319,6 +321,7 @@ std:
         any(): # 判定是否存在True
         ascii(): # 转ascii码
         bin(): # 转二进制
+        breakpoint(): # 断点debugger
         callable(): # 判定对象是否可以调用
         chr(): # 转字符
         delattr(): # 反射，删除属性
@@ -700,6 +703,7 @@ std:
             isdir(): # 是否为目录
             isfile(): # 文件判断
             join(): # 路径合并
+            relpath():
             split(): # 路径分隔（dirname、basename）
             splitext():
         curdir:
@@ -725,7 +729,7 @@ std:
         replace():
         stat(): # 获取文件属性
         system(): # 执行shell命令
-        walk(): # 文件浏览（dfs）
+        walk(): # 文件浏览（dfs）, foldername, subfolders, filenames
     pathlib: # 面向对象的文件路径操作
         Path: # 路径对象
             name: # 文件名
@@ -1064,13 +1068,13 @@ std:
             assertIsInstance():
             assertRaises(): # 测试异常抛出（with）
             assertTrue():
-            setUp(): # 测试运行前钩子
-            setUpClass():
-            tearDown(): # 测试运行结束前钩子
-            tearDownClass():
+            setUp(): # 测试运行前钩子，每个
+            setUpClass(): # 总的运行前钩子
+            tearDown(): # 测试运行结束前钩子，每个
+            tearDownClass(): # 总的运行后钩子
         @expectedFailure():
         @skip():
-        @skipIf():
+        @skipIf(): # 跳过测试
         @skipUnless():
         main(): # 测试运行（自动扫描）
         setUpModule():
@@ -1167,7 +1171,8 @@ std:
             set(): # 修改标签attr
         SubElement: # 创建子标签
     zlib:
-    zipfile:
+    zipfile: # zip文件压缩
+        ZIP_DEFLATED:
         ZipFile:
             close():
             extractall(): # 解压
@@ -2018,8 +2023,11 @@ import生成module实例 ，import只会执行一次（同一个实例）
 
 ### 测试
 
-内置unittest模块
 
+#### unittest
+
+内置unittest模块
+ 
 文件：`test_*.py`或者`*_test.py`
 类：`Test*`
 方法：`test_*()`
@@ -2166,6 +2174,13 @@ site 模块是 Python 启动时自动导入的模块，负责设置环境路径�
 .pyc 是 Python Compiled 文件的缩写，是 Python 源文件 .py 编译后的字节码文件（为了 加快程序启动速度，避免每次都从源代码重新解析）
 - .pyc 文件是与 Python 版本强相关的，但与平台无关（只要解释器版本一致）
 - 默认生成在`__pycache__`目录下，文件名类似`__pycache__/xxx.cpython-311.pyc`
+
+
+
+#### pyi
+
+.pyi文件声明c扩展库中有哪些函数
+
 
 
 #### pth
