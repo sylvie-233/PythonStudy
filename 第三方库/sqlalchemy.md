@@ -5,23 +5,19 @@
 ## 基础介绍
 
 
-
-
+SQLAlchemy 是 Python 中最强大、最主流的数据库框架之一，支持 ORM(Session) 和原生 SQL(Connection) 构建器
 数据库驱动包：
 - mysqlclient
 
-一个engine对应一个数据库
 
-模型类中互相持有，就需要定义back_populates后置填充
-
-
-
-基础使用：
+SQLAlchemy常用三大组件：Engine、Session、Connection
 - 获取数据库引擎(数据库连接信息)Engine -> 获取数据库连接Connection -> 执行SQL 
 - 获取数据库引擎(数据库连接信息)Engine -> 数据库表元信息MetaData -> 数据库表信息Table -> metadata创建表 -> 利用Table创建SQL语句(Insert、Delete...) -> 获取数据库连接Connection执行SQL语句
 - 获取数据库引擎(数据库连接信息)Engine -> 定义模型类继承基类DeclarativeBase -> 模型类metadata创建表 -> 获取会话Session绑定Engine执行SQL操作    （这种方法类似MyBatis）
 
 
+一个engine对应一个数据库
+模型类中互相持有，就需要定义back_populates后置填充
 
 
 ## 核心内容
@@ -30,12 +26,14 @@ sqlalchemy:
     engine: # 引擎包
         base:
             Connection:
+                begin(): # 开启事务
+                    commit():
+                    rollback():
                 close():
-                commit():
-                execute():
+                execute(): # 执行原始sql
             Engine:
                 begin():
-                connect():
+                connect(): # 获取Connection
                 dispose():
         cursor: # 游标结果
             CursorResult:
@@ -57,7 +55,7 @@ sqlalchemy:
         DeclarativeBase: # 模型基类声明
             __table__: # Table元表信息
             __tablename__: # 表名
-            metadata:
+            metadata: # 数据库元表
             registry:
         Mapped: # 模型字段声明
         registry(): # 命令式映射
@@ -71,13 +69,16 @@ sqlalchemy:
             flush(): # 刷新（提交事务）
             get(): # 根据组件查询
             get_one():
-            query():
+            query(): # 条件查询
+                filter_by():
+                first():
+                join(): # 联表
             scalars(): # 查询结果迭代遍历（select构造语句执行）
                 first():
                 one():
             update(): # 更新数据
         aliased(): # 定义表别名
-        declarative_base(): # 创建模型基类
+        declarative_base(): # 创建模型基类, 旧版SQLAlchemy ≤1.4，新版使用DeclarativeBase
         mapped_column(): # 模型字段属性定义
             nullable: # 可空类型
             primary_key: # 主键i段
@@ -89,7 +90,7 @@ sqlalchemy:
             cascade: # 级联操作
             lazy:  #懒加载关联字段
             secondary: # 中间表
-        sessionmaker(): # 获取session
+        sessionmaker(): # 获取session基类
     sql: # 原始SQL构造查询
         dml:
             Delete:
@@ -106,7 +107,7 @@ sqlalchemy:
                 where():
         and_():
         or_():
-    Column:
+    Column: # 旧版字段定义
         nullable:
         primary_key:
         unique:
@@ -131,6 +132,7 @@ sqlalchemy:
     create_engine(): # 创建数据库引擎
         echo: # 显示执行的SQL
     delete(): # 删除sql构造
+    insert(): # 插入sql构造
     select(): # 查询sql构造
         join(): # 关联查询
         where(): # 查询条件构造
@@ -144,53 +146,20 @@ sqlalchemy:
 
 ### Model
 ```python
-# 模型定义
-class Base(DeclarativeBase):
-     ...
+Base = declarative_base()
 
 class User(Base):
-    __tablename__ = "user_account"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    fullname: Mapped[Optional[str]]
-    addresses: Mapped[List["Address"]] = relationship(
-        back_populates="user", cascade="all, delete-orphan"
-    )
-
-class Address(Base):
-    __tablename__ = "address"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email_address: Mapped[str]
-    user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
-
-    user: Mapped["User"] = relationship(back_populates="addresses")
+    __tablename__ = 'users'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String)
 ```
 
-模型定义的两种方式
-- DeclarativeBase
-- registry + Table
+旧版模型定义：
+- declarative_base、Column
+- registry、Table
+新版模型定义：DeclarativeBase、mapped_column、Mapped
 
 
-#### 声明式映射
-
-
-#### 命令式映射
-```python
-mapper_registry = registry()
-
-user_table = Table(
-    "user",
-    mapper_registry.metadata,
-    Column("id", Integer, primary_key=True),
-    Column("name", String(50)),
-)
-
-class User:
-    pass
-
-mapper_registry.map_imperatively(User, user_table)
-```
 
 
 
@@ -208,9 +177,15 @@ with Session(engine) as session:
     session.commit()
 ```
 
-模型操作工具类
+Model模型操作工具类
 
-#### SQL构造
+
+
+
+#### Connection
+
+
+底层数据库连接、常用于底层sql执行、不支持ORM
 
 
 
@@ -231,3 +206,31 @@ Base.metadata.create_all(engine)
 ### RelationShip
 
 模型关联操作
+
+
+#### One To One
+
+
+
+#### One To Many
+
+
+#### Many To Many
+
+
+
+
+
+
+### Core
+```python
+mapper_registry = registry()
+
+user_table = Table(
+    "user",
+    mapper_registry.metadata,
+    Column("id", Integer, primary_key=True),
+    Column("name", String(50)),
+)
+```
+SQL Build查询构造器模式

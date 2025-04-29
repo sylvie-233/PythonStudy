@@ -1070,8 +1070,13 @@ std:
             assertTrue():
             setUp(): # 测试运行前钩子，每个
             setUpClass(): # 总的运行前钩子
+            subTest(): # 子测试，用于实现参数化测试
             tearDown(): # 测试运行结束前钩子，每个
             tearDownClass(): # 总的运行后钩子
+        TestSuite: # 测试套件
+        TextTestRunner: # 测试套件运行器
+            addTest(): # 添加测试用例
+            run():
         @expectedFailure():
         @skip():
         @skipIf(): # 跳过测试
@@ -2025,12 +2030,40 @@ import生成module实例 ，import只会执行一次（同一个实例）
 
 
 #### unittest
+```python
+# 测试文件 test_add.py
+import unittest
+
+# 被测试的函数
+def add(x, y):
+    return x + y
+
+# 测试类
+class TestAddFunction(unittest.TestCase):
+
+    def setUp(self):
+        # 每个测试用例前执行
+        print("Setup")
+
+    def tearDown(self):
+        # 每个测试用例后执行
+        print("Teardown")
+
+    def test_add_zero(self):
+        self.assertEqual(add(0, 0), 0)
+
+# 主程序入口
+if __name__ == '__main__':
+    unittest.main()
+```
 
 内置unittest模块
  
 文件：`test_*.py`或者`*_test.py`
 类：`Test*`
 方法：`test_*()`
+
+TestCase测试基类、支持测试用例、测试套件、参数化测试
 
 
 ### 并发

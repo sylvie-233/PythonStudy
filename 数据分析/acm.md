@@ -236,6 +236,147 @@ KMP实例：
 
 ## 图论
 
+
+
+### 图
+
+
+
+
+#### 图的存储
+
+
+##### 邻接表
+```python
+n = 5  # 点数
+# 1~n
+graph = [[] for _ in range(n + 1)]
+
+# 添加边：u - v，权值 w
+def add_edge(u, v, w):
+    graph[u].append((v, w))
+    graph[v].append((u, w))  # 如果是无向图
+
+add_edge(1, 2, 3)
+add_edge(1, 3, 4)
+```
+
+
+##### 邻接矩阵
+```python
+n = 5
+INF = float('inf')
+# 1~n
+graph = [[INF] * (n + 1) for _ in range(n + 1)]
+
+# 添加边 u -> v，权值 w
+def add_edge(u, v, w):
+    graph[u][v] = w
+    graph[v][u] = w  # 若是无向图
+
+add_edge(1, 2, 5)
+```
+
+
+#### 拓扑排序
+```python
+from collections import deque
+
+N = 100010
+graph = [[] for _ in range(N)]  # 邻接表
+in_degree = [0] * N             # 入度表
+
+def add_edge(u, v):
+    graph[u].append(v)
+    in_degree[v] += 1
+
+def topological_sort(n):
+    q = deque()
+    res = []
+
+    for i in range(1, n + 1):
+        if in_degree[i] == 0:
+            q.append(i)
+
+    while q:
+        u = q.popleft()
+        res.append(u)
+        for v in graph[u]:
+            in_degree[v] -= 1
+            if in_degree[v] == 0:
+                q.append(v)
+
+    if len(res) == n:
+        return res      # 存在拓扑序
+    else:
+        return []       # 有环，拓扑排序失败
+```
+
+
+
+#### 二分图 （DFS 染色法）
+```python
+def is_bipartite(n, edges):
+    graph = [[] for _ in range(n + 1)]
+    for u, v in edges:
+        graph[u].append(v)
+        graph[v].append(u)
+
+    color = [None] * (n + 1)
+
+    def dfs(u, c):
+        color[u] = c
+        for v in graph[u]:
+            if color[v] is None:
+                if not dfs(v, c ^ 1):
+                    return False
+            elif color[v] == c:
+                return False
+        return True
+
+    for i in range(1, n + 1):
+        if color[i] is None:
+            if not dfs(i, 0):
+                return False
+    return True
+```
+
+##### 二分图最大匹配 （匈牙利算法）
+```python
+def hungarian(n, m, edges):
+    """
+    n: 左侧点个数（编号 1 ~ n）
+    m: 右侧点个数（编号 1 ~ m）
+    edges: 二分图边列表 [(u, v), ...]，其中 u ∈ [1, n], v ∈ [1, m]
+    """
+    graph = [[] for _ in range(n + 1)]
+    # 邻接表
+    for u, v in edges:
+        graph[u].append(v)
+
+    match = [0] * (m + 1)  # 右侧点的匹配对象（左侧点编号）
+    used = [False] * (m + 1)
+
+    def dfs(u):
+        for v in graph[u]:
+            if not used[v]:
+                used[v] = True
+                if match[v] == 0 or dfs(match[v]):
+                    match[v] = u
+                    return True
+        return False
+
+    res = 0
+    for u in range(1, n + 1):
+        used = [False] * (m + 1)
+        if dfs(u):
+            res += 1
+    return res
+```
+
+DFS增广路径
+
+
 ### 树
 
 
