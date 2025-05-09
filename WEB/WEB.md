@@ -11,13 +11,43 @@ WEB技术分析
 
 #### 单体架构
 
+
+##### SOLID
+
+SOLID 是面向对象编程中设计原则的一个缩写，用来指导开发者编写 可维护、可扩展、低耦合、高内聚 的代码，每个字母代表一个设计原则
+
+
+##### IOC
+
+控制反转
+
+
+
 ##### MVC
+
+
+
 
 
 
 ##### DDD
 
 实现 DDD 时，关键是将复杂的业务逻辑进行建模，分成 实体（Entity）、值对象（Value Object）、聚合根（Aggregate Root） 和 服务（Service），并通过 仓储（Repository） 来持久化和管理这些对象
+
+![DDD领域设计](image.png)
+
+- Controller:
+- Command:
+- Query:
+- Service: 聚合根无法完成业务逻辑时的替代品、可跨领域
+- Domain
+    - Factory:
+    - Event:
+    - Event Handler:
+- Infrastructure:
+    - Repository:
+
+
 
 
 
