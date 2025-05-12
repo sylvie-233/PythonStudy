@@ -1,9 +1,13 @@
 # neovim
 
+`Neovim 初学者教程: P5`
+
 ## 基础介绍
 
 控制台代码编辑器
 
+config目录：`C:\Users\~\AppData\Local\nvim"`
+data目录：`C:\Users\~\AppData\Local\nvim-data`
 
 
 ### 配置目录
@@ -26,7 +30,7 @@
 ### nvim
 ```yaml
 nvim:
-
+    --clean:
 ```
 
 
@@ -71,10 +75,10 @@ init.lua:
         print():
 ```
 
-`C:\Users\用户名\AppData\Local\nvim/init.lua`
+nvim核心配置文件
+默认加载配置文件：`C:\Users\用户名\AppData\Local\nvim\init.lua`
 `~/.config/nvim/init.lua`
 
-nvim核心配置文件
 
 ## 核心内容
 ```yaml
@@ -118,7 +122,8 @@ vim: # Neovim Lua API
             %:r: # 不带扩展名的文件名
             %:t: # 文件名部分
         getline(): # 获取当前行内容
-        stdpath():
+        stdpath(): # 获取标准路径
+            config: # 配置文件标准路径
         strftime(): # 获取当前时间
         system(): # 运行 shell 命令并获取输出
     keymap: # 快捷键
@@ -132,25 +137,30 @@ vim: # Neovim Lua API
         tabstop:
         termguicolors:
     opt: # 设置 Neovim 选项（替代 vim.o, vim.bo 等）
+        autoread: # 自动同步文件修改
         clipboard:
-        expandtab:
-        number:
-        relativenumber:
+        colorcolumn: # 高亮第n列
+        cursorline: # 高亮当前行
+        expandtab: # tab转空格space
+        number: # 行号
+        relativenumber: # 相对行号（相对当前行）
         rtp:
             prepend():
-        shiftwidth:
-        tabstop:
+        shiftwidth: # 缩进占几个空格
+        tabstop: # 一个tab占几个空格space
     cmd(): # 执行 Vim 命令
     inspect(): # 用于调试、打印 lua 的 table
 
 cmdline:
+    =: # 执行lua表达式
     bd: # 关闭插件
     checkhealth: # 检查nvim配置环境
     close: # 关闭当前栏
+    e: # 打开文件
     help:
     lua: # 执行lua 脚本
     luafile: # 执行lua文件
-    q: # 退出
+    q: # 退出 quit
     saveas: # 另存为
     sp: # 水平分屏
     tabclose:
@@ -162,7 +172,7 @@ cmdline:
     tabprevious:
     tabp:
     vsp: # 垂直分屏
-    w: # 写入
+    w: # 写入 write
     Lazy: # lazy.nvim 设置面板（插件管理）
         ?:
         C: # Check
@@ -261,9 +271,9 @@ edit: # Normal、Insert、Visual
         t: # 
         z: # 当前行光标放中间
     A: # 当前行尾插入
-    B: # 字串开头
+    B: # 字串开头(连续算一个)
     D: # 删除至行尾
-    E: # 下一个字串结尾
+    E: # 下一个字串结尾(连续算一个)
     F: # 反向搜索字符移动，在当前行内跳转
     H: # 跳转当前屏幕首行
     I: # 行首插入
@@ -274,7 +284,7 @@ edit: # Normal、Insert、Visual
     T: # 搜索字符移动，上一个的后一个
     G: # 跳转文件尾部
     V: # 行选择
-    W: # 下一个单词
+    W: # 下一个单词(连续算一个)
 
 lazy.nvim:
 
