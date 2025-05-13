@@ -104,12 +104,17 @@ tortoise:
                 values(): # 获取字典，支持select
             first():
             get(): # 主键查询
+                using_db: # 集成事务管理
+            get_or_none():
             limit():
             offset():
+            only():
             order_by(): # 排序 
                 -: # 倒序
             prefetch_related(): # 预加载字段
+            select_related():
             update(): # 更新（可传入字典动态构造更新参数）
+            using_db(): # 使用指定连接，用于事务管理
             --- # 模型实例
             add():
             clear():

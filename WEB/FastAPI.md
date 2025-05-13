@@ -3,7 +3,7 @@
 >
 >`FastAPI官方文档：https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/`
 >
->``
+>`FastApi开发框架从构建到部署实战: P9`
 
 ## 基础介绍
 
@@ -180,9 +180,12 @@ fastapi:
         descriptioin: # 项目文档描述
         docs_url: # 关闭doc文档
         redoc_url: # 关闭redoc文档
+        state: # 全局应用状态
         title: # 项目文档标题
         version: # 项目文档版本
-        add_middleware(): # 添加中间件
+        add_exception_handler(): # 全局异常处理
+        add_event_handler(): # 全局事件处理
+        add_middleware(): # 全局中间件
         inclue_router(): # include子路由
             prefix:
             responses:
@@ -234,6 +237,7 @@ fastapi:
         regex:
         title: # 文档标题
     Request: # 请求对象
+        app: # fastapi应用实例引用
         client:
             host:
         headers:
@@ -297,6 +301,7 @@ pydantic: # 请求参数映射
             update: # 模型实例复制更新
         model_dump(): # 获取属性字典
             exclude_unset:
+    BaseSettings: # 基础设置
     EmailStr:
     Field: # 字段校验
         default:
@@ -542,6 +547,7 @@ async def read_items():
 - 全局依赖
 - yield函数依赖（yield只能用一次、yield后代码在响应发送前被调用）
 
+一个请求中只执行一次（即 请求级单例）
 使用依赖注入可实现参数预处理、子路由中间件
 
 依赖yield退出代码，在中间件后面执行
