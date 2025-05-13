@@ -1,6 +1,5 @@
 # neovim
 
-`Neovim 初学者教程: P5`
 
 ## 基础介绍
 
@@ -91,8 +90,9 @@ vim: # Neovim Lua API
         nvim_buf_set_name():
         nvim_command():
         nvim_create_augroup():
-        nvim_create_autocmd():
+        nvim_create_autocmd(): # 设置自动命令，自动监听执行
         nvim_del_autocmd():
+        nvim_echo():
         nvim_err_write():
         nvim_exec():
         nvim_get_current_buf():
@@ -111,6 +111,10 @@ vim: # Neovim Lua API
         nvim_win_set_cursor():
         nvim_win_set_height():
         nvim_win_set_width():
+    diagnostic: # 错误信息提示
+        config():
+            update_in_insert:
+            virtual_text:
     fn: # 调用 VimScript 原生函数
         cmd():
         expand(): # 获取允许环境信息
@@ -121,14 +125,17 @@ vim: # Neovim Lua API
             %:p: # 当前文件绝对路径
             %:r: # 不带扩展名的文件名
             %:t: # 文件名部分
+        getchar(): # 输入字符
         getline(): # 获取当前行内容
         stdpath(): # 获取标准路径
             config: # 配置文件标准路径
         strftime(): # 获取当前时间
         system(): # 运行 shell 命令并获取输出
+    g:
+        mapleader: # leader key <leader>
     keymap: # 快捷键
-        set():
-    loop: # 异步 IO（LibUV 封装）
+        set(): # (mode, lhs, rhs, opts)
+    loop: # 异步 IO api（LibUV 封装）
     o:
         expandtab:
         number:
@@ -144,33 +151,40 @@ vim: # Neovim Lua API
         expandtab: # tab转空格space
         number: # 行号
         relativenumber: # 相对行号（相对当前行）
-        rtp:
+        rtp: # lua模块搜索路径，自动将路径下的/lua目录添加到，lua的模块搜索路径中package.path
             prepend():
         shiftwidth: # 缩进占几个空格
+        splitright:
         tabstop: # 一个tab占几个空格space
+    uv: # 异步 IO api
+        fs_stat(): 
     cmd(): # 执行 Vim 命令
     inspect(): # 用于调试、打印 lua 的 table
 
 cmdline:
     =: # 执行lua表达式
     bd: # 关闭插件
+    buffers: # 文件缓冲区，打开文件（可切换buffer n）
     checkhealth: # 检查nvim配置环境
     close: # 关闭当前栏
     e: # 打开文件
     help:
+    LspStart:
     lua: # 执行lua 脚本
     luafile: # 执行lua文件
     q: # 退出 quit
     saveas: # 另存为
-    sp: # 水平分屏
+    sp: 
+    split: # # 水平分屏
     tabclose:
     tabedit:
-    tabn:
-    tabnew:
+    tabn: # tab -> window -> buffer
+    tabnew: # 新建tab
     tabnext:
     tabonly: # fjeajw
     tabprevious:
     tabp:
+    undo: # 撤销
     vsp: # 垂直分屏
     w: # 写入 write
     Lazy: # lazy.nvim 设置面板（插件管理）
@@ -286,8 +300,19 @@ edit: # Normal、Insert、Visual
     V: # 行选择
     W: # 下一个单词(连续算一个)
 
-lazy.nvim:
-
+lazy.nvim: # lazy插件启动配置
+    setup():
+        spec: # 安装插件列表
+            import:
+lazy.plugin: # lazy插件对象格式
+    path: # 插件路径
+    dependencies: # 插件依赖
+    main: # 插件入口
+    opts: # 静态配置
+    config: # 动态配置
+    keys: # 快捷键绑定
+    lazy: # 懒加载
+    event: # 插件激活事件
 ```
 
 vim常见edit编辑操作符:
@@ -353,5 +378,75 @@ Snacks 是一种轻量级的、基于 Python 的构建工具，主要用于 构�
 nvim插件管理工具
 
 
+### Event
+
+事件机制
+
+
 ## 常用插件
 
+
+
+### akinsho/bufferline.nvim
+
+buffer tab栏
+
+
+### folke/tokyonight.nvim
+
+暗色主题
+
+### kylechui/nvim-surround
+
+编辑环绕添加
+
+### lukas-reineke/indent-blankline.nvim
+
+缩进层级显示
+
+### neovim/nvim-lspconfig
+
+lsp默认配置
+
+### nvim-lualine/lualine.nvim
+
+底部状态栏
+
+
+### nvim-tree/nvim-tree.lua
+
+侧栏文件树列表
+
+
+### nvim-tree/nvim-web-devicons
+
+文件图标
+
+
+### nvim-treesitter/nvim-treesitter
+
+代码抽象语法树解析
+
+
+### nvimtools/none-ls.nvim
+
+代码格式化
+
+
+### saghen/blink.cmp
+
+代码补全
+
+### smoka7/hop.nvim
+
+热键快速跳转
+
+
+### williamboman/mason.nvim
+
+LSP服务安装
+
+
+### windwp/nvim-autopairs
+
+自动配对
