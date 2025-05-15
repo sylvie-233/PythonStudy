@@ -853,6 +853,7 @@ std:
                 execute(): # 执行sql语句 
                 executemany():
                 fetchall(): # 获取所有数据
+            execute():    
     ssl:
         _create_unverified_context():
         create_default_context():
