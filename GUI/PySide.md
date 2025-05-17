@@ -13,19 +13,25 @@ qtdesigner、pyrcc、pyuic、
 
 `.ui`文件
 
+
+
+
+
 ### pyuic
 ```yaml
 pyuic:
     -o:
 ```
 
+
 根据`.ui`文件生成py代码（`Ui_Form`、`retranslateUi()`、`setupUi()`）
 
 
 
 `QApplication` -> `QMainWindow` -> `QWidget` -> `Signal` -> `QAction`
-
 `view` -> `model` -> `item`
+
+
 
 ## 核心内容
 ```yaml
@@ -209,6 +215,28 @@ PySide6:
 ```
 
 
+
+
+
+
+### QRC
+
+资源文件，XML格式
+
+
+### 信号和槽
+
+事件机制、connect()连接处理函数
+
+
+
+
+## QtQuick
+```yaml
+
+```
+
+
 ### QML
 
 输入控件、展示控件、布局控件、系统交互控件(文件选择)
@@ -237,14 +265,3 @@ qss:
     border-radius:
     color:
 ```
-
-
-
-### QRC
-
-资源文件，XML格式
-
-
-### 信号和槽
-
-事件机制、connect()连接处理函数

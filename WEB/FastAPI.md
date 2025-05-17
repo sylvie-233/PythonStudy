@@ -3,9 +3,36 @@
 >
 >`FastAPI官方文档：https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/`
 >
->`FastApi开发框架从构建到部署实战: P11`
+>``
 
 ## 基础介绍
+
+WEB项目核心问题：
+- 登录功能
+    - 权限功能
+    - 第三方登录
+- 业务CRUD
+    - 条件查询
+    - 分页功能
+- 数据库存储
+    - 数据库事务    
+- 缓存功能
+    - Redis
+- 消息队列
+- 文档功能
+    - Swagger
+- 日志记录
+- 通信系统
+    - Socket
+    - WebSocket
+    - gRPC
+    - GraphQL
+- 搜索引擎
+- 支付系统
+
+
+
+
 
 内置工具集：Starlette
 

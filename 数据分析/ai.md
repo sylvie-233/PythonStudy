@@ -30,13 +30,34 @@ AI学习：
 
 
 
+
+### DL
+
+
+
 ### LLM
 
 大语言模型
 
+
+#### LLM分类
+```yaml
+LLM:
+    Claude:
+        Claude 3: # 支持多模态图像输入
+    Deepseek:
+    Gemini:
+    GPT:
+    LLaMA:
+```
 
 ### MCP
 
 模型上下文协议
 
 ![MCP架构](../.assets/MCP架构.png)
+
+
+
+
+### ML
