@@ -2274,3 +2274,17 @@ Web Server Gateway Interface
         22. 责任链模式（Chain of Responsibility）:
         23. 访问者模式（Visitor）:
 ```
+
+
+
+## CPython
+```yaml
+cpython:
+    
+```
+
+
+
+python官方C语言实现
+
+

@@ -13,7 +13,7 @@ WEB控制台端口：15672
 Node集群节点通信端口：25672
 
 
-Exchage默认 direct 直连交换机
+Exchage默认 direct 直连交换机（fanout、direct、topic）
 交换机绑定方式：RoutingKey、Arguments
 
 
@@ -44,6 +44,7 @@ RabbitMQ核心应用：
 - 异步任务
 - 流量削峰
 - 延时任务、死信交换机、延迟消息
+- RPC调用：
 
 
 RabbitMQ核心组件：
@@ -67,12 +68,61 @@ RabbitMQ核心问题：
 
 
 
+### rabbitmq-server
+```yaml
+rabbitmq-server:
+    start:
+    stop:
+```
+
+rabbitmq服务启动
+
+
+### rabbitmqctl
+```yaml
+rabbitmqctl:
+    add_user:
+    add_vhost:
+    delete_vhost:
+    change_password:
+    cluster_status: # 集群状态
+    delete_user:
+    join_cluster: # 加入集群
+    list_bindings:
+    list_channels:
+    list_connections:
+    list_exchanges:
+    list_permissions:
+    list_queues:
+    list_users:
+    list_user_permissions:
+    list_vhosts:
+    restart:
+        rabbitmq-server:
+    set_permissions: 
+    set_user_tags: # 设置用户标签
+        administrator:
+    status:
+    stop:
+    
+```
+
+rabbit控制命令
+
+
+
+
 
 ### rabbitmq-plugins
 ```yaml
 rabbitmq-plugins:
+    disable:
     enable:
+    list:
 ```
+
+
+rabbitmq插件管理
 
 
 
@@ -143,3 +193,25 @@ rabbitmq-plugins:
 
 
 ### 集群
+
+
+
+## RabbitMQ核心应用
+
+
+
+### RPC
+
+RPC实现原理
+```txt
+Client                       RabbitMQ                    Server
+   |                             |                           |
+   | -- [fib(10),reply_to,Q,id] -> rpc_queue                 |
+   |                             | -- 消费请求 ------------>  |
+   |                             |<---- 结果,correlation_id-- |
+   |<-- 结果消息 (corr_id match) -- callback_queue            |
+```
+1. 客户端 发送请求消息到一个请求队列（rpc_queue）。
+2. 服务端 监听请求队列，接收到消息后处理，并将结果发回。
+3. 客户端 使用临时队列（回调队列）接收响应。
+4. 利用消息的 correlation_id 字段，实现请求和响应的 一一对应。
