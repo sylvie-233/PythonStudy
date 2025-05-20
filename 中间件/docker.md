@@ -17,7 +17,7 @@ docker:
     build: # 构建镜像
         -f:
         -t: # 设置tag，版本镜像
-    compose:
+    compose: # 批量编排
         -d: # 后台运行
         -f: # 指定配置文件
         down:
