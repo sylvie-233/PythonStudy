@@ -120,8 +120,105 @@ DELETE:
 
 
 
-## Logback
+## LogStash
 
+日志收集与处理引擎
+主要用于从各种数据源（日志文件、数据库、消息队列等）收集数据，经过过滤、转换后传输到目标系统（如 Elasticsearch）。
+
+核心是一个数据管道：input → filter → output
+Filebeat 发送原始日志，Logstash 解析结构并转发
+
+
+### 安装目录
+```yaml
+logstash:
+    /bin:
+        logstash:
+    /config:
+    /data:
+    /jdk:
+    /lib:
+    /logstash-core:
+    /logstash-core-plugin-api:
+    /vendor:
+    /x-pack:
+    Gemfile:
+    Gemfile.lock:
+```
+
+
+#### logstash.conf
+```yaml
+logstash.conf:
+    input:
+        file:
+            path:
+            sincedb_path:
+            start_position:
+        kafka:
+            bootstrap_servers:
+            group_id:
+            topics:
+        stdin:
+    filter:
+        date:
+            match:
+            target:
+        geoip:
+            source:
+        grok:
+            match:
+                message:
+        json:
+            source:
+        mutate:
+            remove_field:
+            rename:
+    output:
+        elasticsearch:
+            hosts:
+            index:
+        file:
+            path:
+        kafka:
+        stdout:
+            codec:
+```
+
+
+### logstash
+```yaml
+logstash:
+    -e: # 字符串配置
+    -f: # 指定conf配置文件
+    -t: # 测试配置文件语法
+    --config:
+        debug:
+    --modules:
+    --path:
+        data:
+        logs:
+        settings:
+    --pipeline:
+    --setup:
+
+logstash-plugin:
+    install:
+    list:
+    uninstall:
+```
+
+
+客户端命令
+
+
+
+
+## Filebeat
+
+
+一个独立运行的轻量级进程
+轻量级日志采集器，用于从文件（如日志文件）读取内容并发送到指定目标
 
 
 
