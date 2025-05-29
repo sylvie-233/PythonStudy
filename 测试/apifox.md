@@ -7,3 +7,12 @@
 
 
 ## 核心内容
+```yaml
+fox:
+    mockRequest:
+        getParam():
+    mockResponse:
+        json():
+        setBody():
+pm:
+```
