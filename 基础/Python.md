@@ -235,7 +235,7 @@ std:
         bisect_right(): # 找到第一个 > x 的位置
         insort_left(): # 插入
         insort_right():
-    builtins:
+    builtins: # 内建模块
         __builtins__:
         __debug__:
         __doc__:
@@ -386,7 +386,7 @@ std:
         setfirstweekday():
         weekday():
     cmath:
-    collections: # 集合
+    collections: # 集合容器
         defaultdict: # 一个带有默认值的字典，（当你访问一个不存在的键时，defaultdict 会自动为你创建该键，并赋予一个默认值，而不会抛出 KeyError 异常），支持自定义默认值函数
             int:
             list:
@@ -802,7 +802,7 @@ std:
         set_completer(): # 命令补全
         write_history_file():
     select:
-    shutil: # 文件操作工具类
+    shutil: # 高级文件操作工具类
         copy(): # 文件拷贝(文件、权限)
         copy2(): # 文件拷贝(文件、状态)
         copyfile():
@@ -865,6 +865,7 @@ std:
         ascii_lowercase:
         digits: # 数字
     struct:
+    subprocess: # 子进程管理
     sys: # 程序参数相关
         _MEIPASS: # pyinstaller 打包后资源路径
         argv: # 程序参数
