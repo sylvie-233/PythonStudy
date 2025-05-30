@@ -3,7 +3,7 @@
 >
 >`FastAPI官方文档：https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/`
 >
->`Eric Roby FastApi: P3`
+>`Eric Roby FastApi: P15`
 
 ## 基础介绍
 
@@ -165,9 +165,9 @@ fastapi:
             SecurityBase:
         oauth2:
             OAuth2:
-        OAuth2PasswordBearer:
-            tokenUrl:
-        OAuth2PasswordRequestForm:
+        OAuth2PasswordBearer: # oauth2 获取Authorization中的token（不带Bearer）
+            tokenUrl: # 获取token的endpoint
+        OAuth2PasswordRequestForm: # oauth2 password 登录表单（username、password）
             username:
             password:
             scope:
@@ -179,7 +179,7 @@ fastapi:
         HTTP_201_CREATED:
     templating: # 页面模板
         Jinja2Templates:
-            TemplateResponse: # 渲染结果
+            TemplateResponse: # 模板渲染
             directory:
     testclient:
         TestClient:
@@ -218,7 +218,7 @@ fastapi:
         descriptioin: # 项目文档描述
         docs_url: # 关闭doc文档
         redoc_url: # 关闭redoc文档
-        state: # 全局应用状态
+        state: # 全局应用状态（用于传递全局变量）
         title: # 项目文档标题
         version: # 项目文档版本
         add_exception_handler(): # 全局异常处理
@@ -295,6 +295,10 @@ fastapi:
         read():
         seek():
         write():
+    Websocket: # websocket
+        accept():
+        receive_text():
+        send_text():
 
 starlette: # ASGI开发工具集
     applications:

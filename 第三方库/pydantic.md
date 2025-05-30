@@ -24,12 +24,21 @@ pydantic:
     BaseModel: # 模型基类
         Config: # 模型配置
             anystr_strip_whitespace:
+            json_schema_extra: # 模型样例
             min_anystr_length:
-        dict(): # 返回字典
+        dict(): # 返回字典(旧版)
         json():
         model_dump(): # 生成字典
             exclude_none: # 排除空字段
         parse_obj(): # 字典解析
         parse_raw(): # 字符串解析
+    EmailStr:
+    Field: # 模型字段配置   
+        default_factory: # 字段默认创建工厂函数
+        gt:
+        lt:
+        max_length:
+        min_length:
     ValidationError:
+    @validator: # 自定义模型字段校验（旧版）
 ```

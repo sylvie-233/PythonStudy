@@ -1,6 +1,6 @@
 # git
 
-`深入理解GIT: P7`
+`深入理解GIT: P12`
 
 ## 基础介绍
 
@@ -43,6 +43,7 @@ git:
     archive: # 创建文件归档
     backfill:
     bisect:
+    blame: # 查看文件的修改历史
     branch: # 分支查看
         -d: # 删除分支
         -D:
@@ -53,7 +54,7 @@ git:
         -p: # 查看对象内容
         -s: # 查看文件长度
         -t: # 查看对象类型
-    checkout: # 切换分支
+    checkout: # 切换分支（也可切换到commit中，分离头指针状态）
         --: # 丢弃未暂存修改
         -b: # 指定分支
     cherry-pick: # 选择并应用指定的commit修改，多分支操作
@@ -81,7 +82,7 @@ git:
             email:
             name:
     diff: # 查看工作区与暂存区之间的差异
-        --cached: # 显示暂存区（index 文件）和最近一次提交之间的差异
+        --cached: # 显示暂存区（index 文件）和最近一次提交（也可指定某一次提交）之间的差异
     fetch: # 仅下拉（下拉到本地仓库）,修改本地远程仓库信息
         --prune: # 清空悬空垃圾objects对象
     format-patch: # 创建patch补丁
@@ -101,6 +102,7 @@ git:
         --stage: # 显示详细的索引信息，包括文件的状态和哈希
     ls-tree:
     merge: # 分支合并（把指定的分支合并到当前分支上）
+        --no-ff: # 禁用fast-forward，手动再提交一次
     mergetool: # 分支合并工具
     mv: # 文件重命名（操作已纳入缓冲区）
     prune: # 清空悬空垃圾objects对象
@@ -109,7 +111,7 @@ git:
         -d: # 删除远程分支
         -u: # set-upstream别名，远程推送（别名 分支）
         --set-upstream: # 设置远程仓库关联分支，用于将本地分支与远程仓库中的分支关联，并且将本地分支的更改推送到远程分支上，<remote> <local-branch>:<remote-branch>
-        --tags: # 推送标签
+        --tags: # 推送tag标签
     rebase: # 切换commit（分支线性变基，用于合并commit、commit分支转线性、）(rebase应该在push之前)
         --abort:
         --continue:
@@ -120,7 +122,7 @@ git:
         pick:
         reword:
         squash: # 合并到前一个commit
-    reflog: # 查看所有历史操作记录
+    reflog: # 查看所有历史操作记录（操作日志）
         -n: # 查看数量
     remote: # 远程仓库管理
         -v: # 查看远程仓库
@@ -137,8 +139,8 @@ git:
         show: # 显示远程仓库信息
     reset: # commit回滚
         --hard: # 切换commit记录
-        --mix: # 回滚到暂存区之前（红色）
-        --soft: # 回滚到暂存区
+        --mix: # 删除最近的 commit，并保留文件修改（不保留 staged 状态）
+        --soft: # 删除最近的 commit，但保留文件修改,会将变更保留在暂存区（staging area） 
         HEAD: # 取消暂存区缓存（变回未缓存状态）
         ORIG_HEAD:
     restore: # 去除文件修改
@@ -150,8 +152,12 @@ git:
     shortlog:
     show: # 查看提交的详细信息(hash、tag)
     show-branch:
-    stash: # 暂存所有修改
-        pop: # 取出暂存区修改
+    stash: # 暂存所有修改（临时保存）
+        apply: # 取出临时保存的修改（不删除这个临时保存）
+        drop: # 手动删除临时保存
+        list: # 列出所有临时保存
+        pop: # 取出临时保存的修改（并删除这个临时保存）
+        save: # 临时保存
     status: # 仓库状态
     submodule: # 管理子模块
         add: # 添加子模块
@@ -161,10 +167,11 @@ git:
             --recursive:
             --remote:
     switch: # 切换分支
-    tag: # 列出标签
-        -a: # 添加标签
+    tag: # 列出标签（标签需手动push）
+        -a: # 添加标签（在当前commit添加）
         -d: # 删除标签
-        -m: # 标签描述
+        -l: # 查找标签
+        -m: # 标签描述（带注释的标签）
     unpack-objects: # 解压缩 objects pack
     verify-pack: # 查看 objects pack 压缩信息
         -v:
@@ -307,6 +314,8 @@ commit 规范:
 ![多级commit结构](../.assets/多级commit结构.png)
 commit -> tree -> file
 
+git merge类型：
+- fast-forword
 
 
 #### Tag

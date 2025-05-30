@@ -2306,7 +2306,11 @@ cpython:
     /Module: # Python 内建模块的 C 代码
         mathmodule.c:
     /Objects: # Python 内置对象的实现（如 list、dict 等）
+        longobject.c:
+        object.h:
     /Parser: # Python 代码的解析
+    /Programs:
+        python.c:
     /Python: # Python 解释器的核心代码
     /Tools: # 工具脚本，如构建和配置脚本
     configure: # 配置和构建文件
@@ -2333,10 +2337,59 @@ CPython 运行流程（核心文件）
     - 许多 CPython 模块是用 C 编写的（如 math, os, sys 等），这些模块提供了对操作系统和底层库的访问。
 
 
-
+![PyObject结构体](../.assets/PyObject结构体.png)
 
 ### PyObject
+```c
+typedef struct {
+    PyObject *ob_refcnt;    // 引用计数
+    struct _typeobject *ob_type; // 对象类型（指向 PyTypeObject）
+    Py_ssize_t ob_size;     // 可变对象的大小（例如，列表中的元素数）
+} PyObject;
+```
 
+python对象
+
+
+
+#### PyTypeObject
+```c
+typedef struct {
+    PyObject_VAR_HEAD /* PyObject */
+    const char *tp_name;             /* 类型的名称 */
+    PyBasicObject* (*tp_dealloc)(PyObject *); /* 处理类型的析构操作 */
+    PyObject *(*tp_repr)(PyObject *); /* repr()返回对象的字符串表示 */
+    PyObject *(*tp_str)(PyObject *);  /* str()返回对象的字符串形式 */
+    PyObject *(*tp_getattr)(PyObject *, char *); /* getattr() */
+    PyObject *(*tp_setattr)(PyObject *, char *, PyObject *); /* setattr() */
+    PyObject *tp_as_number;          /* 支持数字运算 */
+    PyObject *tp_as_sequence;        /* 序列（如列表、元组等）操作相关的方法（如索引、切片等） */
+    PyObject *tp_as_mapping;         /* 映射（如字典）操作相关的方法（如获取键值对、检查键是否存在等） */
+    PyObject *tp_flags;              /* 类型的特性。它的值是由多个标志位组成的 */
+    PyObject *tp_doc;                /* 类型的文档字符串（docstring） */
+    PyObject *tp_traverse;           /* tp_traverse */
+    PyObject *tp_clear;              /* tp_clear */
+    PyObject *tp_richcompare;        /* tp_richcompare */
+    PyObject *tp_weaklistoffset;     /* tp_weaklistoffset */
+    PyObject *tp_iter;               /* 返回一个迭代器对象 */
+    PyObject *tp_iternext;           /* tp_iternext */
+    PyObject *tp_methods;            /* 包含类型的方法定义，指向一个包含函数名、函数指针和文档字符串的结构体数组 */
+    PyObject *tp_members;            /* 指向一个成员定义结构体数组，表示对象的属性及其对应的偏移量 */
+    PyObject *tp_getset;             /* tp_getset */
+    PyObject *tp_base;               /* tp_base */
+    PyObject *tp_dict;               /* tp_dict */
+    PyObject *tp_descr_get;          /* tp_descr_get */
+    PyObject *tp_descr_set;          /* tp_descr_set */
+    PyObject *tp_dictoffset;         /* tp_dictoffset */
+    PyObject *tp_init;               /* tp_init */
+    PyObject *tp_alloc;              /* tp_alloc */
+    PyObject *tp_new;                /* tp_new */
+    PyObject *tp_free;               /* tp_free */
+} PyTypeObject;
+```
+
+
+python类型对象（属性、方法）
 
 
 ### PYC

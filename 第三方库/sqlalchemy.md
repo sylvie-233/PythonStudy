@@ -45,6 +45,10 @@ sqlalchemy:
             load: # 模型加载
             refresh:
             refresh_flush:
+        listen():
+    ext:
+        declarative: # 基类声明创建
+            declarative_base():
     orm: # ORM包
         query:
             Query:
@@ -64,6 +68,7 @@ sqlalchemy:
             add(): # 添加数据
             add_all():
             begin(): # 开启事务
+            close(): # 关闭连接
             commit(): # 提交事务
             delete(): # 删除数据
             flush(): # 刷新（提交事务）
@@ -73,6 +78,9 @@ sqlalchemy:
                 filter_by():
                 first():
                 join(): # 联表
+                limit():
+                offset():
+            refresh():
             scalars(): # 查询结果迭代遍历（select构造语句执行）
                 first():
                 one():
@@ -234,3 +242,12 @@ user_table = Table(
 )
 ```
 SQL Build查询构造器模式
+
+
+
+### Event
+
+事件机制
+
+
+- before_cursor_execute

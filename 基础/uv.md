@@ -42,6 +42,7 @@ uv:
     venv: # 创建虚拟环境
         --python:
     version:
+uvx:
 ```
 
 

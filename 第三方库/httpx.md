@@ -8,7 +8,7 @@ Python HTTP 客户端库，它支持同步和异步请求，是 requests 库的�
 ## 核心内容
 ```yaml
 httpx:
-    AsyncClient:
+    AsyncClient: # 异步客户端
         base_url:
         headers:
         timeout:
