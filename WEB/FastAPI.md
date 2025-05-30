@@ -12,21 +12,33 @@ WEB项目核心问题：
     - 权限功能
     - 第三方登录
 - 业务CRUD
+    - 中间件
+    - 数据校验
+    - 实体转换
     - 条件查询
     - 分页功能
+    - 异常处理
+    - 响应转换
 - 数据库存储
+    - ORM
     - 数据库事务    
-- 缓存功能
-    - Redis
-- 消息队列
+    - 并发锁
+- 模板引擎
+    - Jinja2
+- 日志记录
+    - 链路追踪
 - 文档功能
     - Swagger
-- 日志记录
 - 通信系统
     - Socket
     - WebSocket
     - gRPC
     - GraphQL
+- 缓存功能
+    - Redis
+- 消息队列
+    - RabbitMQ
+- 定时任务
 - 搜索引擎
 - 支付系统
 
@@ -35,7 +47,6 @@ WEB项目核心问题：
 
 
 内置工具集：Starlette
-
 - @on_event: 事件机制
 - @exception_handler: 异常处理
     - HTTPException

@@ -2281,11 +2281,77 @@ Web Server Gateway Interface
 ## CPython
 ```yaml
 cpython:
-    
+    /Include: # Python C API头文件
+        Python.h: # 
+            PyExc_TypeError:
+            PyMODINIT_FUNC:
+            PyModuleDef:
+            PyModuleDef_HEAD_INIT:
+            PyObject: # 所有 Python 对象的基础类型
+            PyObject_Type:
+            PyTypeObject: # 定义了 Python 类型的结构体，用来描述 Python 类型
+            Py_BuildValue(): # 将 C 类型的数据转换为 Python 对象
+            Py_DECREF(): # 减少对象 obj 的引用计数，若引用计数为 0，则释放对象
+            Py_INCREF(): # 增加对象 obj 的引用计数
+            PyArg_ParseKeywords(): # 从关键字参数解析输入
+            PyArg_ParseTuple(): # 从位置参数解析输入
+            PyErr_Print():
+            PyErr_SetString(): # 设置一个异常并带有一个错误消息
+            PyFloat_FromDouble(): # 将 C 的 double 类型转换为 Python 的 float 类型
+            PyList_New(): # 创建一个新的列表对象
+            PyList_SetItem(): # 设置列表中的某个位置的元素
+            PyLong_FromLong(): # 将 C 的 long 类型转换为 Python 的 int 类型
+            PyModule_Create(): # 用于创建一个新的 Python 模块
+    /Lib: # Python 标准库
+    /Module: # Python 内建模块的 C 代码
+        mathmodule.c:
+    /Objects: # Python 内置对象的实现（如 list、dict 等）
+    /Parser: # Python 代码的解析
+    /Python: # Python 解释器的核心代码
+    /Tools: # 工具脚本，如构建和配置脚本
+    configure: # 配置和构建文件
 ```
 
 
 
 python官方C语言实现
 
+
+CPython 运行流程（核心文件）
+1. 解析阶段（Parser）
+    - Python 代码通过 Parser 目录中的文件进行解析。首先，Python 代码被转换成抽象语法树（AST），然后再转换成字节码。
+2. 字节码生成（Code Object）
+    - Python 的源代码被编译为字节码（.pyc 文件），这些字节码是跨平台的，并且是 Python 解释器执行的中间表示。
+    - 字节码执行的核心循环在 ceval.c 中实现。
+3. 字节码执行
+    - ceval.c 文件实现了 Python 解释器的执行循环，它通过逐条执行字节码来运行程序。
+4. 内存管理
+    - CPython 通过引用计数和垃圾回收来管理内存。gc.c 实现了垃圾回收机制，而对象内存管理的核心代码在 object.c 中。
+5. 全局解释器锁（GIL）
+    - pythread.h 和 pystate.c 中管理了 GIL，它是 CPython 用来确保多线程环境下数据一致性的机制。GIL 使得每次只有一个线程能够执行 Python 字节码，影响了 Python 的并发性能。
+6. 标准库
+    - 许多 CPython 模块是用 C 编写的（如 math, os, sys 等），这些模块提供了对操作系统和底层库的访问。
+
+
+
+
+### PyObject
+
+
+
+### PYC
+
+
+python 字节码文件`.pyc`
+
+
+
+### PVM
+
+
+Python 虚拟机
+CPython 的内存管理使用了 堆 和 栈，并通过 引用计数 和 垃圾回收 管理对象的生命周期
+
+
+### GIL
 
