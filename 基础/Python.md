@@ -454,7 +454,7 @@ std:
             set(): # 设置value值
             write(): # 写出配置
     contextlib: # 上下文管理
-        @asynccontextmanager:
+        @asynccontextmanager: # 异步上下文管理
         @contextmanager:
     copy: # 拷贝
         deepcopy(): # 深拷贝
@@ -1347,6 +1347,7 @@ auto()自动赋值
 Control Flow:
     //: # 整除
     as: # 别名
+    assert: # 断言
     del: # 删除变量
     in:
     is:

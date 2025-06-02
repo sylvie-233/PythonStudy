@@ -3,7 +3,7 @@
 >
 >`FastAPI官方文档：https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/`
 >
->`Eric Roby FastApi: P15`
+>`Eric Roby FastApi: P20`
 
 ## 基础介绍
 
@@ -145,6 +145,9 @@ fastapi:
         http_exception_handler(): 
         request_validation_exception_handler():
     middleware:
+        base:
+            BaseHTTPMiddleware:
+                dispathc(): # (request, call_next)
         cors:
             CORSMiddleware:
                 allow_credentials:
@@ -181,11 +184,14 @@ fastapi:
         Jinja2Templates:
             TemplateResponse: # 模板渲染
             directory:
-    testclient:
-        TestClient:
-            get():
+    testclient: # 测试客户端
+        TestClient: # 传入app实例
+            delete():
+            get(): # 路由响应测试
                 json():
                 status_code():
+            post():
+            put():
     APIRouter: # 子路由
         dependencies: # 子路由依赖
         prefix:
@@ -354,9 +360,6 @@ pydantic: # 请求参数映射
         title:
     HttpUrl:
 
-uvicorn: # ASGI服务器
-    run(): # 运行主程序
-
 sqlmodel: # 官方主推ORM框架
     Field: # 模型字段定义
         default:
@@ -382,6 +385,9 @@ sqlmodel: # 官方主推ORM框架
     select():
         limit():
         offset():
+
+uvicorn: # ASGI服务器
+    run(): # 运行主程序
 ```
 
 ### Request
