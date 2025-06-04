@@ -3,7 +3,7 @@
 >
 >`FastAPI官方文档：https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/`
 >
->`Eric Roby FastApi: P42`
+>``
 
 ## 基础介绍
 
