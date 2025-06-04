@@ -1,6 +1,6 @@
 # git
 
-`深入理解GIT: P19`
+`深入理解GIT: P26`
 
 ## 基础介绍
 
@@ -60,6 +60,7 @@ git:
     cherry-pick: # 选择并应用指定的commit修改，多分支操作
     clean: # 从工作区中移除未跟踪的文件
     clone: # 克隆仓库
+        --recursive: # 递归克隆子模块
     commit: # 提交
         -a: # 所有文件
         -m: # 提交备注信息
@@ -91,6 +92,7 @@ git:
     grep: # 代码库中查找指定片段 (文本查找)
     help: # 查看帮助
     init: # 仓库初始化
+        --bare:
     log: # commit日志
         -n:
         --graph:
@@ -129,7 +131,7 @@ git:
         --verbose:
         add: # 添加远程仓库（仓库别名 url）（默认origin）
         get-url:
-        prune: # 清空悬空垃圾objects对象
+        prune: # 清空悬空垃圾objects对象（本地有，远程没有的）
         remove:
         rename:
         rm:
@@ -148,7 +150,7 @@ git:
     revert: # 撤销指定提交的修改
     rm: # 直接从工作区和暂存区中删除指定的文件（删除修改会被纳入到暂存区）
         -r: # 递归
-        --cached: # 移除暂存区文件(从暂存区中删除文件，但保留工作区中的文件)
+        --cached: # 移除暂存区文件(从暂存区中删除文件，但保留工作区中的文件，绿色变成红色)
     shortlog:
     show: # 查看提交的详细信息(hash、tag)
     show-branch:
@@ -161,11 +163,21 @@ git:
     status: # 仓库状态
     submodule: # 管理子模块
         add: # 添加子模块
+        foreach: # 遍历子模块操作
+        init: # 初始化子模块
         status:
-        update:
+        update: # 更新子模块
             --init:
             --recursive:
             --remote:
+    subtree: # 子模块管理进阶（子模块不仅仅是引用，存在实体文件）
+        add: # 添加子模块
+            --prefix:
+            --squash: # 合并子模块提交
+        merge:
+        pull: # 拉取子模块
+        push: # 推送子模块
+        split: # 父模块中分离出一个子模块
     switch: # 切换分支
     tag: # 列出标签（标签需手动push）
         -a: # 添加标签（在当前commit添加）
@@ -220,6 +232,17 @@ git:
 `.git/config`、`~/.gitconfig`
 
 
+#### .gitmodules
+```yaml
+.gitmodules:
+    submodule:
+        path:
+        url:
+```
+
+子模块配置
+
+
 #### .gitignore
 
 git 管理忽略文件
@@ -242,17 +265,19 @@ git 管理忽略文件
         /refs:
             /heads:
                 master:
+    /modules: # 子模块
+        /xxx:
     /objects: # hash，所有对象（blob, tree, commit，tag）都存这里，通过 SHA-1 哈希值命名，2 个字符的目录和剩下的 38 个字符的文件名
         /info:
         /pack: # objects 合并压缩
             pack-xxx.idx:
             pack-xxx.pack:
     /refs: # 引用，保存分支（refs/heads）和 tag（refs/tags），每个引用都指向一个 Git 对象（通常是一个提交对象）
-        /heads: # 分支指针
+        /heads: # 本地分支指针
             main:
             master: # master分支指针，指向objects中的hash commit
         /remotes: # 远程仓库
-            /origin: # 自定义origin远程仓库名
+            /origin: # 远程分支，自定义origin远程仓库名
                 main:
                 master:
         /tags: # 标签
@@ -336,7 +361,6 @@ Tree 对象用于表示一个目录，它包含了该目录下所有文件和子
 
 ### HOOKS
 
-
 ![githooks执行流程](../.assets/githooks执行流程.png)
 - pre-commit
 - post-commit
@@ -350,12 +374,17 @@ bash脚本
 ### SubModule
 
 git子模块
+monorepo多模块管理
 
 
 
-### WorkTree
 
-多分支同时操作
+### SubTree
+
+
+SubModule进阶版
+
+
 
 
 
