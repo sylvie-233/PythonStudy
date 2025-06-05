@@ -1,6 +1,6 @@
 # git
 
-`深入理解GIT: P26`
+``
 
 ## 基础介绍
 
@@ -31,6 +31,9 @@ git文件状态：
 
 分离头指针：Head指向具体的commit，而不是某一branch分支
 git底层核心内容：存储、引用、日志、钩子
+
+
+![git rebase执行](../.assets/../.assets/git_rebase.png)
 
 
 ### git
@@ -114,9 +117,10 @@ git:
         -u: # set-upstream别名，远程推送（别名 分支）
         --set-upstream: # 设置远程仓库关联分支，用于将本地分支与远程仓库中的分支关联，并且将本地分支的更改推送到远程分支上，<remote> <local-branch>:<remote-branch>
         --tags: # 推送tag标签
-    rebase: # 切换commit（分支线性变基，用于合并commit、commit分支转线性、）(rebase应该在push之前)
-        --abort:
-        --continue:
+    rebase: # 分支整体合并，分支线性变基（整体偏移），用于合并commit、commit分支转线性(会修改commit历史，不要对master使用，只在自己的分支上使用，rebase应该在push之前)
+        --abort: # 中断
+        --continue: # 继续（rebase应用是自己每一次commit逐一应用patch的，解决完冲突才进行下一次）
+        --skip: # 跳过本次commit
         edit:
         exec:
         drop:
