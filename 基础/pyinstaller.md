@@ -19,30 +19,46 @@ pyinstaller:
     -w: # exe程序隐藏控制台
     --add-data: # 添加文件、文件夹
     --add-binary: # 添加文件、文件夹
+    --console: # 控制台程序
     --disable-windowed-traceback:
     --help:
-    --hidden-import:
-    --onefile:
+    --hidden-import: # 添加依赖的模块
+    --icon:
+    --noconsole:
+    --nowindowed: # 无窗口
+    --onedir: # 单目录
+    --onefile: # 单文件
     --paths: # 指定python模块搜索路径
     --splash: # 程序启动画面
     --version:
-```
-
-
-
-
-## 核心内容
-```yaml
+    --windowed:
 ```
 
 
 ### main.spec
 ```yaml
 main.spec:
-    Analysis:
+    Analysis: # 打包分析
+        binaries:
+        datas: # 资源文件
+        excludes:
+        pathex:
+        runtime_hooks:
+        ---
+        binaries:
         datas:
-    EXE:
+        pure:
+        scripts:
+    COLLECT:
+    EXE: # exe配置
+        console:
+        icon:
     PYZ:
 ```
 
-pyinstaller配置
+pyinstaller打包配置
+
+
+## 核心内容
+
+

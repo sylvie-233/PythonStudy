@@ -2,17 +2,19 @@
 
 >
 >`QML6(Qt Quick)开发教程: P3`
->
+>`【王铭东】从零入门PySide6: P7`
 
 ## 基础介绍
 
 PySide
+`QApplication` -> `QMainWindow` -> `QWidget` -> `Signal` -> `QAction`
+
+安装：`pip install pyside6`
+
 
 
 qtdesigner、pyrcc、pyuic、
-
 `.ui`文件
-
 
 
 
@@ -23,12 +25,10 @@ pyuic:
     -o:
 ```
 
-
 根据`.ui`文件生成py代码（`Ui_Form`、`retranslateUi()`、`setupUi()`）
 
 
 
-`QApplication` -> `QMainWindow` -> `QWidget` -> `Signal` -> `QAction`
 `view` -> `model` -> `item`
 
 
@@ -36,13 +36,13 @@ pyuic:
 ## 核心内容
 ```yaml
 PySide6:
-    QtCore:
+    QtCore: # Qt核心模块
         QCoreApplication:
         QDate:
         QDateTime:
         QMetaObject:
             connectSlotsByName(): # 连接信号和槽
-        QObject:
+        QObject: # Qt基类对象
             objectName:
         QPoint:
         QRect:
@@ -63,7 +63,7 @@ PySide6:
             singleShot():
             start():
             stop():
-        QUrl:
+        QUrl: # url路径
         Signal: # 信号（多窗口通信）
             connect(): # 连接函数
             emit(): # 触发信号
@@ -89,10 +89,14 @@ PySide6:
         QStandardItemModel:
             setItem():
         QTransform:
-    QtWidgets:
+    QtQuick:
+        QQuickView: # qml视图
+            setSource():
+            show():
+    QtWidgets: # Widget
         QAction:
             triggered:
-        QApplication:
+        QApplication: # 主应用
             exec(): # 事件循环
         QButtonGroup:
             checkedButton:
@@ -219,13 +223,11 @@ PySide6:
 
 
 
-### QRC
-
-资源文件，XML格式
 
 
-### 信号和槽
+### Signal
 
+信号、槽机制
 事件机制、connect()连接处理函数
 
 
@@ -291,10 +293,19 @@ QtQuick:
     NumberAnimation:
     ParallelAnimation:
     PathView:
-    Rectangle:
+    Rectangle: # 矩形
+        anchors: # 布局属性
+            centerIn: # 居中
+                parent:
+        color:    
+        font:
+            pointSize:    
+        height: # 高度
+        width: # 宽度
     SequentialAnimation:
     State:
-    Text:
+    Text: # 文本
+        text:    
     Timer:
     TouchArea:
     Transition:
@@ -345,3 +356,9 @@ qss:
     border-radius:
     color:
 ```
+
+
+
+### QRC
+
+资源文件，XML格式
