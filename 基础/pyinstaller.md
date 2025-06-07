@@ -38,27 +38,60 @@ pyinstaller:
 ### main.spec
 ```yaml
 main.spec:
-    Analysis: # 打包分析
-        binaries:
+    Analysis: # 打包分析，配置入口脚本文件
+        binaries: # 包含的二进制文件，外部二进制文件（如 DLL、so 文件）
+        cipher: # 加密
         datas: # 资源文件
-        excludes:
-        pathex:
-        runtime_hooks:
+        excludes: # 排除的模块
+        hiddenimports: # 隐式导入的模块，没有自动检测到的隐式导入模块
+        hookspath: # 自定义 hook 路径
+        pathex: # 需要扫描的路径，项目所在路径
+        runtime_hooks: # 运行时钩子
+        win_no_prefer_redirects:
+        win_private_assemblies:
         ---
-        binaries:
+        binaries: # 二进制文件
         datas:
-        pure:
-        scripts:
-    COLLECT:
-    EXE: # exe配置
+        pure: # Analysis 对象中的纯 Python 代码（所有分析出来的 Python 文件）
+        scripts: # 入口脚本
+        zipfiles:
+        zipped_data: # 所有依赖的 Python 模块
+    COLLECT: # 用于将生成的可执行文件、二进制文件、数据文件等收集到一起，依赖之前生成的 EXE 文件
+    EXE: # 生成exe配置，依赖之前生成的 PYZ 文件
         console:
         icon:
-    PYZ:
+    PYZ: # 打包核心，PYZ 对象将所有 Python 代码打包成一个 .pyz 文件，.pyz 文件是一个包含了你所有 Python 脚本的压缩归档文件
+        cipher: # .pyz 文件进行加密
 ```
 
 pyinstaller打包配置
 
 
 ## 核心内容
+
+
+
+### Resource Path
+```python
+import os
+import sys
+
+# 获取可执行文件所在的目录
+if getattr(sys, 'frozen', False):  # 当应用打包后，sys.frozen为True
+    base_path = sys._MEIPASS  # 获取临时文件路径
+else:
+    base_path = os.path.dirname(__file__)  # 如果是开发环境，使用脚本的路径
+
+# 资源文件的路径
+resource_path = os.path.join(base_path, 'resources', 'config.json')
+
+# 读取资源文件
+with open(resource_path, 'r') as file:
+    config = file.read()
+
+print(config)
+```
+
+资源文件路径问题
 
 

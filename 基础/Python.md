@@ -507,6 +507,16 @@ std:
             utc:
     decimal:
     difflib:
+    email: # 邮件
+        encoders:
+        mime:
+            base:
+                MIMEBase:
+            multipart:
+                MIMEMultipart:
+                    attach():
+            text:
+                MIMEText:        
     enum: # 枚举
         Enum: # 枚举基类
         Flag: # 按位枚举
@@ -825,6 +835,12 @@ std:
     site: # 添加第三方库的路径到 sys.path、处理 .pth 文件、设置默认编码（早期版本）、运行用户或全局的 sitecustomize.py / usercustomize.py
         getsitepackages(): # 查看全局 site-packages 路径
         getusersitepackages(): # 查看用户级 site-packages 路径
+    smtplib: # smtp邮件发送
+        SMTP:
+            login():
+            quit():
+            sendmail():
+            starttls():
     socket: # socket通信
         AF_INET:
         SOCK_DGRAM: # UDP协议
