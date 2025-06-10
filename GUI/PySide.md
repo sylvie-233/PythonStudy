@@ -2,7 +2,7 @@
 
 >
 >`QML6(Qt Quick)开发教程: P3`
->`【王铭东】从零入门PySide6: P14`
+>`【王铭东】从零入门PySide6: P21`
 
 ## 基础介绍
 
@@ -37,6 +37,7 @@ pyuic:
 ```yaml
 PySide6:
     QtCore: # Qt核心模块
+        @Slot: # 
         QCoreApplication:
         QDate:
         QDateTime: # 日期和时间类
@@ -93,7 +94,9 @@ PySide6:
     QtQuick:
         QQuickView: # qml视图
             resize():
+            rootObject(): # 根组件
             setSource():
+            setTitle():
             show():
     QtSvg: # 提供了对 SVG（可伸缩矢量图形）的支持
     QtWidgets: # Widget
@@ -249,7 +252,7 @@ QtQuick:
         Universal:
         ApplicationWindow:
         Button: # 按钮
-            background:
+            background: # 背景
             id:
             onClicked: # 点击回调    
         CheckBox:
@@ -259,7 +262,10 @@ QtQuick:
         Label:
         Menu:
         MenuBar:
-        ProgressBar:
+        ProgressBar: # 进度条
+            from:
+            to:
+            value:
         RadioButton:
         Slider: 
         SpinBox:
@@ -281,6 +287,7 @@ QtQuick:
         ShapePath:
     Animation:
     Behavior:
+    Column: # 垂直排列
     Flickable:
     FocusScope:
     GridView:
@@ -292,7 +299,7 @@ QtQuick:
                 parent:
             horizontalCenter:
         id:
-        source:
+        source: # url
     Item:
     Keys:
     ListView:
@@ -307,6 +314,7 @@ QtQuick:
     Rectangle: # 矩形
         property: # 属性定义
             int:
+        signal: # 信号定义
         anchors: # 布局属性
             bottom:
             centerIn: # 居中
@@ -318,6 +326,8 @@ QtQuick:
         height: # 高度
         radius: # 圆角
         width: # 宽度
+    Row: # 水平排列
+        spacing:
     SequentialAnimation:
     State:
     Text: # 文本
@@ -325,7 +335,13 @@ QtQuick:
         color:
         text:    
         wrapMode:
-    Timer:
+    Timer: # 定时器
+        interval:
+        onTriggered:
+        repeat:
+        running:
+        start():
+        stop():
     TouchArea:
     Transition:
     Window: # 窗口
@@ -360,21 +376,32 @@ qmlproject:
 
 
 #### 组件
+```yaml
+QWeight:
+    anchors: # 锚点布局
+        centerIn:
+    id:
+    property: # 定义属性
+    signal: # 定义信号
+    parent: # 父组件
+```
+
+
+##### Property
+##### Signal
+##### Id
+##### Anchors
 
 
 #### 布局
 
-
-#### 列表渲染
-
-QListView、QTableView、
-
-view -> model
+##### Row
+##### Column
 
 
-#### 页面路由
 
-QStackedWidget、QTabWidget
+#### 渲染
+
 
 
 ### QSS
