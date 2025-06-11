@@ -279,9 +279,20 @@ QtQuick:
         ScrollBar:
         ScrollView:
     Layouts:
-        ColumnLayout:
-        GridLayout:
-        RowLayout:
+        Layout: # 布局属性
+            column:
+            fillHeight:
+            fillWidth:
+            row:
+        ColumnLayout: # 垂直排列
+            spacing:
+        Flow: # 流式排列
+        GridLayout: # 网格排列
+            columns:
+            columnSpacing:
+            rowSpacing:
+        RowLayout: # 水平排列
+            spacing:
     Shapes:
         Shape:
         ShapePath:
@@ -326,6 +337,7 @@ QtQuick:
         height: # 高度
         radius: # 圆角
         width: # 宽度
+    Repeater: # 重复渲染
     Row: # 水平排列
         spacing:
     SequentialAnimation:
@@ -378,8 +390,19 @@ qmlproject:
 #### 组件
 ```yaml
 QWeight:
-    anchors: # 锚点布局
+    anchors: # 锚点布局（约束布局）
+        bottom:
+        bottomMargin:
         centerIn:
+        fill:
+        horizontalCenter:
+        left:
+        leftMargin:
+        right:
+        rightMargin:
+        top:
+        topMargin:
+        verticalCenter:
     id:
     property: # 定义属性
     signal: # 定义信号
@@ -395,13 +418,22 @@ QWeight:
 
 #### 布局
 
-##### Row
-##### Column
 
+##### Layout
 
+布局属性
+
+##### RowLayout
+##### ColumnLayout
+##### GridLayout
+##### Flow
 
 #### 渲染
 
+
+##### Repeater
+##### ListView
+##### GridView
 
 
 ### QSS
