@@ -2,7 +2,7 @@
 
 >
 >`QML6(Qt Quick)开发教程: P3`
->`【王铭东】从零入门PySide6: P21`
+>``
 
 ## 基础介绍
 
@@ -53,7 +53,7 @@ PySide6:
                 AlignCenter:
             Orientation:
                 Horizontal:
-        QThread: # 线程类
+        QThread: # 线程基类
             finished:
             started:
             run():
@@ -93,6 +93,9 @@ PySide6:
     QtMultimedia: # 提供了多媒体相关的功能，如音频、视频播放等
     QtQuick:
         QQuickView: # qml视图
+            engine():
+                rootContext():
+                    setContextProperty():
             resize():
             rootObject(): # 根组件
             setSource():
@@ -299,6 +302,7 @@ QtQuick:
     Animation:
     Behavior:
     Column: # 垂直排列
+    Component: # 组件属性
     Flickable:
     FocusScope:
     GridView:
@@ -315,8 +319,11 @@ QtQuick:
     Keys:
     ListView:
     Loader:
-    MouseArea:
+    MouseArea: # 鼠标区域
+        hoverEnabled:
         onClicked:
+        onEntered:
+        onExited:
     NumberAnimation:
     ParallelAnimation:
     PathView:
@@ -409,11 +416,19 @@ QWeight:
     parent: # 父组件
 ```
 
+组件的信号与槽机制，既可在QML中定义、也可在Python中定义，用来实现双向通信
 
+
+
+
+##### Component
 ##### Property
+##### Function
 ##### Signal
 ##### Id
 ##### Anchors
+
+
 
 
 #### 布局
@@ -434,6 +449,10 @@ QWeight:
 ##### Repeater
 ##### ListView
 ##### GridView
+
+
+
+#### 生命周期
 
 
 ### QSS
