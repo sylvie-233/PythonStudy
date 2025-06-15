@@ -231,6 +231,39 @@ KMP实例：
 
 
 
+### ST表
+```python
+class SparseTable:
+    def __init__(self, nums):
+        self.n = len(nums)
+        self.k = int(math.log2(self.n)) + 1
+        self.nums = nums
+        self.st_max = [[0] * self.k for _ in range(self.n)]
+        self.st_min = [[0] * self.k for _ in range(self.n)]
+
+        # 初始化
+        for i in range(self.n):
+            self.st_max[i][0] = nums[i]
+            self.st_min[i][0] = nums[i]
+
+        # 构建 ST 表
+        for j in range(1, self.k):
+            for i in range(self.n - (1 << j) + 1):
+                self.st_max[i][j] = max(self.st_max[i][j - 1], self.st_max[i + (1 << (j - 1))][j - 1])
+                self.st_min[i][j] = min(self.st_min[i][j - 1], self.st_min[i + (1 << (j - 1))][j - 1])
+
+    def query_max(self, l, r):
+        """查询区间 [l, r] 内最大值"""
+        j = int(math.log2(r - l + 1))
+        return max(self.st_max[l][j], self.st_max[r - (1 << j) + 1][j])
+
+    def query_min(self, l, r):
+        """查询区间 [l, r] 内最小值"""
+        j = int(math.log2(r - l + 1))
+        return min(self.st_min[l][j], self.st_min[r - (1 << j) + 1][j])
+```
+
+
 ## 动态规划
 
 
@@ -381,7 +414,7 @@ DFS增广路径
 
 
 
-#### LCA (第k个祖先)
+#### LCA
 ```python
 import math
 
@@ -467,6 +500,82 @@ print(bl.get_kth_ancestor(5, 2))  # 输出: 0 (5 的第 2 个祖先是节点 0)
 
 # 查询节点 3 和 5 的最近公共祖先
 print(bl.lca(3, 5))  # 输出: 0 (3 和 5 的 LCA 是节点 0)
+```
+
+第k个祖先
+
+
+```python
+# lca完整版
+class LcaBinaryLifting:
+    # n个点、m条边（0~n-1）
+    def __init__(self, edges: List[List[int]]):
+        n = len(edges) + 1
+        self.m = m = n.bit_length()
+        g = [[] for _ in range(n)]
+        for x, y, w in edges:
+            g[x].append((y, w))
+            g[y].append((x, w))
+
+        # 深度
+        depth = [0] * n
+        # 距离
+        dis = [0] * n
+        # 父节点
+        pa = [[-1] * m for _ in range(n)]
+
+        def dfs(x: int, fa: int) -> None:
+            pa[x][0] = fa
+            for y, w in g[x]:
+                if y != fa:
+                    depth[y] = depth[x] + 1
+                    dis[y] = dis[x] + w
+                    dfs(y, x)
+
+        dfs(0, -1)
+
+        for i in range(m - 1):
+            for x in range(n):
+                if (p := pa[x][i]) != -1:
+                    pa[x][i + 1] = pa[p][i]
+
+        self.depth = depth
+        self.dis = dis
+        self.pa = pa
+
+    # 获取第k个父节点   
+    def get_kth_ancestor(self, node: int, k: int) -> int:
+        for i in range(k.bit_length()):
+            if k >> i & 1:
+                node = self.pa[node][i]
+        return node
+
+    # 返回 x 和 y 的最近公共祖先
+    def get_lca(self, x: int, y: int) -> int:
+        if self.depth[x] > self.depth[y]:
+            x, y = y, x
+        # 使 y 和 x 在同一深度
+        y = self.get_kth_ancestor(y, self.depth[y] - self.depth[x])
+        if y == x:
+            return x
+        for i in range(self.m - 1, -1, -1):
+            px, py = self.pa[x][i], self.pa[y][i]
+            if px != py:
+                x, y = px, py  # 同时往上跳 2**i 步
+        return self.pa[x][0]
+
+    # 返回 x 到 y 的距离（最短路长度）
+    def get_dis(self, x: int, y: int) -> int:
+        return self.dis[x] + self.dis[y] - self.dis[self.get_lca(x, y)] * 2
+
+    # 从 x 往上跳【至多】d 距离，返回最远能到达的节点
+    def upto_dis(self, x: int, d: int) -> int:
+        dx = self.dis[x]
+        for i in range(self.m - 1, -1, -1):
+            p = self.pa[x][i]
+            if p != -1 and dx - self.dis[p] <= d:  # 可以跳至多 d
+                x = p
+        return x
 ```
 
 
