@@ -254,6 +254,27 @@ git 管理忽略文件
 - **递归通配
 - !规则除外
 
+### gitk
+```yaml
+gitk:
+
+```
+
+git commit分支图
+
+
+
+### git-gui
+```yaml
+git-gui:
+
+```
+
+
+
+git图形化操作
+
+
 
 ## 核心内容
 ```yaml
