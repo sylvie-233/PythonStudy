@@ -5,15 +5,99 @@
 ## 基础算法
 
 
+### 快速幂
+```python
+def mod_pow(a, b, mod):
+    res = 1
+    a %= mod
+    while b:
+        if b & 1:
+            res = res * a % mod
+        a = a * a % mod
+        b >>= 1
+    return res
+```
+
+基于幂的二进制拆分
+
+
 ### 搜索
 
 #### DFS
 ```python
+# 图的 DFS：邻接表表示，visited 记录访问过的节点
+def dfs_graph(u, graph, visited):
+    visited.add(u)
+    # 访问或处理 u
+    for v in graph[u]:
+        if v not in visited:
+            dfs_graph(v, graph, visited)
 
+# 示例用法（调用时初始化 visited 为空集合）：
+graph = {0: [1,2], 1: [0,2], 2: [0,1]}  # 无向图邻接表
+visited = set()
+dfs_graph(0, graph, visited)
 ```
+
+DFS（深度优先搜索）
 
 
 #### BFS
+```python
+from collections import deque
+# 图的 BFS：邻接表表示
+def bfs_graph(start, graph):
+    visited = set([start])
+    q = deque([start])
+    while q:
+        u = q.popleft()
+        # 访问或处理 u
+        for v in graph[u]:
+            if v not in visited:
+                visited.add(v)
+                q.append(v)
+    # 返回 visited 或其它结果
+
+# 示例用法：
+graph = {0: [1,2], 1: [0,3], 2: [0], 3: [1]}
+bfs_graph(0, graph)
+```
+
+BFS（广度优先搜索）
+
+
+
+#### 双向BFS
+```python
+from collections import deque
+def bidirectional_bfs(adj, start, goal):
+    if start == goal: return 0
+    visited_s = {start:0}
+    visited_g = {goal:0}
+    q_s = deque([start]); q_g = deque([goal])
+    while q_s and q_g:
+        # 向前扩展一层
+        for _ in range(len(q_s)):
+            u = q_s.popleft()
+            for v in adj[u]:
+                if v not in visited_s:
+                    visited_s[v] = visited_s[u] + 1
+                    if v in visited_g:
+                        return visited_s[v] + visited_g[v]
+                    q_s.append(v)
+        # 向后扩展一层
+        for _ in range(len(q_g)):
+            u = q_g.popleft()
+            for v in adj[u]:
+                if v not in visited_g:
+                    visited_g[v] = visited_g[u] + 1
+                    if v in visited_s:
+                        return visited_s[v] + visited_g[v]
+                    q_g.append(v)
+    return -1  # 不可达时返回 -1
+```
+
+双向 BFS：同时从起点和终点向中间搜索，适用于无权图最短路径查找，可大幅降低搜索空间
 
 
 
@@ -67,7 +151,12 @@ class Difference:
 
 ### 倍增
 
-
+### 离散化
+```python
+coords = sorted(set(original_values))
+comp = {v:i for i,v in enumerate(coords)}
+# 现在 comp[x] 即为 x 的离散化下标  
+```
 
 
 ## 数据结构
@@ -144,6 +233,48 @@ class UnionFind:
         # 判断 x 和 y 是否属于同一个集合
         return self.find(x) == self.find(y)
 ```
+
+
+### ST表
+```python
+class SparseTable:
+    def __init__(self, nums):
+        self.n = len(nums)
+        self.k = int(math.log2(self.n)) + 1
+        self.nums = nums
+        self.st_max = [[0] * self.k for _ in range(self.n)]
+        self.st_min = [[0] * self.k for _ in range(self.n)]
+
+        # 初始化
+        for i in range(self.n):
+            self.st_max[i][0] = nums[i]
+            self.st_min[i][0] = nums[i]
+
+        # 构建 ST 表
+        for j in range(1, self.k):
+            for i in range(self.n - (1 << j) + 1):
+                self.st_max[i][j] = max(self.st_max[i][j - 1], self.st_max[i + (1 << (j - 1))][j - 1])
+                self.st_min[i][j] = min(self.st_min[i][j - 1], self.st_min[i + (1 << (j - 1))][j - 1])
+
+    def query_max(self, l, r):
+        """查询区间 [l, r] 内最大值"""
+        j = int(math.log2(r - l + 1))
+        return max(self.st_max[l][j], self.st_max[r - (1 << j) + 1][j])
+
+    def query_min(self, l, r):
+        """查询区间 [l, r] 内最小值"""
+        j = int(math.log2(r - l + 1))
+        return min(self.st_min[l][j], self.st_min[r - (1 << j) + 1][j])
+```
+
+
+
+
+### 线段树
+```python
+
+```
+
 
 ## 字符串
 
@@ -231,40 +362,78 @@ KMP实例：
 
 
 
-### ST表
-```python
-class SparseTable:
-    def __init__(self, nums):
-        self.n = len(nums)
-        self.k = int(math.log2(self.n)) + 1
-        self.nums = nums
-        self.st_max = [[0] * self.k for _ in range(self.n)]
-        self.st_min = [[0] * self.k for _ in range(self.n)]
 
-        # 初始化
-        for i in range(self.n):
-            self.st_max[i][0] = nums[i]
-            self.st_min[i][0] = nums[i]
-
-        # 构建 ST 表
-        for j in range(1, self.k):
-            for i in range(self.n - (1 << j) + 1):
-                self.st_max[i][j] = max(self.st_max[i][j - 1], self.st_max[i + (1 << (j - 1))][j - 1])
-                self.st_min[i][j] = min(self.st_min[i][j - 1], self.st_min[i + (1 << (j - 1))][j - 1])
-
-    def query_max(self, l, r):
-        """查询区间 [l, r] 内最大值"""
-        j = int(math.log2(r - l + 1))
-        return max(self.st_max[l][j], self.st_max[r - (1 << j) + 1][j])
-
-    def query_min(self, l, r):
-        """查询区间 [l, r] 内最小值"""
-        j = int(math.log2(r - l + 1))
-        return min(self.st_min[l][j], self.st_min[r - (1 << j) + 1][j])
-```
 
 
 ## 动态规划
+
+
+
+### 线性DP
+
+
+### 背包DP
+
+#### 01背包
+```python
+# 0-1 背包：一维优化示例
+# 编号0~N-1
+dp = [0]*(V+1)
+for i in range(N):
+    w, v = weight[i], value[i]
+    for j in range(V, w-1, -1):
+        dp[j] = max(dp[j], dp[j-w] + v)
+# dp[V] 为最优值
+```
+
+
+
+#### 完全背包
+```python
+# 完全背包：示例
+# 编号0~N-1
+for i in range(N):
+    w, v = weight[i], value[i]
+    for j in range(w, V+1):
+        dp[j] = max(dp[j], dp[j-w] + v)
+```
+
+
+#### 多重背包
+```python
+# 多重背包示例（直接拆分为多件0-1背包）
+# 编号0~N-1
+for i in range(N):
+    cnt = count[i]
+    k = 1
+    while cnt > 0:
+        num = min(k, cnt)
+        w, v = weight[i]*num, value[i]*num
+        for j in range(V, w-1, -1):
+            dp[j] = max(dp[j], dp[j-w] + v)
+        cnt -= num
+        # 对cnt进行二进制拆分
+        k <<= 1
+```
+
+
+
+### 状态压缩DP
+```python
+# 例：n<=20 的子集遍历
+N = n
+dp = [INF]*(1<<N)
+dp[0] = 0
+for mask in range(1<<N):
+    # 转移逻辑，根据具体问题定义
+    # 例如，遍历子集子集或状态之间的关系
+    pass
+```
+
+
+
+### 数位DP
+
 
 
 ## 图论
@@ -410,8 +579,130 @@ def hungarian(n, m, edges):
 DFS增广路径
 
 
+
+
+#### 最短路
+
+
+##### Dijkstra
+```python
+import heapq
+def dijkstra(n, adj, src):
+    INF = float('inf')
+    dist = [INF]*n
+    dist[src] = 0
+    hq = [(0, src)]
+    while hq:
+        d, u = heapq.heappop(hq)
+        if d > dist[u]:
+            continue
+        for v, w in adj[u]:
+            if dist[v] > d + w:
+                dist[v] = d + w
+                heapq.heappush(hq, (dist[v], v))
+    return dist
+
+# 示例：n 顶点数，adj 邻接表列表 adj[u]=[(v,w),...]，src 源点
+dist = dijkstra(n, adj, src)
+```
+
+
+Dijkstra（迪杰斯特拉算法）：单源最短路径算法，适用于非负权图。利用最小堆（priority queue）依次扩展到最近的未访问节点
+
+
+
+##### Floyd
+```python
+def floyd_warshall(n, dist):
+    # dist[i][j] 初始为 i->j 的边权，若无边则可设为 INF；对角线为0
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][k] + dist[k][j] < dist[i][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+    return dist
+```
+
+
+Floyd（Floyd–Warshall算法）：多源最短路径算法，计算任意两点间最短路
+
+
+##### Bellman-Ford
+```python
+def bellman_ford(n, edges, src):
+    INF = float('inf')
+    dist = [INF]*n
+    dist[src] = 0
+    for _ in range(n-1):
+        updated = False
+        for u, v, w in edges:
+            if dist[u] != INF and dist[v] > dist[u] + w:
+                dist[v] = dist[u] + w
+                updated = True
+        if not updated:
+            break
+    # 可选：检查负权回路
+    for u, v, w in edges:
+        if dist[u] != INF and dist[v] > dist[u] + w:
+            raise ValueError("Graph contains a negative-weight cycle")
+    return dist
+```
+
+单源最短路径算法，可处理负权边（但无负权回路）
+
 ### 树
 
+
+#### 最小生成树
+
+
+##### Kruskal
+```python
+def kruskal(n, edges):
+    # edges = [(w, u, v), ...]
+    edges.sort()
+    parent = list(range(n))
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    mst_weight = 0
+    for w, u, v in edges:
+        ru, rv = find(u), find(v)
+        if ru != rv:
+            parent[ru] = rv
+            mst_weight += w
+    return mst_weight
+```
+
+
+对图所有边按权值排序，依次选取不构成环的最小边
+
+
+
+##### Prim
+```python
+import heapq
+def prim(n, adj, src=0):
+    visited = [False]*n
+    visited[src] = True
+    hq = []
+    for v, w in adj[src]:
+        heapq.heappush(hq, (w, v))
+    mst_weight = 0
+    while hq:
+        w, u = heapq.heappop(hq)
+        if visited[u]: continue
+        visited[u] = True
+        mst_weight += w
+        for v, w2 in adj[u]:
+            if not visited[v]:
+                heapq.heappush(hq, (w2, v))
+    return mst_weight
+```
+
+Prim（最小生成树Prim算法）：从一个起点开始，逐步向树中添加到外部节点的最小权边
 
 
 #### LCA
@@ -580,3 +871,14 @@ class LcaBinaryLifting:
 
 
 ## 数论
+
+
+
+### GCD
+```python
+def gcd(a, b):
+    return a if b==0 else gcd(b, a%b)
+```
+
+
+最大公约数
