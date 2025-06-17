@@ -159,6 +159,84 @@ comp = {v:i for i,v in enumerate(coords)}
 ```
 
 
+
+### 逆波兰表达式
+```python
+# 计算符号优先级
+def precedence(op):
+    if op in ('+', '-'):
+        return 1
+    if op in ('*', '/'):
+        return 2
+    return 0
+
+# 计算表达式
+def apply_op(a, b, op):
+    if op == '+': return a + b
+    if op == '-': return a - b
+    if op == '*': return a * b
+    if op == '/': return a / b
+
+# 中缀转后缀
+def to_rpn(expression):
+    output = []
+    ops = []
+    i = 0
+    while i < len(expression):
+        ch = expression[i]
+        if ch == ' ':
+            i += 1
+            continue
+        # 获取
+        if ch.isdigit() or ch == '.':
+            num = []
+            while i < len(expression) and (expression[i].isdigit() or expression[i] == '.'):
+                num.append(expression[i])
+                i += 1
+            output.append(''.join(num))
+            continue
+        elif ch == '(':
+            ops.append(ch)
+        elif ch == ')':
+            while ops and ops[-1] != '(':
+                output.append(ops.pop())
+            ops.pop()  # 弹出 '('
+        else:
+            # 遇到运算符时，先把优先级（>=）的弹出
+            while ops and precedence(ops[-1]) >= precedence(ch):
+                output.append(ops.pop())
+            ops.append(ch)
+        i += 1
+    while ops:
+        output.append(ops.pop())
+    return output
+
+# 利用栈计算后缀表达式
+def eval_rpn(rpn):
+    stack = []
+    for token in rpn:
+        if token not in '+-*/':
+            stack.append(float(token))
+        else:
+            b = stack.pop()
+            a = stack.pop()
+            stack.append(apply_op(a, b, token))
+    return stack[0]
+
+
+def evaluate(expression):
+    rpn = to_rpn(expression)
+    return eval_rpn(rpn)
+
+# 示例
+# 后缀表达式 3 2 1 - 5 * 2 3 + / +
+expr = "3 + (2 - 1) * 5 / (2 + 3)"
+print(evaluate(expr))  # 输出 4.0
+```
+
+中缀转后缀 + 逆波兰表达式（RPN）求值实现完整括号四则运算
+
+
 ## 数据结构
 
 ### 堆

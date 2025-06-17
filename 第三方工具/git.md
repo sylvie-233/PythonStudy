@@ -182,7 +182,8 @@ git:
         pull: # 拉取子模块
         push: # 推送子模块
         split: # 父模块中分离出一个子模块
-    switch: # 切换分支
+    switch: # 切换分支、commit
+        --detach: # 切换commit，分离头指针
     tag: # 列出标签（标签需手动push）
         -a: # 添加标签（在当前commit添加）
         -d: # 删除标签
