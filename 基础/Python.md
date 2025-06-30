@@ -227,9 +227,12 @@ std:
         dump():
         parse():
         walk():
+    atexit: # 清理函数
     base64: # base64编码
         b64decode():
         b64encode():
+    bdb: # 调试库
+    binascii: # 二进制转asc码
     bisect: # 二分查找工具
         bisect_left(): # 找到第一个 >= x 的位置
         bisect_right(): # 找到第一个 > x 的位置
@@ -370,7 +373,7 @@ std:
         type(): # 获取对象的类型、动态创建新类
             class_attr:
         zip():
-    bz2:
+    bz2: # bzip2压缩
     calendar: # 日历
         SUNDAY:
         HTMLCalendar:
@@ -386,7 +389,12 @@ std:
         setfirstweekday():
         weekday():
     cmath:
+    cmd:
+    code:
+    codecs:
+    codeop:
     collections: # 集合容器
+        abc:
         defaultdict: # 一个带有默认值的字典，（当你访问一个不存在的键时，defaultdict 会自动为你创建该键，并赋予一个默认值，而不会抛出 KeyError 异常），支持自定义默认值函数
             int:
             list:
@@ -412,6 +420,8 @@ std:
         UserDict:
         UserList:
         UserString:
+    colorsys: # RGB颜色转换
+    compileall:
     concurrent: # 并发库
         futures: # 异步
             Executor: # 执行器
@@ -456,9 +466,12 @@ std:
     contextlib: # 上下文管理
         @asynccontextmanager: # 异步上下文管理
         @contextmanager:
+    contextvars: # 上下文变量
     copy: # 拷贝
         deepcopy(): # 深拷贝
+    copyreg：
     csv:
+    ctypes:
     dataclasses:
         @dataclass(): # 数据类dataclass
             order:
@@ -507,6 +520,8 @@ std:
             utc:
     decimal:
     difflib:
+    dis: # python字节码反汇编
+    doctest:
     email: # 邮件
         encoders:
         mime:
@@ -517,6 +532,7 @@ std:
                     attach():
             text:
                 MIMEText:        
+    ensurepip:
     enum: # 枚举
         Enum: # 枚举基类
         Flag: # 按位枚举
@@ -525,6 +541,10 @@ std:
         StrEnum:
         unique:
         auto(): # 自动枚举值
+    errno:
+    faulthandler: # 拷贝python栈
+    filecmp:
+    fileinput:
     fnmatch:
     fractions:
     ftplib:
@@ -533,10 +553,14 @@ std:
         @reduce(): # 迭代计数
         @wraps(): # 函数包装(常用于高阶函数装饰器).可以将原函数的元数据（如 __name__ 和 __doc__）复制到包装函数上
     gc:
+    getopt:
+    getpass:
+    gettext:
     glob: # 文件索引
         escape():
         glob():
             recursive():
+    graphlib:
     gzip:
     hashlib: # 哈希
         md5(): # md5加密
@@ -558,6 +582,7 @@ std:
         heapreplace():
         nlargest(): # 前k大
         nsmallest(): # 前k小
+    hmac:
     html:
     http:
         client:
@@ -572,6 +597,8 @@ std:
                 read():
         cookies:
         server:
+    idlelib:
+    imaplib:
     importlib: # 模块导入
         util:
         import_module(): # 动态导入模块
@@ -624,6 +651,9 @@ std:
         dumps(): 
         load(): # json反序列化
         loads():
+    keyword:
+    linecache:
+    locale:
     logging: # 日志库（Logger、Handler、Formatter、Filter）
         config:
             fileConfig():
@@ -665,7 +695,7 @@ std:
             setLevel():
         info():
         warning():
-    lzma:
+    lzma: # liblzma压缩
     marshal: # 内置对象序列化
         dump(): # 序列化
         dumps(): 
@@ -674,6 +704,8 @@ std:
     math: # 数学库
         pi:
         sqrt(): # 平方根
+    mmap:
+    modulefinder:
     multiprocessing: # 多进程
         pool: # 进程池
             AsyncResult: # 异步结果
@@ -697,10 +729,12 @@ std:
         Value: # 共享内存
             value:
         cpu_count(): # cpu个数
+    netrc:
     numbers:
     operator: # 运算符
         attrgetter:
         itemgetter:
+    optparse:
     os: # 操作系统相关（文件、路径）
         path: # 路径操作
             abspath(): # 绝对路径
@@ -770,7 +804,9 @@ std:
         dumps(): # 序列化
         load(): # 从文件中反序列化
         loads(): # 反序列化
+    pickletools:
     platform:
+    	profile:
     pydoc:
     queue: # 队列
         Queue: # 线程通信队列
@@ -811,7 +847,12 @@ std:
         read_history_file():
         set_completer(): # 命令补全
         write_history_file():
+    reprlib:
+    runpy:
+    sched:
     select:
+    selectors:
+    shelve:
     shutil: # 高级文件操作工具类
         copy(): # 文件拷贝(文件、权限)
         copy2(): # 文件拷贝(文件、状态)
@@ -832,6 +873,7 @@ std:
             filename: # 解压文件名
             extract_dir: # 解压目录
             format: # 解压格式
+    signal:
     site: # 添加第三方库的路径到 sys.path、处理 .pth 文件、设置默认编码（早期版本）、运行用户或全局的 sitecustomize.py / usercustomize.py
         getsitepackages(): # 查看全局 site-packages 路径
         getusersitepackages(): # 查看用户级 site-packages 路径
@@ -874,6 +916,7 @@ std:
         _create_unverified_context():
         create_default_context():
             cafile:
+    stat:
     statistics: # 数值统计
         mean():
         median():
@@ -882,6 +925,7 @@ std:
         digits: # 数字
     struct:
     subprocess: # 子进程管理
+    symtable:
     sys: # 程序参数相关
         _MEIPASS: # pyinstaller 打包后资源路径
         argv: # 程序参数
@@ -909,8 +953,10 @@ std:
         getsizeof(): # 获取对象内存大小
         setdefaultencoding():
         setrecursionlimit(): # 设置最大递归层数
-    telnetlib:
+    sysconfig:
+    tarfile:
     tempfile:
+    test:
     textwrap:
     threading: # 多线程
         Barrie: # 线程屏障,每一轮等满后，屏障会自动 reset（重置）
@@ -1037,12 +1083,17 @@ std:
             title(): # 窗口标题
         TopLevel: # 顶层窗口（内层窗口）
             focus_set():
+    token:
+    tokenize:
     tomllib:
         load():
+    trace:
+    traceback:
     tracemalloc: # 内存分配跟踪
         get_traced_memory():
         start():
         stop():
+    turtle: # 乌龟绘图库
     types: # 类型类
         FunctionType:
         MethodType: # 方法类型
@@ -1137,12 +1188,14 @@ std:
         uuid5(): # 名字生成
     venv: # 虚拟环境模块
     warnings:
+    wave:
     weakref:
         WeakKeyDictionary:
         WeakSet:
         WeakValueDictionary: # 弱引用字典
         ref():
-    wsgiref:
+    webbrowser:
+    wsgiref: # WSGI接口
         simple_server:
             make_server():
                 serve_forever():
@@ -1193,7 +1246,8 @@ std:
             remove(): # 删除标签
             set(): # 修改标签attr
         SubElement: # 创建子标签
-    zlib:
+    xmlrpc:
+    zipapp:
     zipfile: # zip文件压缩
         ZIP_DEFLATED:
         ZipFile:
@@ -1201,6 +1255,8 @@ std:
             extractall(): # 解压
                 path:
             write(): # 添加文件
+    zipimport:
+    zlib:
     zoneinfo:
 ```
 
