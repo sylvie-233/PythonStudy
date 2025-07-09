@@ -114,7 +114,29 @@ def binary_search(arr, target):
         else:
             right = mid - 1
     return -1  # 元素未找到
+
 ```
+
+#### 符合条件的最小元素
+```python
+# 索引 0 ~ n-1
+ans = 0
+left, right = 0, len(arr) - 1
+while left <= right:
+    mid = (left + right) // 2
+    if check(arr[i]):
+        ans = times[mid]
+        right = mid - 1  # 继续向左找更小的
+    else:
+        left = mid + 1
+```
+
+
+
+
+
+
+
 
 ### 差分
 
@@ -310,6 +332,9 @@ class UnionFind:
     def connected(self, x: int, y: int) -> bool:
         # 判断 x 和 y 是否属于同一个集合
         return self.find(x) == self.find(y)
+
+    def count_components(self):
+        return len(set(self.find(i) for i in range(len(self.parent))))
 ```
 
 
