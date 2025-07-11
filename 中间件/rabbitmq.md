@@ -192,7 +192,7 @@ rabbitmq插件管理
 
 
 
-### 集群
+### Cluster
 
 
 

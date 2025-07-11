@@ -624,6 +624,27 @@ BackgroundTasks
 
 #### OAuth2
 
+OAuth2登录简化流程
+```
+[1] 用户点击“用GitHub登录” →
+[2] 重定向到 GitHub 授权页面 →
+[3] 用户授权后 GitHub 重定向回你的服务端 →
+[4] 服务端获取 code，换取 access_token →
+[5] 使用 access_token 拉取用户信息（如用户名、邮箱） →
+[6] 应用登录或注册该用户
+```
+
+
+Github OAuth2登录流程
+1. 注册 GitHub OAuth App
+    - 填写Callback URL
+    - 得到 client_id 和 client_secret
+2. 服务端实现 OAuth2 登录
+    - 实现login接口：携带client_id客户端id，重定向到 GitHub登录页面
+    - 实现Callback接口
+        - 携带client_id、client_secret、code(刚刚获取)，请求获取access_token
+        - 携带access_token获取用户信息
+        - 完成登录
 
 
 
