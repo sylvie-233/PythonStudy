@@ -300,6 +300,7 @@ std:
             encode(): # 编码
             format(): # 格式化字符串
             isalpha(): # 字符判断
+            isdigit(): # 数字字符判断
             join(): # 以指定字符串拼接数组
             replace():
             split(): # 字符串分隔
@@ -348,6 +349,7 @@ std:
         iter(): # 可迭代对象转迭代器
         len():
         max():
+        map(): # 数组转换
         next(): # 取出迭代器下一个元素
         open(): # 打开文件
             encoding: # 编码

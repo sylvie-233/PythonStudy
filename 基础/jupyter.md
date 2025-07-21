@@ -23,10 +23,24 @@ jupyter:
 
 
 ## 核心内容
-
+```yaml
+jupyter notebook:
+    %run: # 运行外部文件
+    %time: # 耗时统计
+    %timeit: # 多次运行耗时统计
+        -n:
+        -r:
+    %who: # 当前环境值
+    %who_ls:
+    %whos:
+    %%timeit: # 多行运行耗时测试
+    lsmagic:
+```
 
 
 
 ### 快捷键
 ```yaml
+jupyter notebook:
+
 ```

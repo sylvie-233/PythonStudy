@@ -132,6 +132,28 @@ while left <= right:
 ```
 
 
+#### 范围查询出现频次
+```python
+from collections import defaultdict
+from bisect import bisect_left, bisect_right
+
+pos = defaultdict(list)  # pos[x] 存储 x 的所有位置（有序）
+
+# 初始化
+for idx, val in enumerate(a):
+    pos[val].append(idx)
+
+# 查询 x 在 [l, r] 中出现次数
+def query(x, l, r):
+    arr = pos[x]
+    return bisect_right(arr, r) - bisect_left(arr, l)
+```
+
+- 每个值维护一个下标数组
+- 二分查找下标范围
+
+
+
 
 
 
@@ -142,6 +164,7 @@ while left <= right:
 
 #### 一维差分
 ```python
+# 区间更新
 class Difference:
     def __init__(self, nums: list):
         self.n = len(nums)
@@ -368,14 +391,225 @@ class SparseTable:
         """查询区间 [l, r] 内最小值"""
         j = int(math.log2(r - l + 1))
         return min(self.st_min[l][j], self.st_min[r - (1 << j) + 1][j])
+
+# 基础使用
+arr = [2, 1, 3, 4, 5]
+st = SegmentTree(arr)
+
+print(st.query_sum(1, 3))  # 1+3+4 = 8
+print(st.query_max(1, 3))  # max(1,3,4) = 4
+print(st.query_min(1, 3))  # min(1,3,4) = 1
+
+st.update_range(1, 3, 2)  # 区间 [1,3] 加上 2
+
+print(st.query_sum(1, 3))  # 3+5+6 = 14
+print(st.query_max(1, 3))  # max(3,5,6) = 6
+print(st.query_min(1, 3))  # min(3,5,6) = 3
 ```
 
+### 树状数组（BIT）
+
+- 前缀和算法
+- 下标进行二进制拆分
+
+
+#### 单点加 & 区间和
+```python
+class BIT:
+    # 下标范围（1~n）
+    def __init__(self, n):
+        self.n = n
+        self.tree = [0] * (n + 1)  # 1-based index
+
+    def _lowbit(self, x):
+        return x & -x
+
+    def add(self, i, delta):
+        """将位置 i 加上 delta"""
+        while i <= self.n:
+            self.tree[i] += delta
+            i += self._lowbit(i)
+
+    def query(self, i):
+        """查询前缀和 [1, i]"""
+        res = 0
+        while i > 0:
+            res += self.tree[i]
+            i -= self._lowbit(i)
+        return res
+
+    def range_query(self, l, r):
+        """查询区间 [l, r] 的和"""
+        return self.query(r) - self.query(l - 1)
+```
+
+#### 二维树状数组
+
+
+维护多个树状数组（BIT），每个 BIT 维护一个值 x 在数组中出现的频率，支持：
+- 单点修改：将某个位置的值由旧值变成新值
+- 区间查询：快速查询某个值 x 在区间 [l, r] 中出现次数
+```python
+class MultiValueBIT:
+    def __init__(self, data, max_val):
+        """
+        data: 初始数组，长度 n
+        max_val: 值域最大值，假设值是 1..max_val
+        """
+        self.n = len(data)
+        self.max_val = max_val
+        # 为每个值建一个 BIT，BIT 下标从 1 开始
+        # BITs[0~max_val][1~n]
+        # data[1~n]
+        self.BITs = [[0] * (self.n + 1) for _ in range(max_val + 1)]
+        self.data = [0] + data  # 1-based 索引方便处理
+        
+        # 初始化 BIT
+        for i in range(1, self.n + 1):
+            val = self.data[i]
+            self._update_BIT(val, i, 1)
+
+    def _lowbit(self, x):
+        return x & (-x)
+    
+    def _update_BIT(self, val, idx, delta):
+        """
+        单棵 BIT 更新 val 对应的树状数组：位置 idx 增加 delta
+        """
+        while idx <= self.n:
+            self.BITs[val][idx] += delta
+            idx += self._lowbit(idx)
+    
+    def _query_BIT(self, val, idx):
+        """
+        查询 val 对应的树状数组前缀和：[1..idx]
+        """
+        res = 0
+        while idx > 0:
+            res += self.BITs[val][idx]
+            idx -= self._lowbit(idx)
+        return res
+    
+    def update(self, pos, new_val):
+        """
+        更新位置 pos 的值为 new_val
+        """
+        old_val = self.data[pos]
+        if old_val == new_val:
+            return
+        # 先在 old_val 的 BIT 中减去 1
+        self._update_BIT(old_val, pos, -1)
+        # 在 new_val 的 BIT 中加上 1
+        self._update_BIT(new_val, pos, 1)
+        # 更新数组记录
+        self.data[pos] = new_val
+    
+    def query(self, val, left, right):
+        """
+        查询值为 val 的元素在区间 [left, right] 出现次数
+        """
+        return self._query_BIT(val, right) - self._query_BIT(val, left - 1)
+```
 
 
 
 ### 线段树
 ```python
+class SegmentTree:
+    # 下标范围（0~n-1）
+    def __init__(self, data):
+        self.n = len(data)
+        self.sum = [0] * (4 * self.n)
+        self.max = [0] * (4 * self.n)
+        self.min = [0] * (4 * self.n)
+        self.lazy = [0] * (4 * self.n)
+        self._build(data, 0, 0, self.n - 1)
 
+    def _build(self, data, node, l, r):
+        if l == r:
+            self.sum[node] = self.max[node] = self.min[node] = data[l]
+        else:
+            mid = (l + r) // 2
+            self._build(data, node * 2 + 1, l, mid)
+            self._build(data, node * 2 + 2, mid + 1, r)
+            self._push_up(node)
+
+    def _push_up(self, node):
+        self.sum[node] = self.sum[node * 2 + 1] + self.sum[node * 2 + 2]
+        self.max[node] = max(self.max[node * 2 + 1], self.max[node * 2 + 2])
+        self.min[node] = min(self.min[node * 2 + 1], self.min[node * 2 + 2])
+
+    def _push_down(self, node, l, r):
+        if self.lazy[node] != 0:
+            mid = (l + r) // 2
+            left = node * 2 + 1
+            right = node * 2 + 2
+            # 左孩子
+            self.sum[left] += self.lazy[node] * (mid - l + 1)
+            self.max[left] += self.lazy[node]
+            self.min[left] += self.lazy[node]
+            self.lazy[left] += self.lazy[node]
+            # 右孩子
+            self.sum[right] += self.lazy[node] * (r - mid)
+            self.max[right] += self.lazy[node]
+            self.min[right] += self.lazy[node]
+            self.lazy[right] += self.lazy[node]
+            # 清除当前标记
+            self.lazy[node] = 0
+
+    def update_range(self, ul, ur, val):
+        """将区间 [ul, ur] 所有元素加上 val"""
+        self._update_range(0, 0, self.n - 1, ul, ur, val)
+
+    def _update_range(self, node, l, r, ul, ur, val):
+        if ul <= l and r <= ur:
+            self.sum[node] += val * (r - l + 1)
+            self.max[node] += val
+            self.min[node] += val
+            self.lazy[node] += val
+            return
+        self._push_down(node, l, r)
+        mid = (l + r) // 2
+        if ul <= mid:
+            self._update_range(node * 2 + 1, l, mid, ul, ur, val)
+        if ur > mid:
+            self._update_range(node * 2 + 2, mid + 1, r, ul, ur, val)
+        self._push_up(node)
+
+    def query_sum(self, ql, qr):
+        return self._query(0, 0, self.n - 1, ql, qr, 'sum')
+
+    def query_max(self, ql, qr):
+        return self._query(0, 0, self.n - 1, ql, qr, 'max')
+
+    def query_min(self, ql, qr):
+        return self._query(0, 0, self.n - 1, ql, qr, 'min')
+
+    def _query(self, node, l, r, ql, qr, typ):
+        if ql > r or qr < l:
+            if typ == 'sum':
+                return 0
+            elif typ == 'max':
+                return float('-inf')
+            else:  # min
+                return float('inf')
+        if ql <= l and r <= qr:
+            if typ == 'sum':
+                return self.sum[node]
+            elif typ == 'max':
+                return self.max[node]
+            else:
+                return self.min[node]
+        self._push_down(node, l, r)
+        mid = (l + r) // 2
+        left = self._query(node * 2 + 1, l, mid, ql, qr, typ)
+        right = self._query(node * 2 + 2, mid + 1, r, ql, qr, typ)
+        if typ == 'sum':
+            return left + right
+        elif typ == 'max':
+            return max(left, right)
+        else:
+            return min(left, right)
 ```
 
 
@@ -474,6 +708,32 @@ KMP实例：
 
 ### 线性DP
 
+#### 最长上升子序列（LIS）
+```python
+# O(n^2)
+for i in range(n):
+    for j in range(i):
+        if nums[j] < nums[i]:
+            dp[i] = max(dp[i], dp[j] + 1)
+
+# 二分优化
+def length_of_LIS(nums):
+    import bisect
+    tail = []
+    for num in nums:
+        # 找到第一个大于等于 num 的位置
+        i = bisect.bisect_left(tail, num)
+        if i == len(tail):
+            tail.append(num)
+        else:
+            tail[i] = num
+    return len(tail)
+```
+
+- 给定一个长度为 n 的序列，求最长严格上升子序列的长度。
+- `dp[i]` 表示以第 i 个元素结尾的最长上升子序列长度
+
+
 
 ### 背包DP
 
@@ -520,22 +780,59 @@ for i in range(N):
 ```
 
 
+### 区间DP
 
-### 状态压缩DP
-```python
-# 例：n<=20 的子集遍历
-N = n
-dp = [INF]*(1<<N)
-dp[0] = 0
-for mask in range(1<<N):
-    # 转移逻辑，根据具体问题定义
-    # 例如，遍历子集子集或状态之间的关系
-    pass
-```
+
+
+### 状压DP
 
 
 
 ### 数位DP
+
+典型思路：
+1. 拆数字 → 数位数组
+2. 定义状态（一般都是：当前位置、是否受限、是否前导0）
+3. 记忆化搜索
+4. 记得处理上下界：用 solve(R) - solve(L-1)
+
+
+#### 统计 `[L,R]` 中不含 4 的数
+```python
+from functools import lru_cache
+
+def count_no_4(n: int) -> int:
+    digits = list(map(int, str(n)))  # 数位展开，高位到低位
+
+    @lru_cache(maxsize=None)
+    def dfs(pos: int, tight: bool, lead: bool) -> int:
+        """pos当前下标，tight是否受限、lead前导零"""
+        if pos == len(digits):
+            return 1  # 枚举完合法方案
+
+        res = 0
+        up = digits[pos] if tight else 9
+        for d in range(0, up + 1):
+            # 题目限制条件
+            if d == 4:
+                continue  # 不允许有 4
+            # 下一个 tight：如果现在是受限且当前位等于上限，则下一个仍 tight
+            next_tight = tight and (d == up)
+            next_lead = lead and (d == 0)
+            res += dfs(pos + 1, next_tight, next_lead)
+        return res
+
+    return dfs(0, True, True)
+
+def count_range_no_4(L: int, R: int) -> int:
+    return count_no_4(R) - count_no_4(L - 1)
+
+# 示例：统计 [1, 100] 中不含数字4的数有多少个
+print(count_range_no_4(1, 100))  # 输出应该是 81
+```
+
+
+### 树形DP
 
 
 
@@ -777,6 +1074,47 @@ def kruskal(n, edges):
             parent[ru] = rv
             mst_weight += w
     return mst_weight
+
+# 带边集的kruskal
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0]*n  # 用于优化合并树的深度
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # 路径压缩
+        return self.parent[x]
+
+    def union(self, x, y):
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry:
+            return False  # 已经在同一个集合，加入会成环
+        # 按秩合并
+        if self.rank[rx] < self.rank[ry]:
+            self.parent[rx] = ry
+        elif self.rank[rx] > self.rank[ry]:
+            self.parent[ry] = rx
+        else:
+            self.parent[ry] = rx
+            self.rank[rx] += 1
+        return True
+        
+def kruskal(n, edges):
+    # edges: List of (u, v, w)
+    edges.sort(key=lambda x: x[2])  # 按权重排序
+    uf = UnionFind(n)
+    mst = []
+    total_weight = 0
+
+    for u, v, w in edges:
+        if uf.union(u, v):
+            mst.append((u, v, w))
+            total_weight += w
+            if len(mst) == n - 1:
+                break
+
+    return total_weight, mst
 ```
 
 
@@ -985,3 +1323,17 @@ def gcd(a, b):
 
 
 最大公约数
+
+
+
+## 组合数学
+
+![两两组合的乘积之和](../.assets/两两组合的乘积之和.png)
+```python
+# 优化到 O(n)
+total = sum(nums)
+res = 0
+for num in nums:
+    total -= num
+    res += num * total
+```

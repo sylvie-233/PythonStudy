@@ -1,5 +1,6 @@
 # Numpy & Pandas & Matplotlib
 
+`千锋教育NumPy教程: P16`
 
 ## 基础介绍
 
@@ -65,7 +66,7 @@ numpy: # np
         version:
     arange(): # 序列数组生成（左闭右开）
     argmax():
-    array():
+    array(): # 创建ndarray
     concatenate(): # 拼接
     dot(): # 矩阵乘法
     eye(): # 单位矩阵
