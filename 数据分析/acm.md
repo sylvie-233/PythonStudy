@@ -1,5 +1,6 @@
 # ACM
 
+`基础算法精讲：P22`
 
 
 ## 基础算法
@@ -100,6 +101,76 @@ def bidirectional_bfs(adj, start, goal):
 双向 BFS：同时从起点和终点向中间搜索，适用于无权图最短路径查找，可大幅降低搜索空间
 
 
+### 贪心
+
+
+#### 木桶盛水
+```python
+def maxArea(height: List[int]) -> int:
+    left = 0
+    right = len(height) - 1
+    res = 0
+    while left < right:
+        res = max(res, (right - left) * min(height[left], height[right]))
+        # 每次移动较小的那块
+        if height[left] <= height[right]:
+            left += 1
+        else:
+            right -= 1
+    return res
+```
+
+局部最优能保证全局最优的情况
+
+
+
+### 双指针
+
+
+
+
+#### 双数之和
+```python
+def twoSum(numbers: List[int], target: int) -> List[int]:
+    numbers.sort()
+    left = 0
+    right = len(numbers) - 1
+    while left < right:
+        num_sum = numbers[left] + numbers[right]
+        if num_sum == target:
+            break
+        elif num_sum > target:
+            right -= 1
+        else:
+            left += 1
+    return [left, right]
+```
+
+由外向内缩小双指针
+- 数组必须有序
+
+
+#### 长度最小的子数组
+```python
+def minSubArrayLen(target: int, nums: List[int]) -> int:
+    n = len(nums)
+    left = 0
+    res = n + 1
+    s = 0
+    # 枚举右指针
+    for i, x in enumerate(nums):
+        s += x
+        # 符合条件，缩小左指针
+        while s >= target:
+            res = min(res, i - left + 1)
+            s -= nums[left]
+            left += 1
+    return res if res <= n else 0
+```
+
+枚举右指针，移动左指针
+
+
 
 ### 二分查找
 ```python
@@ -116,6 +187,38 @@ def binary_search(arr, target):
     return -1  # 元素未找到
 
 ```
+
+
+#### 大于等于最小索引（Lower_Bound）
+```python
+def lower_bound(nums: List[int], target: int) -> int:
+    left = 0
+    right = len(nums) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return left
+```
+
+
+
+#### 大于最小索引（Upper_Bound）
+```python
+def upper_bound(nums: List[int], target: int) -> int:
+    left = 0
+    right = len(nums) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if nums[mid] <= target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return left
+```
+
 
 #### 符合条件的最小元素
 ```python
@@ -154,6 +257,27 @@ def query(x, l, r):
 
 
 
+#### 三分查找
+```python
+def ternary_search(f, L, R, eps=1e-6):
+    """
+    f: 单峰函数
+    [L, R]: 搜索区间
+    eps: 精度，当区间长度 < eps 时停止
+    """
+    lo, hi = L, R
+    while hi - lo > eps:
+        m1 = lo + (hi - lo) / 3
+        m2 = hi - (hi - lo) / 3
+        if f(m1) < f(m2):
+            lo = m1
+        else:
+            hi = m2
+    # 返回区间中点或 lo/hi
+    return (lo + hi) / 2
+```
+
+常用于求极值点
 
 
 
@@ -195,6 +319,37 @@ class Difference:
 
 
 ### 倍增
+
+
+#### 倍增跳跃
+```python
+def jump_by_power(arr, start, steps):
+    """
+    arr[i]: 表示从 i 跳一步能跳到哪
+    steps: 要跳几步
+    jump[i][k]: 从i跳 2^k 步能跳到哪
+    """
+    n = len(arr)
+    LOGN = steps.bit_length()
+    jump = [[-1] * LOGN for _ in range(n)]
+    for i in range(n):
+        jump[i][0] = arr[i]
+    for k in range(1, LOGN):
+        for i in range(n):
+            if jump[i][k-1] != -1:
+                jump[i][k] = jump[jump[i][k-1]][k-1]
+    
+    # 使用时对数值进行二进制拆分
+    pos = start
+    for k in range(LOGN):
+        if steps & (1 << k):
+            pos = jump[pos][k]
+            if pos == -1:
+                break
+    return pos
+```
+
+
 
 ### 离散化
 ```python
@@ -284,6 +439,150 @@ print(evaluate(expr))  # 输出 4.0
 
 ## 数据结构
 
+
+### 链表
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class ListNodeOperator:
+    # 指定个数反转
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        if left > right: return head
+        dummy = ListNode(next=head)
+        p0 = myhead
+        for _ in range(left - 1):
+            p0 = p0.next
+        pre = None
+        cur = p0.next
+        for _ in range(right - left + 1):
+            nxt = cur.next
+            cur.next = pre
+            pre = cur
+            cur = nxt
+        p0.next.next = cur
+        p0.next = pre
+        return myhead.next
+
+    # 获取链表长度
+    def get_count(self, head: Optional[ListNode]) -> int:
+        res = 0
+        while head:
+            res += 1
+            head = head.next
+        return res
+
+    # 链表全部反转
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        cnt = self.get_count(head)
+        return self.reverseBetween(head, 1, cnt)
+    
+    # 插入头节点
+    def insert_head(self, head: Optional[ListNode], val: int) -> ListNode:
+        return ListNode(val, head)
+
+    # 插入尾节点
+    def insert_tail(self, head: Optional[ListNode], val: int) -> ListNode:
+        dummy = ListNode(0, head)
+        cur = dummy
+        while cur.next:
+            cur = cur.next
+        cur.next = ListNode(val)
+        return dummy.next
+    
+    # 指定位置前面插入
+    def insert_at(self, head: Optional[ListNode], pos: int, val: int) -> ListNode:
+        dummy = ListNode(0, head)
+        cur = dummy
+        for _ in range(pos):
+            if not cur:
+                raise IndexError("Position out of range")
+            cur = cur.next
+        new_node = ListNode(val, cur.next)
+        cur.next = new_node
+        return dummy.next
+
+    # 删除指定元素
+    def delete_value(self, head: Optional[ListNode], val: int) -> ListNode:
+        dummy = ListNode(0, head)
+        cur = dummy
+        while cur.next:
+            if cur.next.val == val:
+                cur.next = cur.next.next
+                break
+            cur = cur.next
+        return dummy.next
+
+    # 删除指定位置的元素
+    def delete_at(self, head: Optional[ListNode], pos: int) -> ListNode:
+        dummy = ListNode(0, head)
+        cur = dummy
+        for _ in range(pos):
+            if not cur.next:
+                raise IndexError("Position out of range")
+            cur = cur.next
+        cur.next = cur.next.next if cur.next else None
+        return dummy.next
+
+    # 查找匹配的匹配的第一个元素
+    def find_by_value(self, head: Optional[ListNode], val: int) -> Optional[ListNode]:
+        while head:
+            if head.val == val:
+                return head
+            head = head.next
+        return None
+
+    # 打印链表
+    def print_list(self, head: Optional[ListNode]) -> None:
+        res = []
+        while head:
+            res.append(str(head.val))
+            head = head.next
+        print(" -> ".join(res))
+```
+
+
+#### 链表反转
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+    """
+    反转第left个到第right个节点
+    left、right：1~n
+    """
+    # 哨兵前置节点
+    myhead = ListNode(next=head)
+    # 反转前置节点
+    p0 = myhead
+    for _ in range(left - 1):
+        p0 = p0.next
+    
+    # 反转 right - left _ 1次
+    pre = None
+    cur = p0.next
+    for _ in range(right - left + 1):
+        # 反转next
+        nxt = cur.next
+        cur.next = pre
+        # 指针后移
+        pre = cur
+        cur = nxt
+    
+    # 连接反转链表
+    p0.next.next = cur
+    p0.next = pre
+    return myhead.next
+```
+
+![链表反转](../.assets/链表反转.png)
+
+
 ### 堆
 
 
@@ -329,6 +628,200 @@ class MedianFinder:
 
 
 ![对顶堆原理](../.assets/对顶堆原理.png)
+
+
+### 栈
+
+#### 单调栈
+
+找每个数第一个比它小的数
+- 维护一个递增的单调栈
+- 栈中维护数组索引
+- 栈中元素被弹出时即找到了第一个比它小的数
+```python
+def next_smaller_elements(nums):
+    n = len(nums)
+    res = [-1] * n
+    stack = []
+
+    for i in range(n):
+        while stack and nums[stack[-1]] > nums[i]:
+            idx = stack.pop()
+            # 区分这里用 idx 还是 i
+            res[idx] = nums[i]
+        stack.append(i)
+
+    return res
+```
+
+
+
+
+##### 柱形图最大面积
+```python
+def largestRectangleArea(heights: List[int]) -> int:
+    """维护单调递增栈，记录最远到达地方"""
+    n = len(heights)
+    stack = []
+    res_left = [i for i in range(n)]
+    for i, x in enumerate(heights):
+        while stack and heights[stack[-1]] >= x:
+            idx = stack.pop()
+            res_left[i] = res_left[idx]
+        stack.append(i)
+    
+    # 清空单调栈
+    stack.clear()
+
+    res_right = [i for i in range(n)]
+    for i, x in enumerate(heights[::-1]):
+        while stack and heights[stack[-1]] >= x:
+            idx = stack.pop()
+            res_right[n - 1 - i] = res_right[idx]
+        stack.append(n - 1 - i) 
+    # print(res_left)
+    # print(res_right)
+    return max([(res_right[i] - res_left[i] + 1) * heights[i] for i in range(n)])
+
+
+print(largestRectangleArea(
+    [2,1,5,6,2,3]
+))
+```
+
+
+### 队列
+
+
+
+
+
+#### 单调队列
+
+
+##### 滑动窗口最值
+```python
+def maxSlidingWindow(nums: List[int], k: int) -> List[int]:
+    from collections import deque
+    # 单调队列，存放索引
+    q = deque()
+    res = []
+
+    for i, x in enumerate(nums):
+        # 维护一个单调递减队列
+        while q and nums[q[-1]] <= x:
+            q.pop() 
+        q.append(i)
+        if i >= k - 1:
+            while q and q[0] < i - k + 1:
+                q.popleft()
+            res.append(nums[q[0]])
+    return res
+```
+
+
+### 二叉树
+```python
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: Optional[TreeNode] = None, right: Optional[TreeNode] = None):
+        self.val = val
+        self.left = left
+        self.right = right
+from typing import Optional, List, Union
+from collections import deque
+
+class TreeNodeOperator:
+    def preorder(self, root: Optional[TreeNode]) -> List[int]:
+        """前序遍历（递归）"""
+        if not root:
+            return []
+        return [root.val] + self.preorder(root.left) + self.preorder(root.right)
+
+    def inorder(self, root: Optional[TreeNode]) -> List[int]:
+        """中序遍历（递归）"""
+        if not root:
+            return []
+        return self.inorder(root.left) + [root.val] + self.inorder(root.right)
+
+    def postorder(self, root: Optional[TreeNode]) -> List[int]:
+        """后序遍历（递归）"""
+        if not root:
+            return []
+        return self.postorder(root.left) + self.postorder(root.right) + [root.val]
+
+    def levelorder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        """层序遍历"""
+        if not root:
+            return []
+        # result记录所有层的节点值，二维list
+        result = []
+        queue = deque([root])
+        while queue:
+            # level记录每一层的节点值
+            level = []
+            for _ in range(len(queue)):
+                node = queue.popleft()
+                level.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            result.append(level)
+        return result
+
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        """树的最大深度"""
+        if not root:
+            return 0
+        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        """反转二叉树"""
+        if not root:
+            return None
+        root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
+        return root
+
+    def buildTreeFromList(self, data: List[Union[int, None]]) -> Optional[TreeNode]:
+        """
+        从层序列表构建二叉树，空用 None 表示
+        例如：[1, 2, 3, None, 4] 表示：
+              1
+             / \
+            2   3
+             \
+              4
+        """
+        if not data or data[0] is None:
+            return None
+        root = TreeNode(data[0])
+        queue = deque([root])
+        i = 1
+        while queue and i < len(data):
+            node = queue.popleft()
+            # 构建左节点
+            if i < len(data) and data[i] is not None:
+                node.left = TreeNode(data[i])
+                queue.append(node.left)
+            i += 1
+            # 构建右节点
+            if i < len(data) and data[i] is not None:
+                node.right = TreeNode(data[i])
+                queue.append(node.right)
+            i += 1
+        return root
+
+    def getNodeCount(self, root: Optional[TreeNode]) -> int:
+        """返回节点总数"""
+        if not root:
+            return 0
+        return 1 + self.getNodeCount(root.left) + self.getNodeCount(root.right)
+```
+
+#### 二叉树深度
+#### 二叉树反转
+
 
 
 ### 并查集
@@ -615,6 +1108,14 @@ class SegmentTree:
 
 ## 字符串
 
+### 哈希（Hash）
+
+
+字符串哈希
+
+
+
+
 ### KMP
 ```python
 def KMP_search(text, pattern):
@@ -783,6 +1284,9 @@ for i in range(N):
 ### 区间DP
 
 
+三角剖分
+
+
 
 ### 状压DP
 
@@ -833,6 +1337,9 @@ print(count_range_no_4(1, 100))  # 输出应该是 81
 
 
 ### 树形DP
+
+
+
 
 
 
@@ -1322,7 +1829,31 @@ def gcd(a, b):
 ```
 
 
+
+
 最大公约数
+
+### 素数筛
+
+#### 埃拉托色尼筛（Sieve of Eratosthenes）
+```python
+def sieve(n):
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
+
+    for i in range(2, int(n ** 0.5) + 1):
+        if is_prime[i]:
+            for j in range(i * i, n + 1, i):
+                is_prime[j] = False
+
+    primes = [i for i, val in enumerate(is_prime) if val]
+    return primes
+```
+
+开根号
+
+
+
 
 
 
@@ -1337,3 +1868,11 @@ for num in nums:
     total -= num
     res += num * total
 ```
+
+
+
+
+
+## 计算几何
+
+

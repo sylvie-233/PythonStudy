@@ -411,7 +411,7 @@ std:
             _fields():
             _replace():
         Coroutine: # 协程
-        Counter: # 计数器
+        Counter: # 计数器（传入list，key为元素，value值元素出现次数）
             elements(): # 返回一个迭代器，产生计数大于 0 的所有元素，元素会根据它们的计数重复输出
             most_common(): # 输出出现次数最多的n个
             subtract():
