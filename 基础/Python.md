@@ -943,7 +943,7 @@ std:
         stderr: # 标准异常
         stdin: # 标准输入
             read():
-            readline():
+            readline(): # 输入一行
         stdout: # 标准输出流
             write():
         version: # python版本

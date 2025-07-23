@@ -1,25 +1,234 @@
 # ACM
 
-`基础算法精讲：P22`
+``
 
 
 ## 基础算法
 
 
-### 快速幂
+
+
+
+
+### 大数运算
 ```python
-def mod_pow(a, b, mod):
-    res = 1
-    a %= mod
-    while b:
-        if b & 1:
-            res = res * a % mod
-        a = a * a % mod
-        b >>= 1
+class BigInt:
+    def __init__(self, number: str):
+        if not number.isdigit():
+            raise ValueError("Only non-negative integers are supported.")
+        # 倒序存储，每个元素是一位
+        self.digits = list(map(int, reversed(number)))
+
+    def __str__(self):
+        return ''.join(map(str, reversed(self.digits)))
+
+    def __add__(self, other: 'BigInt') -> 'BigInt':
+        max_len = max(len(self.digits), len(other.digits))
+        result = []
+        carry = 0
+        for i in range(max_len):
+            a = self.digits[i] if i < len(self.digits) else 0
+            b = other.digits[i] if i < len(other.digits) else 0
+            total = a + b + carry
+            result.append(total % 10)
+            carry = total // 10
+        if carry:
+            result.append(carry)
+        return BigInt(''.join(map(str, reversed(result))))
+
+    def __sub__(self, other: 'BigInt') -> 'BigInt':
+        """只支持大的减小的"""
+        if self < other:
+            raise ValueError("Negative result not supported.")
+        result = []
+        borrow = 0
+        for i in range(len(self.digits)):
+            a = self.digits[i]
+            b = other.digits[i] if i < len(other.digits) else 0
+            sub = a - b - borrow
+            if sub < 0:
+                sub += 10
+                borrow = 1
+            else:
+                borrow = 0
+            result.append(sub)
+        # 去除前导 0
+        while len(result) > 1 and result[-1] == 0:
+            result.pop()
+        return BigInt(''.join(map(str, reversed(result))))
+
+    def __mul__(self, other: 'BigInt') -> 'BigInt':
+        result = [0] * (len(self.digits) + len(other.digits))
+        for i in range(len(self.digits)):
+            for j in range(len(other.digits)):
+                result[i + j] += self.digits[i] * other.digits[j]
+        # 处理进位
+        for i in range(len(result)):
+            if result[i] >= 10:
+                if i + 1 == len(result):
+                    result.append(0)
+                result[i + 1] += result[i] // 10
+                result[i] %= 10
+        # 去除前导 0
+        while len(result) > 1 and result[-1] == 0:
+            result.pop()
+        return BigInt(''.join(map(str, reversed(result))))
+
+    def __lt__(self, other: 'BigInt') -> bool:
+        if len(self.digits) != len(other.digits):
+            return len(self.digits) < len(other.digits)
+        # 从高位比
+        for a, b in zip(reversed(self.digits), reversed(other.digits)):
+            if a != b:
+                return a < b
+        return False
+
+    def __eq__(self, other: 'BigInt') -> bool:
+        return self.digits == other.digits
+
+    def divmod_small(self, divisor: int) -> Tuple['BigInt', int]:
+        """除以小整数 divisor，返回 (商 BigInt, 余数 int)"""
+        if divisor <= 0:
+            raise ValueError("Divisor must be positive.")
+
+        result = []
+        remainder = 0
+        # 从高位开始处理
+        for digit in reversed(self.digits):
+            remainder = remainder * 10 + digit
+            result_digit = remainder // divisor
+            result.append(result_digit)
+            remainder %= divisor
+
+        # 去除前导 0
+        while len(result) > 1 and result[0] == 0:
+            result.pop(0)
+
+        return BigInt(''.join(map(str, result))), remainder
+```
+
+python自带大数运算
+
+
+### 排序
+
+#### 选择排序 
+```python
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n - 1):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr
+```
+
+每次向后寻找最小的，然后和当前交换
+
+
+#### 冒泡排序
+```python
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        swapped = False
+        for j in range(n - 1 - i):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                swapped = True
+        if not swapped:  # 提前结束优化
+            break
+    return arr
+```
+
+
+
+#### 快速排序
+```python
+def quick_sort(arr: List[int]):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[0]
+
+    # 小于中间点的
+    left = quick_sort([x for x in arr[1:] if x < pivot])
+    
+    # 大于中间点的
+    right = quick_sort([x for x in arr[1:] if x >= pivot])
+    return left + [pivot] + right
+```
+
+基于中间点分治
+
+
+
+#### 归并排序
+```python
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    
+    # 直接分治
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    
+    res = []
+    i = j = 0
+    # 合并
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            res.append(left[i])
+            i += 1
+        else:
+            res.append(right[j])
+            j += 1
+    res += left[i:] + right[j:]
     return res
 ```
 
-基于幂的二进制拆分
+直接分治然后合并
+
+
+#### 堆排序
+```python
+import heapq
+
+def heap_sort(arr):
+    heapq.heapify(arr)
+    return [heapq.heappop(arr) for _ in range(len(arr))]
+```
+
+
+
+#### 桶排序
+```python
+def bucket_sort(arr, bucket_size=5):
+    if len(arr) == 0:
+        return []
+    
+    # 获取最小值、最大值
+    min_val, max_val = min(arr), max(arr)
+    bucket_count = (max_val - min_val) // bucket_size + 1
+    buckets = [[] for _ in range(bucket_count)]
+    
+    # 基于数值大小分桶，bucket_size分桶数值
+    for num in arr:
+        index = (num - min_val) // bucket_size
+        buckets[index].append(num)
+    
+    # 分桶排序
+    res = []
+    for b in buckets:
+        res.extend(sorted(b))  # 可以替换为 quick_sort(b)
+    return res
+```
+
+分块排序
+
+
 
 
 ### 搜索
@@ -99,6 +308,9 @@ def bidirectional_bfs(adj, start, goal):
 ```
 
 双向 BFS：同时从起点和终点向中间搜索，适用于无权图最短路径查找，可大幅降低搜索空间
+
+
+#### 记忆化搜索
 
 
 ### 贪心
@@ -187,6 +399,10 @@ def binary_search(arr, target):
     return -1  # 元素未找到
 
 ```
+
+- 二分查找注意区分移动右边界还是左边界（小于最大值，大于最小值）
+
+
 
 
 #### 大于等于最小索引（Lower_Bound）
@@ -280,11 +496,16 @@ def ternary_search(f, L, R, eps=1e-6):
 常用于求极值点
 
 
+### 前缀和
 
-
+- 预先构造
+- 常用于静态区间查询（求和、异或）
 
 
 ### 差分
+
+
+
 
 #### 一维差分
 ```python
@@ -313,6 +534,48 @@ class Difference:
         res[0] = self.diff[0]
         for i in range(1, self.n):
             res[i] = res[i - 1] + self.diff[i]
+        return res
+```
+
+
+### 分块
+
+
+
+#### 单点修改 & 区间求和
+```python
+import math
+
+class SqrtDecomposition:
+    def __init__(self, data):
+        self.n = len(data)
+        # 块大小
+        self.block_size = int(math.sqrt(self.n)) + 1
+        self.data = list(data)
+        self.blocks = [0] * self.block_size
+
+        # 初始化分块
+        for i in range(self.n):
+            self.blocks[i // self.block_size] += self.data[i]
+
+    def update(self, idx, val):
+        """将位置 idx 的值改为 val"""
+        block_idx = idx // self.block_size
+        self.blocks[block_idx] += val - self.data[idx]
+        self.data[idx] = val
+
+    def query(self, l, r):
+        """查询区间 [l, r] 的和"""
+        res = 0
+        while l <= r:
+            # 整块移动，如果 l 在块起点，且整个块都在 [l, r] 内
+            if l % self.block_size == 0 and l + self.block_size - 1 <= r:
+                res += self.blocks[l // self.block_size]
+                l += self.block_size
+            # 逐步移动
+            else:
+                res += self.data[l]
+                l += 1
         return res
 ```
 
@@ -357,6 +620,14 @@ coords = sorted(set(original_values))
 comp = {v:i for i,v in enumerate(coords)}
 # 现在 comp[x] 即为 x 的离散化下标  
 ```
+
+
+### 离线处理
+
+#### 莫队
+
+
+#### CDQ
 
 
 
@@ -587,6 +858,10 @@ def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Opt
 
 
 #### 对顶堆
+
+
+
+##### 中位数
 ```python
 import heapq
 
@@ -854,6 +1129,8 @@ class UnionFind:
 ```
 
 
+
+
 ### ST表
 ```python
 class SparseTable:
@@ -906,7 +1183,7 @@ print(st.query_min(1, 3))  # min(3,5,6) = 3
 - 下标进行二进制拆分
 
 
-#### 单点加 & 区间和
+#### 单点修改 & 区间求和
 ```python
 class BIT:
     # 下标范围（1~n）
@@ -1114,11 +1391,25 @@ class SegmentTree:
 字符串哈希
 
 
+#### 滚动哈希
+
+
+
+#### 二维哈希
+
+
+### 字典树
 
 
 ### KMP
 ```python
 def KMP_search(text, pattern):
+    """
+        text: 主字符串
+        pattern: 要查询的匹配字符串
+    """
+
+
     # 计算部分匹配表
     def compute_pi(pattern):
         m = len(pattern)
@@ -1160,8 +1451,7 @@ KMP_search(text, pattern)
 
 最长的前后缀匹配长度
 
-
-pi[i]: 部分匹配表
+`pi[i]`: 部分匹配表
 - 表示子串 pattern[0...i] 的最长相同前后缀的长度
 - 每个位置之前的子字符串的最长相同前后缀的长度
 - 表示以 pattern[i] 结尾的子串中，最长的前后缀匹配长度
@@ -1198,7 +1488,18 @@ KMP实例：
     pattern[0...4] = "aabaa"。
     子串 "aabaa" 的前缀是 'aa'，后缀也是 'aa'，最长的相同前后缀长度是 2，所以 pi[4] = 2
 
+### Manacher
 
+
+
+
+### AC自动机
+
+
+### 后缀数组
+
+
+### 后缀自动机
 
 
 
@@ -1212,6 +1513,7 @@ KMP实例：
 #### 最长上升子序列（LIS）
 ```python
 # O(n^2)
+# dp[i]: 以i结尾的最长上升子序列
 for i in range(n):
     for j in range(i):
         if nums[j] < nums[i]:
@@ -1233,6 +1535,31 @@ def length_of_LIS(nums):
 
 - 给定一个长度为 n 的序列，求最长严格上升子序列的长度。
 - `dp[i]` 表示以第 i 个元素结尾的最长上升子序列长度
+
+
+
+#### 最长公共子序列（LCS）
+
+#### 最长公共子串
+```python
+# dp[i][j]: 以a[i]和b[j]结尾的最长公共子串
+# 1~n: 因为要使用前面的，所以应该从1开始
+for i in range(len(a) + 1):
+    dp[i][0] = 0
+for j in range(len(b) + 1):
+    dp[0][j] = 0
+
+ans = 0
+for i in range(1, len(a) + 1):
+    for j in range(1, len(b) + 1):
+        if a[i - 1] == b[j - 1]:
+            dp[i][j] = dp[i - 1][j - 1] + 1
+            ans = max(ans, dp[i][j])
+        else:
+            dp[i][j] = 0
+
+print(ans)
+```
 
 
 
@@ -1283,8 +1610,45 @@ for i in range(N):
 
 ### 区间DP
 
+- 三重循环（条件、端点、分隔点）
+- 石子合并：合并区间代价最小，`dp[i][j] = min(dp[i][k] + dp[k+1][j] + sum[i][j])`
+- 分割k段：给定序列，分割成k段使最大值最小
 
-三角剖分
+三角剖分优化
+
+#### 石子合并
+
+
+
+
+#### 分割k段
+
+
+
+划分数组得到各段XOR的最大值的最小值
+```python
+def minXor(nums: List[int], k: int) -> int:
+    n = len(nums)
+    INF = float("inf")
+
+    prefix = [0] * (n + 1)
+    for i in range(n):
+        prefix[i + 1] = prefix[i] ^ nums[i]
+    
+    # dp[1~n][1~k]
+    dp = [[INF] * (k + 1) for _ in range(n + 1)]
+    dp[0][0] = 0
+
+    # 分t段
+    for t in range(1, k + 1):
+        # 枚举端点（分t段，则端点最小为t）
+        for i in range(t, n + 1):
+            # 枚举分隔点（上次t-1段）
+            for j in range(t - 1, i):
+                dp[i][t] = min(dp[i][t], max(dp[j][t - 1], prefix[i] ^ prefix[j]))
+    return dp[n][k]
+```
+
 
 
 
@@ -1340,14 +1704,59 @@ print(count_range_no_4(1, 100))  # 输出应该是 81
 
 
 
-
-
-
 ## 图论
 
 
 
 ### 图
+
+
+图论基本概念：
+- 顶点（点）：图的基本单位
+- 边：两个顶点之间的连接
+- 邻接点：与某个点直接相连的点
+- 度数：一个点的边数（入度/出度）
+- 简单图：没有重边和自环的图
+- 有向图/无向图：边有无方向
+- 连通图：任意两点都有路径连通
+- 强连通图：有向图中任意两点都互相可达
+
+
+图论核心问题：
+1. 最大独立集（Maximum Independent Set）
+    - 图中没有任何两个点有边直接相连的最大点集
+2. 最小点覆盖（Minimum Vertex Cover）
+    - 图中一个点集，使得每条边至少有一个端点在点集中，且点集最小
+3. 最大团（Maximum Clique）
+    - 图中所有点都相互连通的最大点集
+4. 最大匹配（Maximum Matching）
+    - 图中最多的不相交边集（任意两条边无公共点）
+5. 最小路径覆盖（Minimum Path Cover）
+    - 将图的所有点覆盖的最少路径集合，每个路径是简单路径
+```
+最大匹配 ↔ 最小点覆盖  ↘
+    ↑                 最大独立集 = n - 最小点覆盖
+    │↘ 最小边覆盖 = n - 最大匹配
+    ↓
+最小路径覆盖 = n - 最大匹配   (DAG中)
+```
+
+
+图论核心结构：
+1. 割点和桥
+    - 割点（割顶）：删除后图的连通块数增加
+    - 桥（割边）：删除后图不再连通（或连通块数增加）
+2. 强连通分量（SCC）
+    - 在有向图中，每个点都能到达另一个点，且互相可达
+3. 欧拉路径与回路
+    - 所有边恰好走一遍
+    - 条件（无向图）：
+        - 欧拉回路：所有点度数为偶
+        - 欧拉路径：最多两个奇度点
+4. 哈密顿路径与回路
+    - 所有点恰好走一遍（难度高，NP 完全）
+5. 网络流与最小割
+    - 最大流最小割定理：最大流 = 最小割
 
 
 
@@ -1423,7 +1832,12 @@ def topological_sort(n):
 
 
 
-#### 二分图 （DFS 染色法）
+#### 二分图
+
+二分图对图论核心问题(5个)有一些结论
+
+
+##### 二分图判定（DFS 染色法）
 ```python
 def is_bipartite(n, edges):
     graph = [[] for _ in range(n + 1)]
@@ -1557,8 +1971,294 @@ def bellman_ford(n, edges, src):
 
 单源最短路径算法，可处理负权边（但无负权回路）
 
+
+#### Tarjan
+
+Tarjan 算法是一种基于 DFS 的图遍历算法，主要用于：
+1. 求强连通分量 SCC（有向图）
+2. 求割点（割顶）/桥（割边）（无向图）
+
+##### 强连通分量
+```python
+from collections import defaultdict
+
+class TarjanSCC:
+    def __init__(self, n):
+        """
+            n: 0~n-1
+        """
+        self.n = n
+        # 邻接表
+        self.graph = defaultdict(list)
+        # 维护全局dfs序
+        self.index = 0
+        # dfs序
+        self.dfn = [-1] * n
+        # dfs最小序
+        self.low = [-1] * n
+        self.stack = []
+        self.in_stack = [False] * n
+        self.sccs = []
+
+    def add_edge(self, u, v):
+        """有向图邻接表加边"""
+        self.graph[u].append(v)
+
+    def run(self) -> List[List[int]]:
+        for u in range(self.n):
+            # 每遍历的点，则dfs
+            if self.dfn[u] == -1:
+                self._dfs(u)
+        return self.sccs
+
+    def _dfs(self, u):
+        self.dfn[u] = self.low[u] = self.index
+        self.index += 1
+        # 入栈
+        self.stack.append(u)
+        self.in_stack[u] = True
+
+        for v in self.graph[u]:
+            if self.dfn[v] == -1:
+                self._dfs(v)
+                self.low[u] = min(self.low[u], self.low[v])
+            # 回边则更新当前最小dfs序（之所以不用low[v]是因为low[v]可能还没更新）
+            elif self.in_stack[v]:
+                self.low[u] = min(self.low[u], self.dfn[v])
+
+        # 当前dfs序等于最小dfs序，则遇到scc根节点了
+        if self.dfn[u] == self.low[u]:
+            scc = []
+            while True:
+                x = self.stack.pop()
+                self.in_stack[x] = False
+                scc.append(x)
+                if x == u:
+                    break
+            self.sccs.append(scc)
+```
+
+
+##### 割点
+```python
+class TarjanCutVertex:
+    def __init__(self, n):
+        """
+            n: 0~n-1
+        """
+        self.n = n
+        self.graph = [[] for _ in range(n)]
+        self.dfn = [-1] * n
+        self.low = [-1] * n
+        self.index = 0
+        self.cut_points = set()
+
+    def add_edge(self, u, v):
+        """无向图邻接表加边"""
+        self.graph[u].append(v)
+        self.graph[v].append(u)  # 无向图
+
+    def run(self) -> Set[int]:
+        for u in range(self.n):
+            if self.dfn[u] == -1:
+                self._dfs(u, -1)
+        return self.cut_points
+
+    def _dfs(self, u, parent):
+        self.dfn[u] = self.low[u] = self.index
+        self.index += 1
+        child_count = 0
+        for v in self.graph[u]:
+            if self.dfn[v] == -1:
+                self._dfs(v, u)
+                self.low[u] = min(self.low[u], self.low[v])
+                # 如果子节点 v 无法回到 u 的祖先（只能回到 u 或更低），那么 u 是割点
+                if parent != -1 and self.low[v] >= self.dfn[u]:
+                    self.cut_points.add(u)
+                child_count += 1
+            elif v != parent:
+                self.low[u] = min(self.low[u], self.dfn[v])
+        
+        # 根节点特殊处理（有两棵及以上的子树，则根节点也是割点）
+        if parent == -1 and child_count > 1:
+            self.cut_points.add(u)
+```
+
+
+##### 割边
+```python
+class TarjanBridge:
+    def __init__(self, n):
+        self.n = n
+        self.graph = [[] for _ in range(n)]
+        self.dfn = [-1] * n
+        self.low = [-1] * n
+        self.index = 0
+        self.bridges = []
+
+    def add_edge(self, u, v):
+        self.graph[u].append(v)
+        self.graph[v].append(u)  # 无向图
+
+    def run(self):
+        for u in range(self.n):
+            if self.dfn[u] == -1:
+                self._dfs(u, -1)
+        return self.bridges
+
+    def _dfs(self, u, parent):
+        self.dfn[u] = self.low[u] = self.index
+        self.index += 1
+        for v in self.graph[u]:
+            if self.dfn[v] == -1:
+                self._dfs(v, u)
+                self.low[u] = min(self.low[u], self.low[v])
+                if self.low[v] > self.dfn[u]:
+                    self.bridges.append((u, v))
+            elif v != parent:
+                self.low[u] = min(self.low[u], self.dfn[v])
+
+```
+
+
+
+#### 网络流
+
+网络流核心问题：
+1. 最大流：从源点到汇点最多能流多少
+2. 最小割：把图分成两个集合使得割掉的边容量和最小
+3. 最小费用最大流：流量最大，同时总代价最小（每条边有单位花费）
+4. 二分图最大匹配：二部图中最大匹配数（特殊网络流建图）
+5. 可行流/上下界流：每条边有容量上下界，求是否存在合法流
+
+
+##### Dinic
+
+最大流
+```python
+from collections import deque
+
+class Edge:
+    def __init__(self, to, rev, cap):
+        self.to = to        # 目标节点
+        self.rev = rev      # 反向边的索引
+        self.cap = cap      # 当前边的剩余容量
+
+class MaxFlow:
+    """
+        时间复杂度：O(E * V^2)
+        n: 0~n-1
+    """
+    def __init__(self, N):
+        # n个点
+        self.size = N
+        # 存边的邻接表
+        self.graph = [[] for _ in range(N)]
+
+    def add(self, fr, to, cap):
+        """添加边（含反向边）"""
+        forward = Edge(to, len(self.graph[to]), cap)
+        backward = Edge(fr, len(self.graph[fr]), 0)
+        self.graph[fr].append(forward)
+        self.graph[to].append(backward)
+
+    def bfs_level(self, s, t, level):
+        """构建层级图"""
+        queue = deque()
+        level[s] = 0
+        queue.append(s)
+        while queue:
+            v = queue.popleft()
+            for e in self.graph[v]:
+                if e.cap > 0 and level[e.to] < 0:
+                    level[e.to] = level[v] + 1
+                    queue.append(e.to)
+        return level[t] != -1
+
+    def dfs_flow(self, v, t, f, level, iter):
+        """在分层图上寻找增广路径并进行增广"""
+        # 如果当前节点已经到达汇点 t，说明找到了一条增广路径
+        if v == t:
+            return f
+        
+        # iter[v] 记录当前从哪一条边开始尝试（避免重复、回溯）,最开始是0
+        for i in range(iter[v], len(self.graph[v])):
+            e = self.graph[v][i]
+
+            # 边上还有容量，自上向下遍历
+            if e.cap > 0 and level[v] < level[e.to]:
+                # 增广
+                d = self.dfs_flow(e.to, t, min(f, e.cap), level, iter)
+                # 寻找到增广路径
+                if d > 0:
+                    e.cap -= d
+                    # 反向边补偿
+                    self.graph[e.to][e.rev].cap += d
+                    return d
+            iter[v] += 1
+        return 0
+
+    def max_flow(self, s, t):
+        flow = 0
+        INF = float('inf')
+        while True:
+            level = [-1] * self.size
+            # 判断s是否能到t
+            if not self.bfs_level(s, t, level):
+                break
+
+            # 避免回溯遍历优化
+            iter = [0] * self.size
+            while True:
+                f = self.dfs_flow(s, t, INF, level, iter)
+                if f == 0:
+                    break
+                flow += f
+        return flow
+
+if __name__ == "__main__":
+    n = 6  # 节点数
+    mf = MaxFlow(n)
+
+    # 添加边（从 u 到 v，容量为 cap）
+    mf.add(0, 1, 10)
+    mf.add(0, 2, 10)
+    mf.add(1, 3, 4)
+    mf.add(1, 4, 8)
+    mf.add(1, 2, 2)
+    mf.add(2, 4, 9)
+    mf.add(3, 5, 10)
+    mf.add(4, 5, 10)
+
+    print("最大流:", mf.max_flow(0, 5))  # 源点 0，汇点 5
+```
+
+dfs增广路径
+
+
+
 ### 树
 
+树的基本性质：
+- 树是一种无环连通图
+- 无向图
+- 有n个点，恰好有n−1条边
+- 任意两个点间有且只有一条简单路径
+
+
+树的基本概念：
+- 根节点：一棵有根树指定的起点（如树的深度从此计算）
+- 父节点/子节点：有连接关系的上下层节点
+- 叶子节点：没有子节点的节点
+- 深度（depth）：从根节点到当前节点路径上的边数
+- 高度（height）：当前节点到其最远叶子节点的距离
+- 子树：某节点为根的部分树
+- 祖先/后代：在路径上为其上/下游的节点
+
+#### 树的性质
+
+##### 树的直径
+##### 树的重心
 
 #### 最小生成树
 
@@ -1741,9 +2441,7 @@ print(bl.get_kth_ancestor(5, 2))  # 输出: 0 (5 的第 2 个祖先是节点 0)
 print(bl.lca(3, 5))  # 输出: 0 (3 和 5 的 LCA 是节点 0)
 ```
 
-第k个祖先
-
-
+##### 第k个祖先
 ```python
 # lca完整版
 class LcaBinaryLifting:
@@ -1818,7 +2516,25 @@ class LcaBinaryLifting:
 ```
 
 
+#### 树链剖分
+
+
 ## 数论
+
+### 快速幂
+```python
+def mod_pow(a, b, mod):
+    res = 1
+    a %= mod
+    while b:
+        if b & 1:
+            res = res * a % mod
+        a = a * a % mod
+        b >>= 1
+    return res
+```
+
+基于幂的二进制拆分
 
 
 
