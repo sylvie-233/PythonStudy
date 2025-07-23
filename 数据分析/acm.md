@@ -1417,6 +1417,7 @@ def KMP_search(text, pattern):
         k = 0  # 前缀后缀匹配的长度
         for i in range(1, m):
             while k > 0 and pattern[k] != pattern[i]:
+                # 当前不匹配，回跳（pi[k-1]前一个字符结尾匹配的前缀长度）
                 k = pi[k - 1]
             if pattern[k] == pattern[i]:
                 k += 1
@@ -1443,10 +1444,43 @@ def KMP_search(text, pattern):
             print(f"Pattern found at index {i - m + 1}")
             q = pi[q - 1]  # 使用部分匹配表跳到下一位置
 
-# 示例
-text = "ababcababcababc"
-pattern = "ababc"
-KMP_search(text, pattern)
+if __name__ == "__main__":
+    # 示例
+    text = "ababcababcababc"
+    pattern = "ababc"
+    KMP_search(text, pattern)
+
+
+
+
+
+def kmp_search(S: str, P: str) -> int:
+    """获取第一次匹配成功的索引"""
+
+    # 获取next数组，next[0]=0
+    def get_next(P: str) -> List[int]:
+        n = len(P)
+        next = [0] * n
+        j = 0
+        for i in range(1, n):
+            while j > 0 and P[i] != P[j]:
+                j = next[j - 1]
+            if P[i] == P[j]:
+                j += 1
+            next[i] = j
+        return next
+
+    n, m = len(S), len(P)
+    next = get_next(P)
+    j = 0
+    for i in range(n):
+        while j > 0 and S[i] != P[j]:
+            j = next[j - 1]
+        if S[i] == P[j]:
+            j += 1
+        if j == m:
+            return i - m + 1  # 匹配成功，返回位置
+    return -1  # 匹配失败
 ```
 
 最长的前后缀匹配长度
@@ -1488,12 +1522,272 @@ KMP实例：
     pattern[0...4] = "aabaa"。
     子串 "aabaa" 的前缀是 'aa'，后缀也是 'aa'，最长的相同前后缀长度是 2，所以 pi[4] = 2
 
+
+
+#### Z函数
+```python
+def get_z(s: str) -> List[int]:
+    n = len(s)
+    Z = [0] * n # 初始化为0
+
+    # 维护一个匹配区间 [l, r]，表示 s[l:r+1] 是与 s[0:r-l+1] 完全相同的子串
+    l = r = 0 # l, r 是当前 Z-box 的左右边界
+    for i in range(1, n):
+        # i在边界内（i一定比l大，因为l为旧i）
+        # 前半段是匹配的（长度i-l）,可直接用（z[i-l]），但长度不能超过右半段（r-i+1仅用来限制产犊）
+        if i <= r:
+            Z[i] = min(Z[i - l], r - i + 1)
+        # 逐步扩展Z[i]长度
+        while i + Z[i] < n and s[Z[i]] == s[i + Z[i]]:
+            Z[i] += 1
+
+        # 更新新边界，l到r为匹配成功的后缀
+        if i + Z[i] - 1 > r:
+            l, r = i, i + Z[i] - 1
+    Z[0] = n  # 整个串和自己完全匹配
+    return Z
+```
+
+![z函数l-i复用](../.assets/Z函数l-i复用.png)
+- 构造 `Z[i]` 数组：表示 `S[i:]` 与 `S[0:]` 的最长公共前缀长度
+- 常用于：字符串哈希、多个匹配点查找、前缀分析等
+
+Z函数原理：
+- 维护一个匹配区间 [l, r]，表示 s[l:r+1] 是与 s[0:r-l+1] 完全相同的子串
+    - 如果 i > r，说明 i 不在当前匹配区间中，我们只能从头开始匹配
+    - 如果 i <= r，说明 i 在 [l, r] 里了，我们可以利用之前的结果来复用匹配信息 
+- next[i]是以i结尾，Z[i]是以i开头
+
+
 ### Manacher
+```python
+def manacher(s: str) -> (list[int], str):
+    """返回新字符串回文半径数组(原字符串回文直径)、最大回文子串"""
+    # 预处理字符串，加入分隔符 '#'，防止奇偶长度差异（t的长度一定是奇数）
+    t = '#' + '#'.join(s) + '#'
+    n = len(t)
+    p = [0] * n  # p[i] 表示以 t[i] 为中心的最长回文半径（包含自己）
+    
+    c = 0  # 当前已知回文的中心
+    r = 0  # 当前已知回文的右边界（不包含），r为0或奇数
 
+    # i在c到r的范围内
+    for i in range(n):
+        mirr = 2 * c - i  # i 关于 c 的对称位置
 
+        if i < r:
+            # i和mirr是对称，mirr在前面算过了，所以可以复用mirr，r-i用来限制长度
+            p[i] = min(p[mirr], r - i)  # 利用对称性初始化
+
+        # 中心扩展，匹配回文
+        while i - p[i] - 1 >= 0 and i + p[i] + 1 < n and t[i - p[i] - 1] == t[i + p[i] + 1]:
+            p[i] += 1
+
+        # 如果回文右边界更新了，更新中心
+        if i + p[i] > r:
+            c = i
+            r = i + p[i]
+
+    # 可选：找最长回文子串
+    max_len = max(p)
+    center_index = p.index(max_len)
+    # 新字符串字符都在奇数位置上，整除2可以得到原来位置
+    start = (center_index - max_len) // 2  # 注意映射回原始字符串的位置
+    longest_palindrome = s[start: start + max_len]
+
+    return p, longest_palindrome
+
+if __name__ == "__main__":
+    s = "abacaba"
+    p, longest = manacher(s)
+    print("回文半径数组:", p)
+    print("最长回文子串:", longest)
+# 构造新字符串：字符均在奇数位置上，1、3、5...
+#                           0     1     2     3     4     5     6
+#                        0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+#                        #  a  #  b  #  a  #  c  #  a  #  b  #  a  #
+# (新字符串)回文半径数组: [0, 1, 0, 3, 0, 1, 0, 7, 0, 1, 0, 3, 0, 1, 0]
+# 最长回文子串: abacaba
+```
+
+![马拉车对称优化](../.assets/马拉车对称优化.png)
+在线性时间内求解字符串的最长回文子串或以每个位置为中心的回文半径数组
+- 求出每个字符为中心的最大回文半径
+- 求最长回文子串（经典题）
+- 判断是否存在长度为 k 的回文
+- 计算所有的回文子串个数
+
+优化思路和z函数差不多
 
 
 ### AC自动机
+```python
+from collections import deque, defaultdict
+
+class Node:
+    def __init__(self):
+        # 字典树
+        self.children = {}
+        self.fail = None
+        self.output = []  # 存储所有在这个节点结束的模式串编号
+
+class ACAutomaton:
+    def __init__(self):
+        # 根节点不存元素
+        self.root = Node()
+
+    def insert(self, word, idx):
+        node = self.root
+        for ch in word:
+            if ch not in node.children:
+                node.children[ch] = Node()
+            node = node.children[ch]
+        # 节点添加结束标记
+        node.output.append(idx)  # 标记此处结束一个单词
+
+    def build(self):
+        queue = deque()
+        # 根节点及所有子节点的fail指针指向root根节点
+        self.root.fail = self.root
+        for child in self.root.children.values():
+            child.fail = self.root
+            queue.append(child)
+
+        while queue:
+            current = queue.popleft()
+            for ch, child in current.children.items():
+                fail_node = current.fail
+                # 匹配失败，回跳
+                while fail_node != self.root and ch not in fail_node.children:
+                    fail_node = fail_node.fail
+                    
+                child.fail = fail_node.children[ch] if ch in fail_node.children else self.root
+                child.output += child.fail.output  # 合并回调的output
+                queue.append(child)
+
+    def query(self, text):
+        """
+        返回每个模式串出现的位置（index -> 出现次数）
+        """
+        node = self.root
+        counter = defaultdict(int)
+        for i, ch in enumerate(text):
+            # 匹配失败，fail回跳
+            while node != self.root and ch not in node.children:
+                node = node.fail
+            if ch in node.children:
+                node = node.children[ch]
+            else:
+                node = self.root
+            for idx in node.output:
+                counter[idx] += 1  # 匹配到了编号为 idx 的模式串
+        return counter
+
+if __name__ == "__main__":
+    # 模式串列表
+    patterns = ["he", "she", "his", "hers"]
+    text = "ushers"
+
+    ac = ACAutomaton()
+    for idx, pattern in enumerate(patterns):
+        ac.insert(pattern, idx)
+    ac.build()
+
+    # 查询匹配情况
+    result = ac.query(text)
+    for idx, count in result.items():
+        print(f"模式串 '{patterns[idx]}' 出现了 {count} 次")
+```
+
+多字符串版本KMP
+
+一种多模式串匹配算法的数据结构，用于在一个大的文本中同时匹配多个关键词/模式串
+加强版的 Trie 树（前缀树）+ KMP 的失败指针
+对所有的模式串构造一个AC自动机
+```
+文本：ushers
+模式串：he, she, his, hers
+          root
+         /    \
+       h       s
+      / \       \
+     e   i       h
+    /     \       \
+   r       s       e
+  /                 \
+ s                   r
+                      \
+                       s
+```
+
+
+
+
+
+`["he", "she", "hers"]`构造流程
+```
+     root
+     /   \
+    h     s
+    |     |
+    e     h
+    |     |
+    r     e
+    |
+    s
+
+root
+ ├── s
+ │   └── h
+ │       └── e (output=["she"])
+ └── h
+     └── e (output=["he"])
+         └── r
+             └── s (output=["hers"])
+```
+
+我们使用 BFS 构造 fail 指针，初始将 root 的所有直接子节点的 fail 设为 root
+1. root 的 fail 是自己，不设置
+2. 直接孩子：root.h.fail = root、root.s.fail = root
+3. h.e.fail = root （从 root 没有 'e' 的路径，只能到 root）、s.h.fail = h （从 root 有 h）
+4. s.h.e.fail = h.e（因为 root.h.e 存在）、h.e.r.fail = root（从 root 没有路径到 r）
+5. h.e.r.s.fail = s（因为从 root 能走到 s）
+```
+root
+├── h (fail=root)
+│   └── e (fail=root, output=["he"])
+│       └── r (fail=root)
+│           └── s (fail=s, output=["hers"])
+└── s (fail=root)
+    └── h (fail=h)
+        └── e (fail=he, output=["she", "he"])
+```
+
+
+`["he", "she", "hers"]`匹配流程
+```
+root
+├── h (fail=root)
+│   └── e (fail=root, output=["he"])
+│       └── r (fail=root)
+│           └── s (fail=s)
+│               └── output=["hers"]
+├── s (fail=root)
+    └── h (fail=h)
+        └── e (fail=he)
+            └── output=["she", "he"]
+```
+
+匹配阶段（比如文本 "ushers"）
+逐字符从 root 开始走，如果走不通，就根据 fail 指针跳：
+1. u → root 无 u，跳回 root
+2. s → root 有 s，走 s
+3. h → s 有 h，走 s.h
+4. e → s.h 有 e，走 s.h.e，命中 output=["she", "he"] ✅
+5. r → s.h.e 无 r → 跳 fail（到 he）→ he 有 r，走 r
+6. s → r 有 s，走 r.s → 命中 output=["hers"] ✅
+
+
 
 
 ### 后缀数组
@@ -2573,7 +2867,7 @@ def sieve(n):
 
 
 
-## 组合数学
+## 离散与组合数学
 
 ![两两组合的乘积之和](../.assets/两两组合的乘积之和.png)
 ```python
@@ -2585,10 +2879,18 @@ for num in nums:
     res += num * total
 ```
 
+## 线性代数
 
+
+## 概率论
+
+
+## 博弈论
 
 
 
 ## 计算几何
+
+
 
 
