@@ -1883,6 +1883,8 @@ for i in range(N):
         dp[j] = max(dp[j], dp[j-w] + v)
 ```
 
+##### 完全背包方案计数
+
 
 #### 多重背包
 ```python
