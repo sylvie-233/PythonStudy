@@ -155,7 +155,7 @@ std:
             reverse():
             tobytes():
             tolist(): # 转换为list
-    asyncio: # 异步
+    asyncio: # 异步I/O
         Barrier:
         BoundedSemaphore:
         CancelledError: # 协程任务取消异常
@@ -176,6 +176,14 @@ std:
             put():
         Runner:
         Semaphore: # 异步信号量，并发量控制，配合async with异步上下文使用
+        StreamReader: # 流式读入
+            read():
+        StreamWriter: # 流式写出
+            close():
+            drain():
+            get_extra_info(): # 获取额外信息
+            wait_closed():
+            write():
         Task: # 异步协程任务对象，Future子类
             add_done_callback(): # 成功回调
             cancel(): # 取消任务
@@ -204,8 +212,12 @@ std:
             run_until_complete(): # 运行所有任务
             stop():
         new_event_loop(): # 新建事件循环
+        open_connection(): # 
         run(): # 运行一个协程/任务，等待完成，内置事件循环（每次创建、结束销毁）
         set_event_loop(): # 设置当前线程的事件循环
+        set_event_loop_policy(): # 设置事件循环策略（集成第三方）
+        start_server(): # 创建服务器
+            serve_forever(): # 事件循环
         sleep(): # 协程睡眠
         to_thread(): # 异步线程包装，避免阻塞事件循环
         wait(): # 多个任务等待，list列表，多个task包装成一个task
@@ -925,7 +937,9 @@ std:
     string: # 字符串
         ascii_lowercase:
         digits: # 数字
-    struct:
+    struct: # 字节数据转换
+        pack(): # 打包(对象 -> 字节)
+        unpack(): # 解包(字节 -> 对象)
     subprocess: # 子进程管理
     symtable:
     sys: # 程序参数相关
