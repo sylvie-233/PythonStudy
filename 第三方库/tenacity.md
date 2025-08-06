@@ -10,19 +10,22 @@
 ## 核心内容
 ```yaml
 tenacity:
-    retry_if_exception_type():
-    retry_if_result():
-    stop_after_attempt():
-    stop_after_delay():
-    wait_exponential():
-    wait_fixed():
-    wait_random():
-    @retry:
+    @retry: # 异常触发重试
         after: # hook
         before: # hook
         before_sleep:
-        retry:
-        retry_error_callback:
-        stop:
-        wait:
+        reraise: # 所有重试失败后是否抛出最后一次异常
+        retry: # 设置什么样的异常或条件需要重试
+        retry_error_callback: # 所有重试都失败后，调用的函数
+        stop: # 设置什么时候停止重试（如重试几次或总时间）
+        wait: # 设置每次重试之间的等待时间
+    after_log():
+    before_log():
+    retry_if_exception_type(): # retry 只对特定异常重试
+    retry_if_result():
+    stop_after_attempt(): # stop 限定最多重试次数
+    stop_after_delay():
+    wait_exponential(): # wait 指数退避策略
+    wait_fixed(): # wait 固定等待时间
+    wait_random():
 ```
