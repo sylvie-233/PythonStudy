@@ -1,6 +1,6 @@
 # rabbitmq
 
-`消息队列rabbitmq: P4`
+``
 
 ## 基础介绍
 
