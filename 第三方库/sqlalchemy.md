@@ -18,6 +18,22 @@ SQLAlchemy常用三大组件：Engine、Session、Connection
 
 一个engine对应一个数据库
 模型类中互相持有，就需要定义back_populates后置填充
+ORM使用方式：4种
+1. Table: 表结构定义
+    - Column:
+    - mapper(): 手动映射表结构和模型实体类 
+2. declarative_base()：模型表结构定义（目前教程大部分）
+    - Colomun(Integer):
+    - Session操作ORM
+        - session.query(Entity)：条件查询
+3. DeclarativeBase：模型表结构定义
+    - Mapped/mapped_column()：
+    - session.query(Entity)
+4. select(): sql构造（推荐）
+    - session.execute(select(Entity))
+
+
+sqlalchemy中没有ActiveRecord风格的操作，默认都是要通过session进行操作的（Flask-SQLAlchemy进行了封装）
 
 
 ## 核心内容
@@ -25,13 +41,13 @@ SQLAlchemy常用三大组件：Engine、Session、Connection
 sqlalchemy:
     engine: # 引擎包
         base:
-            Connection:
+            Connection: # 连接
                 begin(): # 开启事务
                     commit():
                     rollback():
                 close():
                 execute(): # 执行原始sql
-            Engine:
+            Engine: # 引擎
                 begin():
                 connect(): # 获取Connection
                 dispose():
@@ -61,9 +77,8 @@ sqlalchemy:
             __tablename__: # 表名
             metadata: # 数据库元表
             registry:
+            create_all(): # 创建数据库表
         Mapped: # 模型字段声明
-        registry(): # 命令式映射
-            metadata:
         Session: # 模型操作工具类
             add(): # 添加数据
             add_all():
@@ -74,12 +89,20 @@ sqlalchemy:
             flush(): # 刷新（提交事务）
             get(): # 根据组件查询
             get_one():
-            query(): # 条件查询
-                filter_by():
-                first():
+            query(): # 条件查询（传入ORM实体类）
+                all():
+                first(): # 第一条
+                one(): # 查询一条
+                one_or_none():
+                where(): # 条件过滤
+                filter(): # 条件过滤
+                filter_by(): # 条件过滤，可以不写Entity
+                    or_(): # 布尔逻辑
+                    not_(): # 布尔逻辑 
                 join(): # 联表
                 limit():
                 offset():
+                order_by(): # 排序
             refresh():
             scalars(): # 查询结果迭代遍历（select构造语句执行）
                 first():
@@ -92,13 +115,15 @@ sqlalchemy:
             primary_key: # 主键i段
             server_default: # 默认值
             unique: # 唯一约束
+        registry(): # 命令式映射
+            metadata:
         relationship(): # 关联模型字段属性定义
             back_populates: # 后置填充
             backref: # 逆向添加本身引用（给关联表添加一个引用自身的字段）
             cascade: # 级联操作
             lazy:  #懒加载关联字段
             secondary: # 中间表
-        sessionmaker(): # 获取session基类
+        sessionmaker(): # 获取session基类(实例化后继续使用)
     sql: # 原始SQL构造查询
         dml:
             Delete:
@@ -141,8 +166,13 @@ sqlalchemy:
         echo: # 显示执行的SQL
     delete(): # 删除sql构造
     insert(): # 插入sql构造
+    and_():
+    not_():
+    or_():
     select(): # 查询sql构造
         join(): # 关联查询
+        options(): # 
+            selectinload(): # 预加载
         where(): # 查询条件构造
             ==:
             contains():
