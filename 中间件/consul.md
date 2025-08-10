@@ -59,16 +59,19 @@ consul:
             list:
     agent: # agent启动
         -client: # Client 模式启动
+            -bind:
             -data-dir:
+            -node: # 节点名称
             -retry-join: # 加入server集群
         -dev: # 快速启动一个单节点 Consul 集群，方便开发调试和本地测试(默认是单节点 Server+Client 模式)
-        -node:
         -server: # 生产 Server 节点启动
-            -bind:
-            -bootstrap-expect:
+            -bind: # ip绑定
+            -bootstrap-expect: # 期待集群节点数
+            -client: # 客户端地址
             -config-dir: # 配置目录
             -data-dir:
             -ui:
+            -node: # 节点名称
     catalog: # 集群信息查看
         nodes: # 查看所有节点
         service: # 查询服务实例
@@ -86,8 +89,8 @@ consul:
         service: # 查看服务健康状态
     info: # 查看当前集群中所有节点及状态
     intention:
-    join:
-    keygen: # 生成加密密钥（用于 Gossip 加密等）
+    join: # 加入集群
+    keygen: # 生成加密密钥（用于 Gossip 加密集群通信等）
     kv: # kv键值对管理
         delete:
             -recurse:
@@ -100,7 +103,7 @@ consul:
     lock:
     login:
     logout:
-    members: # 节点查看
+    members: # 集群节点查看
     monitor: # 实时查看事件日志（控制台）
     reload: # 重新加载配置文件
     services: # 服务管理
@@ -131,7 +134,7 @@ consul:
 
 配置目录
 
-#### client.hcl
+#### client.json
 ```yaml
 client.hcl:
     datacenter: # 数据中心名字，唯一
@@ -147,12 +150,18 @@ agent client配置
 #### server.json
 ```yaml
 server.json:
+    acl:
+    encrypt: # 集群通讯加密
     datacenter: # 数据中心名字，唯一
     data-dir:
     encrypt: # consul节点之间通信的密钥
     server: # 代表当前agent以服务端模式启动
     bootstrap_expect: # 代表需要部署3个server节点
     retry_join: # 其他server节点地址(支持ip地址、域名)，填一个即可，会自动加入集群
+    start_join:
+    node_name: # 节点名称
+    primary_datacenter:
+    ui:
     watches:
 ```
 
@@ -169,7 +178,7 @@ web.json:
         checks: # 健康检查
 ```
 
-配置文件方式的服务注册
+应用配置文件方式的服务注册
 
 
 
@@ -187,20 +196,42 @@ Consul Agent 是 Consul 的运行单元，部署在每台机器上。它是服�
     - Server Agent：组成 Consul 的核心集群，负责选主、数据存储和一致性维护
 
 
-#### Node
-#### Service
-#### Catalog
-#### KV
-#### Check
+#### Client Agent
 
-服务健康检查
+客户端代理应用，用于和应用程序对接
+
+#### Server Agent
+
+服务端代理应用，用于Consul集群选主Master、内部数据存储
+
 
 ### Datacenter
 
+命名空间
 Datacenter 是 Consul 的逻辑集群单位。每个 Datacenter 是一个完全独立的集群，通常代表物理或虚拟数据中心
 
 
-### UIConsole
+#### Service
 
+#### Node
+##### Health Checks
+
+服务健康检查
+
+
+#### KV
+
+
+#### ACL
+
+## Web Console
+
+- Services
+    - Instances
+    - Tags
+- Nodes
+- Key/Value
+- ACL
+- Intentions
 
 web控制台，默认8500端口
