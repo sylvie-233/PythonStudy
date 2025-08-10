@@ -1631,6 +1631,9 @@ T = TypeVar('T')
 # 泛型函数声明
 def first_item(items: List[T]) -> T:
     return items[0]
+
+def get_first[T](coll: Sequence[T]) -> T:
+    return coll[0]
 ```
 
 
