@@ -199,7 +199,7 @@ std:
         create_future(): # 创建Task
         create_task(): # 根据co对象创建task
         current_task():
-        ensure_future():
+        ensure_future(): # co包装future对象
         gather(): # 并行执行多个任务，不定量参数，等待多个协程完成
         get_event_loop(): # 获取当前线程的事件循环对象，手动管理事件循环
             run_forever():
@@ -1441,6 +1441,8 @@ Control Flow:
     is:
     pass: # 代码省略
     raise:
+    yield: # 生成器返回
+        yield from: # 生成器嵌套返回
     for ... else:
     for ... in:
         enumerate(): # 带索引遍历
@@ -2226,7 +2228,7 @@ async函数创建协程对象Coroutine object
 每个线程只能有一个事件循环，可新建事件循环手动管理，默认不需要
 一般使用Task封装Coroutine，管理协程生命周期（封装成Task是为了方便'并行'执行）
 
-event loop -> executor  -> task -> coroutine(async)
+event loop -> executor  -> task(future) -> coroutine(async)
 
 
 coroutine协程是可以暂停运行、恢复运行的函数（async定义协程函数）
@@ -2234,8 +2236,9 @@ task任务是对协程的包装，使得事件循环能获取协程的状态
 coroutine包装成task的过程可自动实现、包装成task后可对coroutine进行控制
 
 async函数返回corouotine协程对象、可根据coroutine对象创建task、task为future子类
-
-`asyncio.create_task()`相当于`new Promise()`
+- future需要手动设置结果set_result() 或 set_exception() 
+- task对future进行封装task不需要手动设置结果，因为协程结束时的返回值会自动成为 Task 的 result
+- co对象需要包装成task对象才会开始运行`asyncio.create_task()`相当于`new Promise()`
 
 ##### Coroutine
 
