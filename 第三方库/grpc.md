@@ -17,16 +17,25 @@ gRPC核心功能：
 - 使用生成的Stub客户端存根绑定Channel连接，调用Server rpc服务
 
 
+pip依赖：
+- grpcio
+- grpc-tools
+- protobuf
+
+
 
 
 
 ### protoc
 ```yaml
 protoc:
-
+    -I: # protobuf输入文件
+    --python_out: # message定义文件输出
+    --grpc_python_out: # service定义文件输出
 ```
 
 proto文件编译命令
+`python -m grpc_tools.protoc`
 
 
 ### .proto
@@ -35,14 +44,27 @@ proto文件编译命令
     syntax: # 语法版本
         proto3:
     package: # 定义模块名
+    import: # 导入插件
     message: # 消息定义
+        bool:
+        bytes:
         string:
-    service:
-        rpc:
-            returns:
+        int32:
+        int64:
+        float:
+        repeated: # 数组
+        map: # 哈希表
+        ---
+        extend: # 继承
+        message: # 消息嵌套定义
+    service: # 服务定义
+        rpc: # 服务方法定义
+            stream: # 流式输入
+            returns: # 服务方法返回值
+                stream: # 流式响应
 ```
 
-核心定义文件
+protobuf协议定义文件
 
 
 
@@ -51,32 +73,65 @@ proto文件编译命令
 ## 核心内容
 ```yaml
 grpc:
-    server: # grpc服务器
-        add_insecure_port(): # 注册服务端口
-        start():
-        wait_for_termination():
-    insecure_channel: # Channel grpc客户端连接，传入stub中进行操作
-
+    Compression: # 数据压缩
+    GenericRpcHandler: # 通用服务处理器（类似中间件）
+        service(): # 通用服务处理逻辑
+    ServerInterceptor: # 服务器拦截器
+        _abort():
+        intercept_service():
+            continuation:
+            handler_call_details: # 类似context  
+    StatusCode: # 响应状态码
+    server(): # grpc服务器（需传入线程池）
+        compression:
+        intercepters:
+        options: # 服务配置
+            grpc.max_receive_message_length:
+            grpc.max_send_message_length:
+        ---
+        add_generic_rpc_handlers(): # 添加通用方法处理器
+        add_insecure_port(): # 注册grpc服务端口（grpc服务需要一个单独的端口运行）
+        start(): # 开启grpc服务器
+        wait_for_termination(): # 开启事件循环
+    insecure_channel(): # 创建Channel grpc客户端连接，传入stub中进行操作
+    unary_unary_rpc_method_handler(): # unary-unary rpc方法注册
 
 grpcio:
-
 
 grpcio_tools: # 编译模块
     protoc: # protoc编译模块，可执行模块
         -I:
         --grpc_python_out: # 服务端代码生成 服务接口
         --python_out: # 客户端代码生成 Message 数据结构
-    xxx: # 客户端代码生成 Message
-    xxx_grpc: # 服务端代码生成 服务接口
-        XxxServicer: # service服务基类，继承并实现具体的service方法
-        XxxStub: # Stub客户端存根（Session，依赖channel），调用service
-        add_XxxServicer_to_server(): # 注册service实现到服务器
+    xxx: # 客户端代码生成 Message定义实体类 xxx_pb2.py
+        XxxRequest:
+        XxResponse:
+    xxx_grpc: # 服务端代码生成 服务接口 xxx_pb2_grpc.py
+        XxxServicer: # service服务基类，服务端需继承并实现具体的service方法
+            request:
+                data:    
+            context:
+                cancel():
+                invocation_metadata():
+                is_active():
+                set_code():
+                set_compression(): # 数据压缩
+                set_detail():
+                set_trailing_metadata():
+        XxxStub: # 客户端创建Stub客户端存根（Session，依赖channel），调用service
+            with_call(): # 获取调用者元信息 
+                compression:
+                metadata: # 调用者传递metadata
+                timeout:
+                ---
+                trailing_metadata():
+        add_XxxServicer_to_server(): # 注册service(XxxServicer)实现到grpc服务器
 ```
 
 
 ### Message
 
-消息模型
+消息模型（请求格式、响应格式）
 RequestMessage、ResponseMessage
 Protocol Buffers、一种轻量高效的序列化格式（IDL）
 
@@ -124,10 +179,31 @@ gRPC客户端操作工具、客户端存根
 
 ### Server
 
-服务端实现
+grpc服务端实现
 手动实现定义在 proto 文件中的接口
 
+#### Metadata
 
+
+元数据（模拟请求头）
+
+
+#### Compression
+
+数据压缩
+
+
+#### StatusCode
+
+响应状态码
+
+
+#### ServerInterceptor
+
+
+#### GenericRpcHandler
+
+通用服务处理器
 
 
 ## grpc核心应用
@@ -198,6 +274,7 @@ def add_GreeterServicer_to_server(servicer, server):
     # 注册服务端实现到 gRPC server
 ```
 
+服务接口定义
 
 
 #### 5. 实现服务端
@@ -210,6 +287,16 @@ import hello_pb2_grpc
 # rpc service接口实现
 class GreeterImpl(hello_pb2_grpc.GreeterServicer):
     def SayHello(self, request, context):
+        """
+            request: 请求数据
+                data:    
+            context: 服务上下文
+                cancel():
+                is_active():
+                set_code():
+                set_detail():
+                set_trailing_metadata():
+        """
         print("Received:", request.name)
         return hello_pb2.HelloReply(message=f"Hello, {request.name}")
 

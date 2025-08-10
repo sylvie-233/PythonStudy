@@ -6,6 +6,9 @@
 服务发现、配置管理、监控检查、多数据中心中间件
 默认8500端口
 
+环境变量：
+- CONSUL_HTTP_TOKEN：
+
 
 ![consul集群架构](../.assets/consul集群架构.png)
 
@@ -119,10 +122,24 @@ consul:
     watch: # 
 ```
 
+#### consul-template
+```yaml
+consul-template:
+    -consul-addr:
+    -template:
+```
+
+后台进程，实时监听consul服务
+根据consul信息生成模板配置文件
+- 刷新网关中服务节点的配置信息
+
+
+
 #### api-http
 ```yaml
 consul:
     /v1:
+        /agent/service/deregister: # 注销服务实例
         /catalog/register: # 
         /catalog/service:
         /health/service:
@@ -213,6 +230,14 @@ Datacenter 是 Consul 的逻辑集群单位。每个 Datacenter 是一个完全�
 
 #### Service
 
+
+##### Instances
+
+
+服务实例
+
+
+
 #### Node
 ##### Health Checks
 
@@ -224,6 +249,32 @@ Datacenter 是 Consul 的逻辑集群单位。每个 Datacenter 是一个完全�
 
 #### ACL
 
+
+##### Tokens
+
+
+token可赋予Role角色、Policy权限
+
+
+##### Roles
+
+角色
+Role可赋予Policy权限
+
+
+
+##### Policeis
+```yaml
+node: # 节点匹配
+service_prefix: # 服务前缀匹配
+    policy:
+        write:
+```
+
+
+节点权限配置
+
+
 ## Web Console
 
 - Services
@@ -232,6 +283,9 @@ Datacenter 是 Consul 的逻辑集群单位。每个 Datacenter 是一个完全�
 - Nodes
 - Key/Value
 - ACL
+    - Tokens
+    - Roles
+    - Policies
 - Intentions
 
 web控制台，默认8500端口
