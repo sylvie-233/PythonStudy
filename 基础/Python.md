@@ -123,7 +123,29 @@ python调试工具
 
 
 
-
+### pyproject.toml
+```yaml
+pyproject.toml:
+    build-system: # 构建系统配置
+        build-backend: # 构建后端的模块路径
+        requires: # 构建时依赖的包
+    tool: # 构建工具
+        poetry: # Poetry构建工具
+            authors:
+            classifiers: # PyPI 分类器
+            dependencies: # 运行依赖
+            description:
+            dev-dependencies: # 开发依赖
+            homepage:
+            keywords:
+            license: # 
+            name:
+            packages: # 包含的包
+            readme:
+            repository:
+            scripts: # 命令行脚本
+            version:
+```
 
 
 
@@ -137,12 +159,18 @@ std:
         @abstractmethod: # 抽象方法
     argparse: # 命令行解析工具
         ArgumentParser:
-            description:
-            add_argument(): # 添加命令行参数
+            description: # 命令描述
+            formatter_class:
+            add_argument(): # 添加命令行参数（根据参数名称区分必填、选填，位置参数、可选参数（有前缀 - 或 --））
                 action:
-                default: # 默认值
-                help:
-                type:
+                    store_true:
+                choices: # 参数选值列表
+                default: # 参数默认值
+                help: # 参数提示语
+                nargs: # 多值参数
+                type: # 参数类型 
+            add_mutually_exclusive_group(): # 添加互斥参数组
+            add_subparsers: # 添加子命令
             parse_args(): # 参数解析返回args
     array: # 相同元素数组
         array: # 支持切片
@@ -163,14 +191,14 @@ std:
         Event: # 异步事件等待，顺序控制
             set(): # 事件触发
             wait():
-        Future: # Task父类，可存储结果，通常用于task内部，可await
+        Future: # Task父类，可存储结果，通常用于task内部，可await（Future常用于传递结果）
             add_done_callback():
             cancel():
             done():
             exception():
             result():
-            set_exception():
-            set_result():
+            set_exception(): # 设置异常
+            set_result(): # 设置结果
         Queue: # 异步队列，协程通信
             get():
             put():
@@ -222,22 +250,43 @@ std:
         to_thread(): # 异步线程包装，避免阻塞事件循环
         wait(): # 多个任务等待，list列表，多个task包装成一个task
         wait_for(): # 限时等待
-    ast: # 抽象语法树，提供了对 Python 代码的解析、处理和转换功能，可以用来实现源代码分析、代码生成、动态执行等操作
+        wrap_future(): # 包装concurrent下的future对象为asyncio下的future对象
+    ast: # Python专用抽象语法树，提供了对 Python 代码的解析、处理和转换功能，可以用来实现源代码分析、代码生成、动态执行等操作
         Add: # 加法运算符
         Assign: # 赋值操作
         BinOp: # 二元操作，如加法、减法等
+        Call: # 函数调用
+        ClassDef: # 类定义
         Constant: # 常量值，如数字、字符串等
+        Expr: # 表达式
+        For: # for语句  
+        FunctionDef: # 函数定义
+            body:
+                insert(): # 函数体插入语句
+        If: # if语句
+        Import:
+        ImportFrom:
         Load: # 读取变量
         Module: # 模块
         Name: # 变量名或函数名
+        NodeTransformer: # 自定义节点转换器
+            visit_Constant(): # 遍历常量 
         NodeVisitor: # 自定义节点访问器
             generic_visit(): # 继续遍历子节点
-            visit_Assign():
+            visit():
+            visit_Assign(): # 遍历复制语句
+            visit_FunctionDef(): # 函数定义
+        Return: # return语句
         Store: # 写入变量
         Sub:
+        UnaryOp: # 一元运算
+        While: # while语句
         compile(): # 编译ast，常配合exec使用
-        dump():
-        parse():
+        copy_location():
+        dump(): # 输出ast结构
+        fix_missing_locations():
+        parse(): # 解析python源代码为抽象语法树ast
+        unparse(): # ast装python源代码
         walk():
     atexit: # 清理函数
     base64: # base64编码
@@ -248,8 +297,8 @@ std:
     bisect: # 二分查找工具
         bisect_left(): # 找到第一个 >= x 的位置
         bisect_right(): # 找到第一个 > x 的位置
-        insort_left(): # 插入
-        insort_right():
+        insort_left(): # 插入，相等值插前
+        insort_right(): # ，相等值插后
     builtins: # 内建模块
         __builtins__:
         __debug__:
@@ -408,7 +457,21 @@ std:
     codecs:
     codeop:
     collections: # 集合容器
-        abc:
+        abc: # 容器和迭代器等数据结构的抽象基类（Abstract Base Classes, ABC）
+            AsyncGenerator:
+            AsyncIterable: # 
+            AsyncIterator:  
+            Container: # 是否支持 in 操作__contains__
+            Generator:
+            Iterable: # 是否可迭代__iter__
+            Iterator: # 迭代器（迭代一次）__iter__、__next__
+            Mapping: # 不可变映射（dict 接口）__getitem__、__iter__、__len__
+            MutableMapping: # 可变映射上面的方法 + __setitem__、__delitem__
+            MutableSequence: # 可变序列__getitem__、__setitem__、__delitem__、__len__、insert
+            MutableSet: # 可变集合
+            Sequence: # 不可变序列__getitem__、__len__
+            Set: # 不可变集合__contains__、__iter__、__len__
+            Sized: # 是否有长度__len__
         defaultdict: # 一个带有默认值的字典，（当你访问一个不存在的键时，defaultdict 会自动为你创建该键，并赋予一个默认值，而不会抛出 KeyError 异常），支持自定义默认值函数
             int:
             list:
@@ -438,12 +501,17 @@ std:
     compileall:
     concurrent: # 并发库
         futures: # 异步
+            process:
+                ProcessPoolExecutor: # 进程池执行器
+            thread:
+                ThreadPoolExecutor: # 线程池执行器
+                    submit():
             Executor: # 执行器
                 map(): # 直接运行，等待所有返回结果
                 shutdown(): # 关闭
                     wait: # 等待所有任务执行完毕
                 submit():
-            Future: # 异步结果对象
+            Future: # 并发异步结果对象
                 cancel(): # 取消任务
                 done(): # 检查是否完成
                 result(): # 阻塞获取结果
@@ -483,7 +551,7 @@ std:
     contextvars: # 上下文变量
     copy: # 拷贝
         deepcopy(): # 深拷贝
-    copyreg：
+    copyreg:
     csv:
     ctypes:
     dataclasses:
@@ -495,9 +563,16 @@ std:
             default_factory:
     datetime: # 日期相关
         date: # 日期
+            day:
+            month:
+            year:
             fromtimestamp(): # 时间戳转换date
+            isoformat(): # ISO 格式字符串'2025-08-13'
+            isoweekday():
+            replace(): # 日期替换，替换部分字段
             timetuple(): # 获取时间元组struct_time
-            today():
+            today(): # 当前日期
+            weekday():
         datetime: # 日期时间
             day:
             hour:
@@ -525,6 +600,11 @@ std:
             today(): # 今天
             utcfromtimestamp(): # UTC 时间戳转换
         time: # 时间
+            hour:
+            microsecond:
+            minute:
+            second:
+            isoformat(): # '14:30:45.123456'
         timedelta: # 时间间隔
             days:
             hours:
@@ -532,6 +612,8 @@ std:
             total_seconds(): # 总共秒数
         timezone: # 时区
             utc:
+            astimezone():
+        tzinfo: # 时区基类（自定义时区用）
     decimal:
     difflib:
     dis: # python字节码反汇编
@@ -549,6 +631,8 @@ std:
     ensurepip:
     enum: # 枚举
         Enum: # 枚举基类
+            name:
+            value:
         Flag: # 按位枚举
         IntFlag:
         IntEnum:
@@ -656,10 +740,23 @@ std:
         ip_address():
             version:
     itertools: # 迭代工具库
-        count: # 计数器，可迭代，无限
+        accumulate(): # 累积和（可自定义函数）
+        chain(): # 合并，链接多个可迭代对象
+        combinations(): # 组合
+        combinations_with_replacement(): # 允许重复的组合
+        compress(): # 按选择器布尔值过滤数据
+        count(): # 计数器，可迭代，无限
             start:
-        chain(): # 合并
-        permutations(): # 
+        cycle(): # 无限重复一个序列
+        dropwhile(): # 条件为 True 时丢弃元素
+        filterfalse(): # 取条件为 False 的元素
+        groupby(): # 按键值分组
+        islice(): # 按索引切片迭代器
+        permutations(): # 排列
+        product(): # 笛卡尔积
+        repeat(): # 无限或固定次数重复一个元素
+        takewhile(): # 条件为 True 时取元素
+        tee(): # 
     json: # JSON
         dump(): # json序列化
         dumps(): 
@@ -888,9 +985,13 @@ std:
             extract_dir: # 解压目录
             format: # 解压格式
     signal:
-    site: # 添加第三方库的路径到 sys.path、处理 .pth 文件、设置默认编码（早期版本）、运行用户或全局的 sitecustomize.py / usercustomize.py
-        getsitepackages(): # 查看全局 site-packages 路径
+    site: # 添加第三方库的路径到 sys.path、处理 .pth 文件、设置默认编码（早期版本）、运行用户或全局的 sitecustomize.py / usercustomize.py（启动时自动运行的站点配置管理器）
+        ENABLE_USER_SITE:
+        addsitedir(): # 手动添加路径到 sys.path
+        getsitepackages(): # 查看全局 site-packages 路径（查看所有 site-packages 目录）
+        getuserbase():
         getusersitepackages(): # 查看用户级 site-packages 路径
+        main(): # 手动执行 site 初始化逻辑
     smtplib: # smtp邮件发送
         SMTP:
             login():
@@ -914,7 +1015,19 @@ std:
             recv(): # 接收响应(byte字节)
             send(): # 发送请求
             sendto():
-    socketserver:
+    socketserver: # socket服务器
+        BaseRequestHandler: # 请求处理器
+            client_address: # 客户端地址元组 (ip, port)
+            request: # 客户端socket连接
+                recv():
+                sendall():
+            handle(): # 处理器方法
+        TCPServer: # TCP socket服务器
+            server_close():
+            serve_forever(): # 事件循环
+            shutdown():
+        ThreadingMixIn: #
+        UDPServer: # UDP socket服务器
     sqlite3: # Connection、Cursor
         connect(): # 连接数据库 返回连接Connection
             :memory: # 内存数据库
@@ -1212,9 +1325,13 @@ std:
         ref():
     webbrowser:
     wsgiref: # WSGI接口
+        headers:
         simple_server:
-            make_server():
+            make_server(): # (environ, start_response)，environ 是一个包含请求信息的字典、start_response 是个函数，用来发送状态和响应头
                 serve_forever():
+        util:
+        validate:
+            validator():
     xml: # xml操作
         dom:
             minidom:
@@ -1436,6 +1553,9 @@ Control Flow:
     //: # 整除
     as: # 别名
     assert: # 断言
+    async:
+        await:
+
     del: # 删除变量
     in:
     is:
@@ -2292,10 +2412,13 @@ Future子类、异步任务（封装异步响应）
 #### site
 
 
-site 模块是 Python 启动时自动导入的模块，负责设置环境路径、处理 .pth 文件和加载初始化代码，确保你能 import 到安装的包
+site 模块是 Python 启动时自动导入的模块，负责设置环境路径、处理 .pth 文件和加载初始化代码，确保你能 import 到安装的包（启动时自动运行的站点配置管理器）
+- 初始化 Python 运行环境（在解释器启动时自动导入，除非使用 -S 禁止）
+- 添加第三方库路径到 sys.path（如 site-packages）
+- 处理 .pth 文件（可以自动执行代码或添加路径）
+- 设置 site-specific 配置（如 sitecustomize.py、usercustomize.py）
 
-可通过`python -S`禁用site
-
+可通过`python -S`禁用site（python解释器会自动执行 import site（除非使用 python -S））
 虚拟环境背后就是修改了 sys.path 和 PYTHONPATH
 
 
@@ -2315,7 +2438,8 @@ site 模块是 Python 启动时自动导入的模块，负责设置环境路径�
 
 #### pth
 
-
+- 路径添加：.pth 文件中每一行可以是一个目录路径，启动时会被加到 sys.path
+- 执行代码：如果 .pth 文件中有 import mymodule 这样的 Python 语句，也会在启动时执行
 
 
 
@@ -2338,6 +2462,21 @@ if __name__ == '__main__':
 
 Web Server Gateway Interface
 
+
+ssl证书工作流程：
+1. 申请证书（公钥域名提交申请（证书签名请求CSR文件）、证书携带域名公钥）
+    - 你告诉 CA：“这是我的域名，我想要证书！”
+    - CA 验证你对这个域名的控制权（比如让你在域名对应网站放个文件）
+    - 验证通过后，CA 给你发一个证书，里面写明“这个公钥属于你的域名”，CA 用自己的私钥给证书做了数字签名
+2. 服务器部署
+    - 你把 私钥 和 证书 放在服务器上，开启 HTTPS
+    - 服务器用私钥解密信息，用证书里的公钥让访问者验证身份
+3. 用户访问（浏览器等客户端）
+    - 浏览器访问你的网站，服务器发给它你的证书
+    - 浏览器通过“信任链”校验证书的合法性（从你证书→中间证书→根证书），确保证书真的是由一个受信任的 CA 签发的
+    - 浏览器用证书里的公钥验证服务器传来的信息是用对应私钥签名的，确认服务器身份没被冒充
+4. 安全通信建立
+    - 双方通过公钥加密和私钥解密建立安全的“加密通道”，别人截获数据也看不到内容
 
 
 ## 设计模式
