@@ -1,8 +1,5 @@
 # Django
 
->
->
->
 
 
 ## 基础介绍
@@ -46,15 +43,25 @@ django项目:
 ```yaml
 settings.py:
     ALLOWED_HOSTS:
-    DATABASES:
-        default:
+    AUTHENTICATION_BACKENDS: # 认证后端
+        django.contrib.auth.backends.ModelBackend:
+    DATABASE_ROUTERS: # 数据库路由器（基于规则切换数据源）
+    DATABASES: # 数据库配置（可动态切换）
+        default: # 默认数据库
             ENGINE:
             HOST:
             NAME:
             PORT:
             USER:
     DEBUG:
-    INSTALLED_APPS:
+    INSTALLED_APPS: # 安装的APP应用(6个默认安装)
+        django.contrib.admin:
+        django.contrib.auth:
+        django.contrib.contenttypes:
+        django.contrib.sessions:
+        django.contrib.messages:
+        django.contrib.staticfiles:
+    LANGUAGE_CODE: # 语言
     STATIC_URL: # 静态资源url
     STATICFILES_DIRS: # 静态资源目录
     TEMPLATES: # 模板配置
@@ -62,6 +69,7 @@ settings.py:
         DIRS:
         APP_DIRS:
         OPTIONS:
+    TIME_ZONE: # 时区
 ```
 
 项目配置文件
@@ -81,38 +89,58 @@ urls.py:
 ### django-admin
 ```yaml
 django-admin:
+    help:
+    runserver:
+        --settings:
     startapp: # 创建应用
     startproject: # 创建项目
 ```
+
+
+django脚手架命令
+
+
+
 
 ### manage.py
 ```yaml
 manage.py:
     createsuperuser: # 创建admin超级管理员
     drf_create_token:
-    makemigrations: # 数据库迁移
-    migrate: # 生成数据库迁移文件
+    makemigrations: # 生成数据库迁移文件
+    migrate: # 数据库迁移
     runserver: # 开发服务器运行
     startapp: # 生成项目app
 ```
 
 
+django项目脚本命令
+会自动把项目路径和 settings.py 加载到 PYTHONPATH，这样命令就可以访问项目的配置和环境（而django-admin则没有）
+- 内部调用了 django-admin 的功能
+- 添加项目路径到 sys.path
+- 设置环境变量 DJANGO_SETTINGS_MODULE 为项目的 settings.py
+- 调用 django.core.management 模块执行命令
+
+
+
+
 ## 核心内容
 ```yaml
 django:
-    apps:
+    apps: # 应用
         AppConfig:
             name:
             verbose_name:
-    conf:
+    conf: # 配置
         settings: # 项目配置项引用
         urls:
             static:
                 static():
-    contrib:
+    contrib: # 第三方
         admin:
             site:
                 url:
+                register(): # 后台注册模型
             ModelAdmin: # Admin管理模型（与Model绑定）
                 Meta:
                     verbose_name: # 显示名称
@@ -121,28 +149,54 @@ django:
                 search_fields:
             @register():
         auth: # django内置登录校验
+            backends:
+                BaseBackend:
             context_processors:
                 auth:
-            decorators:
-                @login_required:
+            decorators: # 装饰器
+                @login_required: # 登录校验
                     login_url:
+                @permission_required: # 权限校验 
             models:
-                User:
+                AbstractBaseUser:
+                AbstractUser: #     
+                AnonymousUser:
+                UserManager:
+                Group: # 组（用户分组）
+                    permissions: # 组权限     
+                Permission: # 权限
+                    codename:
+                    content_type:
+                    name:
+                User: # 用户模型
+                    date_joined: # 注册时间
+                    email:
+                    is_active: # 是否有效
+                    is_staff: # 是否可登录 admin 后台
+                    is_superuser: # 是否是超级用户
+                    last_login: # 最后登录时间
+                    password:
+                    username:
+                    ---
+                    groups: # 用户所属组
                     objects:
                         create_user():
+                    user_permissions: # 用户权限
                     check_password():
                     get_username():
+                    has_perm(): # 权限校验
                     is_authenticated():
+            authenticate(): # user用户认证
             get_user_model():
-            login():
-            logout():
+            login(): # 登入
+            logout(): # 登出
         contenttypes:
         messages:
             context_processors:
                 messages:
         sessions:
         staticfiles:
-    core:
+    core: # 核心
         mail:
             backends:
                 smtp:
@@ -150,9 +204,13 @@ django:
             send_mail(): # 发送邮件
         serializers: # 序列化
             serialize():
+        signals: # 信号
+            got_request_exception:
+            request_finished:
+            request_started:
         validators: # 表单校验器
             RegexValidator:
-    db:
+    db: # 数据库
         backends:
             mysql:
             sqlite3:
@@ -165,8 +223,11 @@ django:
                 name:
                 fields:
         models:
-            signals:
-                post_save():
+            signals: # orm信号
+                pre_delete:
+                pre_save:
+                post_delete:
+                post_save:
             BigAutoField:
             CharField:
                 max_length:
@@ -180,6 +241,8 @@ django:
                 to_field:
             ImageField:
             IntegerField:
+            Manager: # 全局拦截器
+                create():
             ManyToManyField: # 多对多关联字段
                 to:
                 related_name: # 反向引用字段名
@@ -187,6 +250,7 @@ django:
                 Meta: # 模型元信息
                     db_table: # 模型表名
                     ordering:
+                    permissions: # 权限
                 objects: # 模型操作类 Queryset
                     aggregate(): # 聚合查询
                     all(): # 所有数据
@@ -211,8 +275,10 @@ django:
                     order_by():
                     update():
                     update_or_create():
-                delete():
-                save(): # 添加数据
+                    using(): # 切换数据源
+                clean(): # 数据提交校验钩子
+                delete(): # 删除数据钩子
+                save(): # 添加数据钩子
             OneToOneField: # 一对一关联字段
                 on_delete:
                 to:
@@ -231,8 +297,10 @@ django:
                 fetchall():
                 rowcount():
     dispatch: # 信号机制
-        @receiver():
-            sender:
+        Signal: # 信号
+            send(): # 发送信号
+        @receiver(): # 信号接收
+            sender: # 指定发送者
     forms: # 表单模型
         BooleanField:
         CharField:
@@ -269,7 +337,7 @@ django:
             save(): # 保存到数据库
         Textarea: # 文本域组件
         ValidationError:
-    http:
+    http: # HTTP
         request:
             Request: # 请求对象
                 COOKIES:
@@ -283,7 +351,7 @@ django:
                 user:
         response:
             JsonResponse:
-        HttpResponse:
+        HttpResponse: # HTTP响应
             delete_cookie():
             set_cookie():
                 key:
@@ -312,7 +380,7 @@ django:
         re_path():
         reverse(): # 路由反转
             kwargs:
-    views:
+    views: # 视图函数
         decorators:
             csrf:
                 @csrf_exempt():
@@ -413,10 +481,12 @@ rest_framework:
                 serializer:
 ```
 
-<br />
-<br />
 
 ### 视图函数
+
+
+
+#### View
 
 views控制器
 
@@ -452,8 +522,18 @@ Form可实现表单参数校验、ModelForm自定义表单字典校验：`Form.c
 
 DRF的序列化器可实现参数校验
 
-<br />
-<br />
+
+#### Form
+
+原始表单模型，用于表单校验
+
+
+#### ModelForm
+
+
+ModelForm: 根据模型（Model）自动生成表单字段，并支持直接保存到数据库。
+- 把 Form 表单系统 和 ORM 模型 自动结合起来，帮你省去手动定义表单字段、手动验证和手动保存的步骤
+
 
 ### 中间件
 
@@ -476,6 +556,10 @@ DRF的序列化器可实现参数校验
 ### ORM
 
 
+django自带ORM框架
+
+
+
 #### QuerySet
 
 `filter()`、`exclude()`、`get()`
@@ -484,8 +568,14 @@ DRF的序列化器可实现参数校验
 
 
 
+#### Manage
 
-#### 一对一
+全局拦截器
+
+
+
+
+#### OneToOneField
 ```python
 class User(models.Model):
     name = models.CharField()
@@ -504,11 +594,6 @@ article.save()
 外键关联自动生成`author_id`外键字段
 
 
-
-<br />
-<br />
-
-
 #### 一对多
 
 ```python
@@ -519,13 +604,10 @@ articles = user.article_set.all()
 一对多使用对应外键字段：`xxx_set`
 
 
-<br />
-<br />
 
 
 
-
-#### 多对多
+#### ManyToManyField
 
 `ManyToManyField`
 
@@ -580,17 +662,40 @@ Django内置模板引擎
 
 ### 页面组件
 
+
+#### ModelForm
+
 ModelForm：将Form和Model结合起来的模型
 
 
 ### 认证/权限
 
 
-contrib.auth
+`django.contrib.auth`
+
+
+#### User
 
 
 
 ### 信号
+
+`django.dispatch.Signal`
+- orm信号
+- http信号
+
+
+信号机制：
+- Signal：事件的定义，例如 pre_save、post_save
+- Sender：谁发的信号（通常是模型类）
+- Receiver：信号的接收者（回调函数）
+- send：主动触发信号
+- connect：注册接收函数到信号
+
+
+
+#### Signal
+
 
 
 
