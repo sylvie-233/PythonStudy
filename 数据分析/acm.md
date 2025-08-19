@@ -1,4 +1,4 @@
-# ACM
+# ACM (6 = 1 + 2 + 1 + 2)
 
 ``
 
@@ -631,6 +631,13 @@ comp = {v:i for i,v in enumerate(coords)}
 
 
 
+### 随机算法
+
+
+#### 模拟退火
+
+
+
 ### 逆波兰表达式
 ```python
 # 计算符号优先级
@@ -905,7 +912,37 @@ class MedianFinder:
 ![对顶堆原理](../.assets/对顶堆原理.png)
 
 
+#### 可并堆
+
+左偏树
+
+
 ### 栈
+```python
+# 简单栈（list列表模拟）
+class Stack:
+    def __init__(self):
+        self.items = []
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        if self.is_empty():
+            raise IndexError("pop from empty stack")
+        return self.items.pop()
+
+    def peek(self):
+        if self.is_empty():
+            raise IndexError("peek from empty stack")
+        return self.items[-1]
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def size(self):
+        return len(self.items)
+```
 
 #### 单调栈
 
@@ -968,7 +1005,7 @@ print(largestRectangleArea(
 ### 队列
 
 
-
+#### 双端队列
 
 
 #### 单调队列
@@ -1128,6 +1165,15 @@ class UnionFind:
         return len(set(self.find(i) for i in range(len(self.parent))))
 ```
 
+
+#### 点权并查集
+
+
+#### 边权并查集
+
+
+
+#### 可持久化并查集
 
 
 
@@ -1383,6 +1429,40 @@ class SegmentTree:
 ```
 
 
+#### 0-1 线段树
+
+
+
+### Treap
+
+Tree + Heap
+随机化平衡二叉搜索树
+
+
+### 伸展树Splay
+
+
+
+### 动态树LCT
+
+
+
+### 红黑树
+
+
+
+### 替罪羊树
+
+
+
+### k-d树
+
+### 珂朵莉树ODT
+
+### 笛卡尔树
+
+
+
 ## 字符串
 
 ### 哈希（Hash）
@@ -1399,6 +1479,9 @@ class SegmentTree:
 
 
 ### 字典树
+
+
+#### 0-1 字典树
 
 
 ### KMP
@@ -1618,6 +1701,9 @@ if __name__ == "__main__":
 - 计算所有的回文子串个数
 
 优化思路和z函数差不多
+
+
+### 回文自动机
 
 
 ### AC自动机
@@ -1907,6 +1993,8 @@ for i in range(N):
         k <<= 1
 ```
 
+#### 分组背包
+
 
 ### 区间DP
 
@@ -2003,6 +2091,23 @@ print(count_range_no_4(1, 100))  # 输出应该是 81
 ### 树形DP
 
 
+#### 树上最大独立集
+
+
+#### 树上最小顶点覆盖
+
+
+#### 树上最小支配集
+
+
+#### 树上最大匹配
+
+
+
+### 环形DP
+
+
+
 
 ## 图论
 
@@ -2096,6 +2201,9 @@ add_edge(1, 2, 5)
 ```
 
 
+##### 链式前向星
+
+
 #### 拓扑排序
 ```python
 from collections import deque
@@ -2129,6 +2237,8 @@ def topological_sort(n):
     else:
         return []       # 有环，拓扑排序失败
 ```
+
+#### 双连通分量
 
 
 
@@ -2536,6 +2646,9 @@ if __name__ == "__main__":
 dfs增广路径
 
 
+#### 2-SAT
+
+
 
 ### 树
 
@@ -2819,9 +2932,27 @@ class LcaBinaryLifting:
 #### 树链剖分
 
 
-## 数论
 
-### 快速幂
+#### 树上启发式合并
+
+
+
+#### 圆方树
+
+
+#### 斯坦纳树
+
+
+#### 曼哈顿树
+
+
+
+## 数学
+
+
+### 数论
+
+#### 快速幂
 ```python
 def mod_pow(a, b, mod):
     res = 1
@@ -2838,20 +2969,22 @@ def mod_pow(a, b, mod):
 
 
 
-### GCD
+#### GCD
 ```python
 def gcd(a, b):
     return a if b==0 else gcd(b, a%b)
 ```
 
 
-
-
 最大公约数
 
-### 素数筛
+##### 扩展欧几里得
 
-#### 埃拉托色尼筛（Sieve of Eratosthenes）
+
+
+#### 素数筛
+
+##### 埃拉托色尼筛（Sieve of Eratosthenes）
 ```python
 def sieve(n):
     is_prime = [True] * (n + 1)
@@ -2869,11 +3002,38 @@ def sieve(n):
 开根号
 
 
+##### 欧拉筛
+
+#### 欧拉函数
+
+
+#### 原根
+
+
+#### 逆元
 
 
 
+#### 数论分块
 
-## 离散与组合数学
+
+#### 莫比乌斯函数
+
+
+##### 莫比乌斯反演
+
+
+#### 大步小步算法BSGS
+
+
+#### 中国剩余定理CRT
+
+
+#### 二次剩余
+
+
+
+### 离散数学
 
 ![两两组合的乘积之和](../.assets/两两组合的乘积之和.png)
 ```python
@@ -2885,17 +3045,68 @@ for num in nums:
     res += num * total
 ```
 
-## 线性代数
+#### 容斥原理
+
+#### 离散对数
 
 
-## 概率论
+#### 卢卡斯定理
 
 
-## 博弈论
+#### 卡特兰数
 
 
 
-## 计算几何
+#### 默慈金数
+
+
+
+#### 那罗延数
+
+
+
+#### 斯特林数
+
+
+### 线性代数
+
+
+#### 高斯消元
+
+
+#### 快速傅里叶变换 FFT
+
+
+#### 快速数论变换 NTT
+
+
+#### 快速沃尔什变换 FWT
+
+### 数值分析
+
+
+#### 自适应辛普森积分
+
+
+### 概率论
+
+
+### 博弈论
+
+
+#### SG 函数
+
+
+
+### 计算几何
+
+
+#### 圆
+
+
+
+#### 凸包
+
 
 
 
