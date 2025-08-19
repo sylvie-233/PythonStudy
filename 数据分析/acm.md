@@ -913,8 +913,72 @@ class MedianFinder:
 
 
 #### 可并堆
+```python
+class LeftistNode:
+    def __init__(self, val):
+        """
+            dist: 从该节点出发，到 最近的空子节点（None）的最短路径长度
+            左偏树需维持：left.dist >= right.dist
+        """
+        self.val = val
+        self.dist = 1        # 零路径长 (NPL)，叶子结点记作 1
+        self.left = None
+        self.right = None
 
-左偏树
+
+class LeftistHeap:
+    def __init__(self):
+        self.root = None
+
+    def merge(self, h1: LeftistNode, h2: LeftistNode) -> LeftistNode:
+        """
+            合并两棵左偏树：
+                - 小根堆
+                - 左偏性质
+                - dist值
+        """
+        if not h1: return h2
+        if not h2: return h1
+        # 小根堆，保证 h1 根较小
+        if h1.val > h2.val:
+            h1, h2 = h2, h1
+        # 递归合并
+        h1.right = self.merge(h1.right, h2)
+        # 保持左偏性质：左子树的 dist >= 右子树
+        if not h1.left or (h1.left.dist < h1.right.dist if h1.right else False):
+            h1.left, h1.right = h1.right, h1.left
+        # 更新 dist（右边最短）
+        h1.dist = 1 + (h1.right.dist if h1.right else 0)
+        return h1
+
+    def push(self, val: int):
+        """插入一个元素"""
+        node = LeftistNode(val)
+        self.root = self.merge(self.root, node)
+
+    def top(self):
+        """获取最小值"""
+        return self.root.val if self.root else None
+
+    def pop(self):
+        """删除最小值"""
+        if not self.root:
+            return None
+        min_val = self.root.val
+        self.root = self.merge(self.root.left, self.root.right)
+        return min_val
+
+    def merge_with(self, other: "LeftistHeap"):
+        """和另一棵堆合并"""
+        self.root = self.merge(self.root, other.root)
+```
+
+左偏树，支持快速合并的优先队列 数据结构
+- 最小/最大堆性质：根节点是最小（或最大）元素。
+- 左偏性质：每个节点的左子树到叶子节点的距离 ≥ 右子树距离（保证右边路径尽量短）
+- 快速合并：两棵左偏树的合并操作是 O(log n) 的期望时间，而普通二叉堆合并是 O(n)
+    - 递归只沿着 右子树 走
+    - 左偏性质保证：右子树的 dist 最短 → merge 递归深度 ≤ 右路径长度 ≤ log n
 
 
 ### 栈
@@ -1430,6 +1494,8 @@ class SegmentTree:
 
 
 #### 0-1 线段树
+
+### 二叉搜索树BST
 
 
 
@@ -2651,6 +2717,12 @@ dfs增广路径
 
 
 ### 树
+
+树的遍历：
+- 先序遍历：中 -> 左 -> 右
+- 中序遍历：左 -> 中 -> 右
+- 后序遍历：左 -> 右 -> 中
+
 
 树的基本性质：
 - 树是一种无环连通图
