@@ -3074,7 +3074,33 @@ def sieve(n):
 开根号
 
 
+
+
+
 ##### 欧拉筛
+
+
+
+#### 质因数分解
+
+##### 试除法
+```python
+def prime_factors(n: int) -> list[int]:
+    factors: list[int] = []
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            factors.append(d) # 可重复添加元素
+            n //= d
+        d += 1
+    if n > 1:
+        factors.append(n)
+    return factors
+```
+
+
+
+
 
 #### 欧拉函数
 
