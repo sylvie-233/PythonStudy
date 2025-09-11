@@ -426,6 +426,44 @@ SubModule进阶版
 
 github官方GUI工具
 
+### github workflow
+
+
+.github目录结构
+```yaml
+/.github:
+    /workflows: # GitHub Actions 工作流 (CI/CD 配置)
+        cicd.yml:
+    /ISSUE_TEMPLATE: # Issue 模板
+        bug_report.md: # 
+    PULL_REQUEST_TEMPLATE.md: # Pull Request 模板
+    CODEOWNERS: # 指定代码所有者/审核人
+    CONTRIBUTING: # 贡献指南
+    CODE_OF_CONDUCT.md: # 社区行为规范 
+```
+
+#### actions.yml
+```yaml
+Actions.yaml:
+    name: # 工作流名
+    on: # 工作流触发条件
+        push:
+            branches:
+        pull_request:
+        schedule:
+            cron:
+        workflow_dispatch:
+    jobs: # 定义多个任务
+        _:
+            if: # 条件触发
+            needs: # 任务依赖关系
+            runs-on: # 运行环境
+            steps: # 任务执行步骤
+                name: # 直接运行命令
+                run:
+                uses:
+                with:
+```
 
 
 
@@ -447,7 +485,7 @@ gitlab-ctl:
 ```
 
 
-### 提交
+### Commit
 
 #### Pull request
 
@@ -458,7 +496,23 @@ gitlab-ctl:
 #### 议题
 
 
-### 工作流
+### WorkFlow
+
+
+
+#### gitlab-ci.yml
+```yaml
+gitlab-ci.yml:
+    stages: # 定义流水线的阶段
+    _: # 一个 Job
+        except:
+        only: # 条件触发
+        rules: # 
+            if:
+            when:
+        stage:
+        script:
+```
 
 
 #### Runner
