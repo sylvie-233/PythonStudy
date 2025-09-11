@@ -6,7 +6,20 @@
 ## 基础算法
 
 
+### 快速幂
+```python
+def mod_pow(a, b, mod):
+    res = 1
+    a %= mod
+    while b:
+        if b & 1:
+            res = res * a % mod
+        a = a * a % mod
+        b >>= 1
+    return res
+```
 
+基于幂的二进制拆分
 
 
 
@@ -861,6 +874,109 @@ def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Opt
 ![链表反转](../.assets/链表反转.png)
 
 
+### 二叉树
+```python
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: Optional[TreeNode] = None, right: Optional[TreeNode] = None):
+        self.val = val
+        self.left = left
+        self.right = right
+from typing import Optional, List, Union
+from collections import deque
+
+class TreeNodeOperator:
+    def preorder(self, root: Optional[TreeNode]) -> List[int]:
+        """前序遍历（递归）"""
+        if not root:
+            return []
+        return [root.val] + self.preorder(root.left) + self.preorder(root.right)
+
+    def inorder(self, root: Optional[TreeNode]) -> List[int]:
+        """中序遍历（递归）"""
+        if not root:
+            return []
+        return self.inorder(root.left) + [root.val] + self.inorder(root.right)
+
+    def postorder(self, root: Optional[TreeNode]) -> List[int]:
+        """后序遍历（递归）"""
+        if not root:
+            return []
+        return self.postorder(root.left) + self.postorder(root.right) + [root.val]
+
+    def levelorder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        """层序遍历"""
+        if not root:
+            return []
+        # result记录所有层的节点值，二维list
+        result = []
+        queue = deque([root])
+        while queue:
+            # level记录每一层的节点值
+            level = []
+            for _ in range(len(queue)):
+                node = queue.popleft()
+                level.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            result.append(level)
+        return result
+
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        """树的最大深度"""
+        if not root:
+            return 0
+        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        """反转二叉树"""
+        if not root:
+            return None
+        root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
+        return root
+
+    def buildTreeFromList(self, data: List[Union[int, None]]) -> Optional[TreeNode]:
+        """
+        从层序列表构建二叉树，空用 None 表示
+        例如：[1, 2, 3, None, 4] 表示：
+              1
+             / \
+            2   3
+             \
+              4
+        """
+        if not data or data[0] is None:
+            return None
+        root = TreeNode(data[0])
+        queue = deque([root])
+        i = 1
+        while queue and i < len(data):
+            node = queue.popleft()
+            # 构建左节点
+            if i < len(data) and data[i] is not None:
+                node.left = TreeNode(data[i])
+                queue.append(node.left)
+            i += 1
+            # 构建右节点
+            if i < len(data) and data[i] is not None:
+                node.right = TreeNode(data[i])
+                queue.append(node.right)
+            i += 1
+        return root
+
+    def getNodeCount(self, root: Optional[TreeNode]) -> int:
+        """返回节点总数"""
+        if not root:
+            return 0
+        return 1 + self.getNodeCount(root.left) + self.getNodeCount(root.right)
+```
+
+#### 二叉树深度
+#### 二叉树反转
+
+
 ### 堆
 
 
@@ -1096,107 +1212,7 @@ def maxSlidingWindow(nums: List[int], k: int) -> List[int]:
 ```
 
 
-### 二叉树
-```python
 
-class TreeNode:
-    def __init__(self, val: int = 0, left: Optional[TreeNode] = None, right: Optional[TreeNode] = None):
-        self.val = val
-        self.left = left
-        self.right = right
-from typing import Optional, List, Union
-from collections import deque
-
-class TreeNodeOperator:
-    def preorder(self, root: Optional[TreeNode]) -> List[int]:
-        """前序遍历（递归）"""
-        if not root:
-            return []
-        return [root.val] + self.preorder(root.left) + self.preorder(root.right)
-
-    def inorder(self, root: Optional[TreeNode]) -> List[int]:
-        """中序遍历（递归）"""
-        if not root:
-            return []
-        return self.inorder(root.left) + [root.val] + self.inorder(root.right)
-
-    def postorder(self, root: Optional[TreeNode]) -> List[int]:
-        """后序遍历（递归）"""
-        if not root:
-            return []
-        return self.postorder(root.left) + self.postorder(root.right) + [root.val]
-
-    def levelorder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        """层序遍历"""
-        if not root:
-            return []
-        # result记录所有层的节点值，二维list
-        result = []
-        queue = deque([root])
-        while queue:
-            # level记录每一层的节点值
-            level = []
-            for _ in range(len(queue)):
-                node = queue.popleft()
-                level.append(node.val)
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
-            result.append(level)
-        return result
-
-    def maxDepth(self, root: Optional[TreeNode]) -> int:
-        """树的最大深度"""
-        if not root:
-            return 0
-        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
-
-    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        """反转二叉树"""
-        if not root:
-            return None
-        root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
-        return root
-
-    def buildTreeFromList(self, data: List[Union[int, None]]) -> Optional[TreeNode]:
-        """
-        从层序列表构建二叉树，空用 None 表示
-        例如：[1, 2, 3, None, 4] 表示：
-              1
-             / \
-            2   3
-             \
-              4
-        """
-        if not data or data[0] is None:
-            return None
-        root = TreeNode(data[0])
-        queue = deque([root])
-        i = 1
-        while queue and i < len(data):
-            node = queue.popleft()
-            # 构建左节点
-            if i < len(data) and data[i] is not None:
-                node.left = TreeNode(data[i])
-                queue.append(node.left)
-            i += 1
-            # 构建右节点
-            if i < len(data) and data[i] is not None:
-                node.right = TreeNode(data[i])
-                queue.append(node.right)
-            i += 1
-        return root
-
-    def getNodeCount(self, root: Optional[TreeNode]) -> int:
-        """返回节点总数"""
-        if not root:
-            return 0
-        return 1 + self.getNodeCount(root.left) + self.getNodeCount(root.right)
-```
-
-#### 二叉树深度
-#### 二叉树反转
 
 
 
@@ -2170,16 +2186,9 @@ print(count_range_no_4(1, 100))  # 输出应该是 81
 
 
 
-### 环形DP
-
-
-
 
 ## 图论
 
-
-
-### 图
 
 
 图论基本概念：
@@ -2232,10 +2241,10 @@ print(count_range_no_4(1, 100))  # 输出应该是 81
 
 
 
-#### 图的存储
+### 图的存储
 
 
-##### 邻接表
+#### 邻接表
 ```python
 n = 5  # 点数
 # 1~n
@@ -2251,7 +2260,7 @@ add_edge(1, 3, 4)
 ```
 
 
-##### 邻接矩阵
+#### 邻接矩阵
 ```python
 n = 5
 INF = float('inf')
@@ -2267,10 +2276,10 @@ add_edge(1, 2, 5)
 ```
 
 
-##### 链式前向星
+#### 链式前向星
 
 
-#### 拓扑排序
+### 拓扑排序
 ```python
 from collections import deque
 
@@ -2304,16 +2313,16 @@ def topological_sort(n):
         return []       # 有环，拓扑排序失败
 ```
 
-#### 双连通分量
+### 双连通分量
 
 
 
-#### 二分图
+### 二分图
 
 二分图对图论核心问题(5个)有一些结论
 
 
-##### 二分图判定（DFS 染色法）
+#### 二分图判定（DFS 染色法）
 ```python
 def is_bipartite(n, edges):
     graph = [[] for _ in range(n + 1)]
@@ -2340,7 +2349,7 @@ def is_bipartite(n, edges):
     return True
 ```
 
-##### 二分图最大匹配 （匈牙利算法）
+#### 二分图最大匹配 （匈牙利算法）
 ```python
 def hungarian(n, m, edges):
     """
@@ -2378,10 +2387,10 @@ DFS增广路径
 
 
 
-#### 最短路
+### 最短路
 
 
-##### Dijkstra
+#### Dijkstra
 ```python
 import heapq
 def dijkstra(n, adj, src):
@@ -2408,7 +2417,7 @@ Dijkstra（迪杰斯特拉算法）：单源最短路径算法，适用于非负
 
 
 
-##### Floyd
+#### Floyd
 ```python
 def floyd_warshall(n, dist):
     # dist[i][j] 初始为 i->j 的边权，若无边则可设为 INF；对角线为0
@@ -2424,7 +2433,7 @@ def floyd_warshall(n, dist):
 Floyd（Floyd–Warshall算法）：多源最短路径算法，计算任意两点间最短路
 
 
-##### Bellman-Ford
+#### Bellman-Ford
 ```python
 def bellman_ford(n, edges, src):
     INF = float('inf')
@@ -2448,13 +2457,13 @@ def bellman_ford(n, edges, src):
 单源最短路径算法，可处理负权边（但无负权回路）
 
 
-#### Tarjan
+### Tarjan
 
 Tarjan 算法是一种基于 DFS 的图遍历算法，主要用于：
 1. 求强连通分量 SCC（有向图）
 2. 求割点（割顶）/桥（割边）（无向图）
 
-##### 强连通分量
+#### 强连通分量
 ```python
 from collections import defaultdict
 
@@ -2515,7 +2524,7 @@ class TarjanSCC:
 ```
 
 
-##### 割点
+#### 割点
 ```python
 class TarjanCutVertex:
     def __init__(self, n):
@@ -2561,7 +2570,7 @@ class TarjanCutVertex:
 ```
 
 
-##### 割边
+#### 割边
 ```python
 class TarjanBridge:
     def __init__(self, n):
@@ -2598,7 +2607,7 @@ class TarjanBridge:
 
 
 
-#### 网络流
+### 网络流
 
 网络流核心问题：
 1. 最大流：从源点到汇点最多能流多少
@@ -2608,7 +2617,7 @@ class TarjanBridge:
 5. 可行流/上下界流：每条边有容量上下界，求是否存在合法流
 
 
-##### Dinic
+#### Dinic
 
 最大流
 ```python
@@ -2712,11 +2721,8 @@ if __name__ == "__main__":
 dfs增广路径
 
 
-#### 2-SAT
+### 2-SAT
 
-
-
-### 树
 
 树的遍历：
 - 先序遍历：中 -> 左 -> 右
@@ -2740,15 +2746,15 @@ dfs增广路径
 - 子树：某节点为根的部分树
 - 祖先/后代：在路径上为其上/下游的节点
 
-#### 树的性质
+### 树的性质
 
-##### 树的直径
-##### 树的重心
+#### 树的直径
+#### 树的重心
 
-#### 最小生成树
+### 最小生成树
 
 
-##### Kruskal
+#### Kruskal
 ```python
 def kruskal(n, edges):
     # edges = [(w, u, v), ...]
@@ -2814,7 +2820,7 @@ def kruskal(n, edges):
 
 
 
-##### Prim
+#### Prim
 ```python
 import heapq
 def prim(n, adj, src=0):
@@ -2838,7 +2844,7 @@ def prim(n, adj, src=0):
 Prim（最小生成树Prim算法）：从一个起点开始，逐步向树中添加到外部节点的最小权边
 
 
-#### LCA
+### LCA
 ```python
 import math
 
@@ -2926,7 +2932,7 @@ print(bl.get_kth_ancestor(5, 2))  # 输出: 0 (5 的第 2 个祖先是节点 0)
 print(bl.lca(3, 5))  # 输出: 0 (3 和 5 的 LCA 是节点 0)
 ```
 
-##### 第k个祖先
+#### 第k个祖先
 ```python
 # lca完整版
 class LcaBinaryLifting:
@@ -3001,21 +3007,21 @@ class LcaBinaryLifting:
 ```
 
 
-#### 树链剖分
+### 树链剖分
 
 
 
-#### 树上启发式合并
+### 树上启发式合并
 
 
 
-#### 圆方树
+### 圆方树
 
 
-#### 斯坦纳树
+### 斯坦纳树
 
 
-#### 曼哈顿树
+### 曼哈顿树
 
 
 
@@ -3024,20 +3030,7 @@ class LcaBinaryLifting:
 
 ### 数论
 
-#### 快速幂
-```python
-def mod_pow(a, b, mod):
-    res = 1
-    a %= mod
-    while b:
-        if b & 1:
-            res = res * a % mod
-        a = a * a % mod
-        b >>= 1
-    return res
-```
 
-基于幂的二进制拆分
 
 
 
@@ -3131,7 +3124,7 @@ def prime_factors(n: int) -> list[int]:
 
 
 
-### 离散数学
+### 组合数学
 
 ![两两组合的乘积之和](../.assets/两两组合的乘积之和.png)
 ```python
@@ -3144,9 +3137,7 @@ for num in nums:
 ```
 
 #### 容斥原理
-
-#### 离散对数
-
+#### 鸽巢原理
 
 #### 卢卡斯定理
 
@@ -3168,9 +3159,11 @@ for num in nums:
 
 ### 线性代数
 
-
+#### 矩阵快速幂
 #### 高斯消元
 
+
+### 高等数学
 
 #### 快速傅里叶变换 FFT
 
@@ -3179,9 +3172,6 @@ for num in nums:
 
 
 #### 快速沃尔什变换 FWT
-
-### 数值分析
-
 
 #### 自适应辛普森积分
 
