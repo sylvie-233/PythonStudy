@@ -1,6 +1,5 @@
 # Numpy & Pandas & Matplotlib
 
-`千锋教育NumPy教程: P16`
 
 ## 基础介绍
 
@@ -40,7 +39,7 @@ matplotlib核心功能：
 ## Numpy
 ```yaml
 numpy: # np
-    linalg: 
+    linalg: # 线性代数
         inv(): # 逆矩阵
     ndarray: # n维数组
         dtype: # 数据类型
@@ -60,8 +59,11 @@ numpy: # np
         transpose(): # 矩阵转置
         vstack(): # 竖直合并
     random: # 随机
+        normal(): # 正态分布
         randint():
-        randn():
+            size: # 维度
+        randn(): # 
+        random():
     version:
         version:
     arange(): # 序列数组生成（左闭右开）
@@ -89,7 +91,28 @@ numpy: # np
 ```
 
 矩阵、向量运算库
-
+- ndarray: 多维向量
+    - 维度：ndim
+    - 形状：shape
+    - 长度：size
+    - 类型：dtype
+    - 索引/切片：
+    - 广播机制：
+- 序列生成
+    - 顺序：arange
+- 随机数
+- 数学运算：
+    - 三角函数：
+    - 排序：sort
+- 矩阵运算
+    - 变形：reshape
+    - 级联/拆分：concatenate、hstack/vsplit、hsplit
+    - 点乘：dot
+    - 逆矩阵：
+- 聚合函数
+    - 最值下标：argmax/argmin
+    - 条件下表：argwhere
+- 文件操作
 
 
 

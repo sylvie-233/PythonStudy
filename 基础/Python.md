@@ -1300,9 +1300,18 @@ std:
             HTTPError: # URLError子类
             URLError:
         parse: # 解析模块
+            parse_qs():
             urlencode(): # url编码
                 encoding:
             urldecode():
+            urlparse(): # url解析 
+                ---
+                fragment:
+                netloc:
+                path:
+                query:
+                scheme:
+            urlunparse():
         request: # 请求模块
             ProxyHandler:
                 proxies:
@@ -2100,6 +2109,10 @@ def __new__(mcs, *args, **kwargs):
     # args传入的参数即type()需要的参数
     return class
 ```
+
+![metaclass继承图](../.assets/metaclass继承图.jpeg)
+![metaclass执行流程](../.assets/metaclass执行流程.jpeg)
+
 
 - `metaclass.__new__`: 创建MyClass类
 - `metaclass.__init__`: 初始化MyClass类
