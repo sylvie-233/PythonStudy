@@ -1,6 +1,6 @@
 # Django
 
-
+`Django REST Framework series: P3`
 
 ## 基础介绍
 
@@ -43,6 +43,7 @@ django项目:
 ```yaml
 settings.py:
     ALLOWED_HOSTS:
+    AUTH_USER_MODEL:
     AUTHENTICATION_BACKENDS: # 认证后端
         django.contrib.auth.backends.ModelBackend:
     DATABASE_ROUTERS: # 数据库路由器（基于规则切换数据源）
@@ -107,6 +108,7 @@ django脚手架命令
 manage.py:
     createsuperuser: # 创建admin超级管理员
     drf_create_token:
+    graph_models:
     makemigrations: # 生成数据库迁移文件
     migrate: # 数据库迁移
     runserver: # 开发服务器运行
@@ -202,6 +204,10 @@ django:
                 smtp:
                     EmailBackend:
             send_mail(): # 发送邮件
+        management:
+            base:
+                BaseCommand: # 命令基类
+                    handle():
         serializers: # 序列化
             serialize():
         signals: # 信号
@@ -222,19 +228,20 @@ django:
             CreateModel(): # 迁移模型
                 name:
                 fields:
-        models:
+        models: # 模型
             signals: # orm信号
                 pre_delete:
                 pre_save:
                 post_delete:
                 post_save:
             BigAutoField:
-            CharField:
+            CharField: # 字符串字段
                 max_length:
-            DateTimeField:
+            DateTimeField: # 日期时间字段
                 auto_now_add:
+            DecimalField: # 浮点数字段
             ForeignKey: # 模型外键
-                on_delete:
+                on_delete: # 关联删除
                     CASCADE:
                 related_name: # 反向引用字段名(默认xxx_set)
                 to: # 关联的模型
@@ -244,6 +251,7 @@ django:
             Manager: # 全局拦截器
                 create():
             ManyToManyField: # 多对多关联字段
+                through: # 中间表（类）
                 to:
                 related_name: # 反向引用字段名
             Model: # 模型基类
@@ -283,6 +291,9 @@ django:
                 on_delete:
                 to:
             SmallIntegerField:
+            TextChoices:
+            TextField: # 文本字段
+            UUIDField:
             Avg(): # 平均数
             Count(): # 个数
             F(): # 字段计算
@@ -362,6 +373,7 @@ django:
                 domain:
     shortcuts:
         HttpResponse: # 基础响应对象
+        get_object_or_404():
         redirect():
         render(): # 视图渲染
             context: # 上下文变量
@@ -380,6 +392,8 @@ django:
         re_path():
         reverse(): # 路由反转
             kwargs:
+    utils:
+        lorem_ipsum:
     views: # 视图函数
         decorators:
             csrf:
@@ -400,7 +414,7 @@ rest_framework:
         views:
             obtain_auth_token:
     decorators:
-        @api_view():
+        @api_view(): # 视图函数
         @authentication_classes():
         @permission_classes():
     generics:
@@ -436,7 +450,7 @@ rest_framework:
     schemas:
         AutoSchema:
         get_schema_view():
-    serializers:
+    serializers: # 序列化模型
         CharField:
             error_messages:
             max_length:
@@ -446,20 +460,21 @@ rest_framework:
             Meta:
                 fields:
                 model: # 关联的模型Model
-            data:
+            data: # 数据
             errors:
             instance: # 模型实例
             many:
             is_valid(): # 字段校验
             save():
+            validate_xxx(): # 字段校验
         ReadOnlyField:
             source:
-        Serializer: # 序列化器（模型）,
+        Serializer: # 序列化器（模型基类）,
             data:
             many:
             validate():
             validate_field():
-        ValidationError:
+        ValidationError: # 字段校验异常
     status:
     urls:
     views:
@@ -594,7 +609,7 @@ article.save()
 外键关联自动生成`author_id`外键字段
 
 
-#### 一对多
+#### OneToMany
 
 ```python
 articles = user.article_set.all()
@@ -698,6 +713,13 @@ ModelForm：将Form和Model结合起来的模型
 
 
 
+### 命令
+
+
+#### Command
+
+
+
 
 ### Contrib
 
@@ -755,7 +777,7 @@ urlpatterns = [
 
 
 
-### 序列化器
+### Serializer
 
 可实现字段校验
 

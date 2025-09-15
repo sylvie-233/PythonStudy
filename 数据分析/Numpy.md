@@ -138,27 +138,45 @@ pandas: # pd
     DataFrame: # 二维excel表，每列可以是不同类型
         columns: # 列名
         dtypes: # 每一列的数据类型
+        iloc:
         index: # 索引
+        loc: # 选择行(支持切片)
         shape: # 形状、行列数
         values:
         agg(): # 表聚合
         append(): # 添加数据
+        apply(): # 应用函数创建Series
+        applymap():
+        assign(): # 同apply
         astype():
         concat():
+        count():
+        cov():
         describe(): # 数值统计
         drop(): # 删除行、列
         drop_duplicates(): # 删除重复值
         drop_na(): # 删除含缺失值的行
+            axis:
+                columns:
+                index:
+            how:
+            inplace:
         fillna():
         from_records():
         groupby(): # 分组
-        head(): # 查看前n行
+            agg():
+            apply():
+            get_group():
+            mean():
+            sum():
+            unstack():
+        head(): # 查看前n行(默认前5行)
         iloc(): # 选择行
         info(): # 数据结构信息
         isnull():
         join(): # 表连接
-        loc(): # 选择行
         map():
+        pivot(): # 数据透视
         query(): # 表查询
         rename(): # 重命名
             columns:
@@ -167,22 +185,54 @@ pandas: # pd
         reset_index():
         sample(): # 采样
         set_index(): # 设置索引列
+        sort_index():
         sort_values(): # 排序
             ascending:
-            by:
+            by: # 列名
         tail():
         to_excel(): # 文件输出：excel
         unique():
         where(): # 条件查询
     Series: # 一维带标签数组，二维表的列
         index: # 列索引
+        str: # 字符串值
+            astype():
+            isnumeric():
+            len():
+            replace():
+            slice():
+            startswith():
+        values:
+        copy():
+        corr():
+        fillna(): # 空值填充
+        head():
+        isnull():
+        map():
+        max():
+        mean():
+        min():
+        notnull():
+        sort_values(): # 排序
+            ascending:
+        unique(): # 去重
+        value_counts(): # 按值计数
     nan:
-    concat(): # 连接
+    concat(): # 合并连接
         axis:
     date_range():
-    merge(): # 合并表，联表
+    merge(): # 联表查询
+        how:
+            inner:
+            outer:
+        left_on:
+        on:
+        right_on:
     read_csv():
+        head:
     read_excel():
+        skiprows:
+    read_sql():
     to_csv():
     to_datetime():
 ```
