@@ -1,6 +1,6 @@
 # Django
 
-`Django REST Framework series: P3`
+`Django REST Framework series: P10`
 
 ## 基础介绍
 
@@ -281,6 +281,7 @@ django:
                     first():
                     get():
                     order_by():
+                    prefech_related():
                     update():
                     update_or_create():
                     using(): # 切换数据源
@@ -385,6 +386,13 @@ django:
             request:
         loader:
             render_to_string():
+    test:
+        TestCase:
+            client:
+                force_login():
+                get():
+            assertTrue():
+            setUp():
     urls:
         include():
         path(): # 定义路径 视图函数映射
@@ -417,12 +425,19 @@ rest_framework:
         @api_view(): # 视图函数
         @authentication_classes():
         @permission_classes():
-    generics:
+    generics: # 通用视图
         ListAPIView:
+            permission_classes:
+            queryset:
+            serializer_class:
+            as_view():
+            get_queryset():
         ListCreateAPIView:
             queryset:
             serializer_class:
             perform_create():
+        RetrieveAPIView:
+            lookup_field:
     mixins:
         DestroyModelMixin:
         UpdateModelMixin:
@@ -431,7 +446,7 @@ rest_framework:
         FormParser:
         JSONParser:
         MultiPartParser:
-    permissions:
+    permissions: # 权限
         BasePermission: # 权限基类
             has_object_permission():
                 request:
@@ -475,7 +490,7 @@ rest_framework:
             validate():
             validate_field():
         ValidationError: # 字段校验异常
-    status:
+    status: # 状态码
     urls:
     views:
         APIView: # API控制器类
@@ -721,11 +736,27 @@ ModelForm：将Form和Model结合起来的模型
 
 
 
+### Test
+
+测试
+
+
+
+
 ### Contrib
 
 #### Django-Admin
 
 `/admin`：访问admin管理后台
+
+##### ModelAdmin
+
+
+
+### 第三方库
+
+
+#### django-silk
 
 
 
@@ -784,13 +815,16 @@ urlpatterns = [
 ModelSerializer
 
 
-### 视图函数
+### View
 
 原生视图函数
 - 函数视图 `func(request)`
 - 类视图 `View::get(request)`
 
-DRF视图函数
+
+函数视图、类视图、通用视图、视图集
+
+#### @api_view
 ```python
 @api_view(["GET"])
 def course_list(request):
@@ -801,7 +835,25 @@ class MyApi(APIView):
         return Response(data, status)
 ```
 
-函数视图、类视图、通用视图、视图集
+DRF视图函数
+
+#### APIView
+
+原始apiview
+
+#### GenericAPIView
+
+- RetrieveAPIView
+- UpdateAPIView
+- DestroyAPIView
+- ListAPIView
+- CreateAPIView
+- ListCreateAPIView
+- RetrieveUpdateAPIView
+- RetrieveDestroyAPIView
+- RetrieveUpdateDestroyAPIView
+
+
 
 ### 认证/权限
 
