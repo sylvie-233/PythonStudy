@@ -18,8 +18,9 @@ pylint:
         R0903: # 类太简单
         W0611: # 未使用导入
         W0612: # 未使用变量
-    --generate-rcfile:
+    --generate-rcfile: # 生成配置文件
     --output-format:
+    --version:
 ```
 
 
@@ -41,4 +42,29 @@ pylint:
 pylint配置文件
 
 
-## 核心内容
+#### settings.json
+```yaml
+settings.json:
+    editor.formatOnSave:
+    python.formatting.blackArgs:
+    python.formatting.provider:
+        black:
+    python.linting.enabled:
+    python.linting.pylintArgs:
+    python.linting.pylintEnabled:
+```
+
+
+## black
+```yaml
+black:
+    --check:
+    --exclude:
+    --diff:
+    --line-length:
+    --skip-string-normalization:
+    --verbose:
+```
+
+
+代码格式化工具

@@ -292,7 +292,7 @@ std:
     base64: # base64编码
         b64decode():
         b64encode():
-    bdb: # 调试库
+    bdb: # 基础调试库
     binascii: # 二进制转asc码
     bisect: # 二分查找工具
         bisect_left(): # 找到第一个 >= x 的位置
@@ -1093,6 +1093,7 @@ std:
         getsizeof(): # 获取对象内存大小
         setdefaultencoding():
         setrecursionlimit(): # 设置最大递归层数
+        settrace(): # 堆栈钩子(frame, event, arg)
     sysconfig:
     tarfile:
     tempfile:
@@ -1228,7 +1229,9 @@ std:
     tomllib:
         load():
     trace:
-    traceback:
+    traceback: # 堆栈信息
+        format_stack():
+        print_stack():
     tracemalloc: # 内存分配跟踪
         get_traced_memory():
         start():

@@ -45,6 +45,16 @@ mypy:
 ```
 
 
+#### settings.json
+```yaml
+settings.json:
+    python.linting.enabled:
+    python.linting.lintOnSave:
+    python.linting.mypyArgs:
+    python.linting.mypyEnabled:
+```
+
+
 
 ## 核心内容
 ```yaml

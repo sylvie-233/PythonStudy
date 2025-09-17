@@ -63,6 +63,11 @@ settings.py:
         django.contrib.messages:
         django.contrib.staticfiles:
     LANGUAGE_CODE: # 语言
+    REST_FRAMEWORK: # drf配置
+        DEFAULT_AUTHENTICATION_CLASSES:
+        DEFAULT_PAGINATION_CLASS:
+        DEFAULT_PERMISSION_CLASSES:
+        PAGE_SIZE:
     STATIC_URL: # 静态资源url
     STATICFILES_DIRS: # 静态资源目录
     TEMPLATES: # 模板配置
@@ -135,6 +140,7 @@ django:
             verbose_name:
     conf: # 配置
         settings: # 项目配置项引用
+            configure():
         urls:
             static:
                 static():
@@ -199,6 +205,7 @@ django:
         sessions:
         staticfiles:
     core: # 核心
+        exceptions: # 异常
         mail:
             backends:
                 smtp:
@@ -220,6 +227,12 @@ django:
         backends:
             mysql:
             sqlite3:
+        connection:
+            cursor():
+                close():
+                execute():
+                fetchall():
+                rowcount():
         migrations:
             Migration:
                 dependencies:
@@ -302,12 +315,9 @@ django:
             Min(): # 最小值
             Q(): # 查询语句（规范查询嵌套）
             Sum(): # 求和
-        connection:
-            cursor():
-                close():
-                execute():
-                fetchall():
-                rowcount():
+        transaction: # 事务
+            @atomic: # 
+            set_rollback():
     dispatch: # 信号机制
         Signal: # 信号
             send(): # 发送信号
@@ -372,15 +382,18 @@ django:
                 expires:
                 path:
                 domain:
-    shortcuts:
-        HttpResponse: # 基础响应对象
+        HttpRequest: # HTTP请求
+    middleware: # 中间件
+        MiddlewareMixin:
+    shortcuts: # 辅助函数
+        get_list_or_404():
         get_object_or_404():
         redirect():
         render(): # 视图渲染
             context: # 上下文变量
         reverse(): # 反向引用
         reverse_lazy(): # 反向引用
-    template:
+    template: # 模板
         context_processors:
             debug:
             request:
@@ -393,12 +406,12 @@ django:
                 get():
             assertTrue():
             setUp():
-    urls:
-        include():
+    urls: # 路由链接
+        include(): # 路由包含
         path(): # 定义路径 视图函数映射
             name: # 路由命名
-        re_path():
-        reverse(): # 路由反转
+        re_path(): # 正则路由
+        reverse(): # 路由反向引用
             kwargs:
     utils:
         lorem_ipsum:
@@ -415,7 +428,10 @@ django:
 
 rest_framework:
     authentication:
+        BaseAuthentication: # 自定义认证基类
         BasicAuthentication:
+        SessionAuthentication:
+        TokenAuthentication:
     authtoken: # token存储在数据库中
         models:
             Token:
@@ -425,6 +441,15 @@ rest_framework:
         @api_view(): # 视图函数
         @authentication_classes():
         @permission_classes():
+    exceptions: # 异常
+        APIException:
+        AuthenticationFailed:
+        NotFound:
+        PermissionDenied:
+        ValidationError:
+    filters: # 过滤
+        OrderingFilter:
+        SearchFilter:
     generics: # 通用视图
         ListAPIView:
             permission_classes:
@@ -438,15 +463,21 @@ rest_framework:
             perform_create():
         RetrieveAPIView:
             lookup_field:
-    mixins:
+    mixins: # 混入
         DestroyModelMixin:
         UpdateModelMixin:
-    pagination:
-    parsers:
+    pagination: # 分页
+        CursorPagination:
+        LimitOffsetPagination:
+        PageNumberPagination:
+            page_query_param:
+            page_size:
+    parsers: # 请求解析器
         FormParser:
         JSONParser:
         MultiPartParser:
     permissions: # 权限
+        AllowAny:
         BasePermission: # 权限基类
             has_object_permission():
                 request:
@@ -458,10 +489,11 @@ rest_framework:
     renders:
         BrowsableAPIRenderer:
         JSONRenderer:
-    response:
+    response: # 响应    
         Response: # 响应对象
-    routers:
+    routers: # 路由视图
         DefaultRouter:
+            urls:
     schemas:
         AutoSchema:
         get_schema_view():
@@ -492,7 +524,10 @@ rest_framework:
         ValidationError: # 字段校验异常
     status: # 状态码
     urls:
-    views:
+    validators: # 
+        RegexValidator:
+        UniqueValidator:
+    views: # 视图
         APIView: # API控制器类
             authentication_classes: # 认证校验器
             permission_classes:
@@ -500,7 +535,7 @@ rest_framework:
             delete():
             get():
             post():
-    viewsets:
+    viewsets: # 视图集
         ModelViewSet: # 视图集基类
             queryset:
             serializer_class:
@@ -603,6 +638,9 @@ django自带ORM框架
 全局拦截器
 
 
+#### Transactioin
+
+事务
 
 
 #### OneToOneField
@@ -645,8 +683,7 @@ articles = user.article_set.all()
 
 
 
-<br />
-<br />
+
 
 ### 模板引擎
 
@@ -756,6 +793,9 @@ ModelForm：将Form和Model结合起来的模型
 ### 第三方库
 
 
+#### django-filter
+
+
 #### django-silk
 
 
@@ -778,44 +818,21 @@ Django Rest API
 - 测试
 
 
-### 项目配置
-
-#### settings.py
-```yaml
-REST_FRAMEWORK:
-    DEFAULT_AUTHENTICATION_CLASSES:
-    DEFAULT_PAGINATION_CLASS:
-    DEFAULT_PERMISSION_CLASS:
-    DEFAULT_RENDER_CLASSES:
-```
-
-
-DRF项目配置
-
-
-#### urls.py
-```python
-router = DefaultRouter()
-router.register(prefix, viewset)
-
-urlpatterns = [
-    path("/", include("rest_framework.urls"))
-    path("/", router.urls)
-]
-```
-
-可使用Router注册路由
-
-
 
 ### Serializer
 
+序列化器
 可实现字段校验
 
 ModelSerializer
 
 
-### View
+### Parser
+
+请求解析器
+
+
+### Views
 
 原生视图函数
 - 函数视图 `func(request)`
@@ -854,13 +871,33 @@ DRF视图函数
 - RetrieveUpdateDestroyAPIView
 
 
+#### ViewSet
 
-### 认证/权限
+
+#### Router
+```python
+router = DefaultRouter()
+router.register(prefix, viewset)
+
+urlpatterns = [
+    path("/", include("rest_framework.urls"))
+    path("/", router.urls)
+]
+```
+
+
+### Authentication
 
 authtoken、中间件
+
+
+
+### Permission
 
 `permissions.BasePermission::has_object_permission()`
 
 
 
-### API文档
+### API Documetation
+
+api文档

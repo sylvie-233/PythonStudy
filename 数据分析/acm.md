@@ -2457,6 +2457,100 @@ def bellman_ford(n, edges, src):
 单源最短路径算法，可处理负权边（但无负权回路）
 
 
+### 最小生成树
+
+
+#### Kruskal
+```python
+def kruskal(n, edges):
+    # edges = [(w, u, v), ...]
+    edges.sort()
+    parent = list(range(n))
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    mst_weight = 0
+    for w, u, v in edges:
+        ru, rv = find(u), find(v)
+        if ru != rv:
+            parent[ru] = rv
+            mst_weight += w
+    return mst_weight
+
+# 带边集的kruskal
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0]*n  # 用于优化合并树的深度
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # 路径压缩
+        return self.parent[x]
+
+    def union(self, x, y):
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry:
+            return False  # 已经在同一个集合，加入会成环
+        # 按秩合并
+        if self.rank[rx] < self.rank[ry]:
+            self.parent[rx] = ry
+        elif self.rank[rx] > self.rank[ry]:
+            self.parent[ry] = rx
+        else:
+            self.parent[ry] = rx
+            self.rank[rx] += 1
+        return True
+        
+def kruskal(n, edges):
+    # edges: List of (u, v, w)
+    edges.sort(key=lambda x: x[2])  # 按权重排序
+    uf = UnionFind(n)
+    mst = []
+    total_weight = 0
+
+    for u, v, w in edges:
+        if uf.union(u, v):
+            mst.append((u, v, w))
+            total_weight += w
+            if len(mst) == n - 1:
+                break
+
+    return total_weight, mst
+```
+
+
+对图所有边按权值排序，依次选取不构成环的最小边
+
+
+
+#### Prim
+```python
+import heapq
+def prim(n, adj, src=0):
+    visited = [False]*n
+    visited[src] = True
+    hq = []
+    for v, w in adj[src]:
+        heapq.heappush(hq, (w, v))
+    mst_weight = 0
+    while hq:
+        w, u = heapq.heappop(hq)
+        if visited[u]: continue
+        visited[u] = True
+        mst_weight += w
+        for v, w2 in adj[u]:
+            if not visited[v]:
+                heapq.heappush(hq, (w2, v))
+    return mst_weight
+```
+
+Prim（最小生成树Prim算法）：从一个起点开始，逐步向树中添加到外部节点的最小权边
+
+
+
 ### Tarjan
 
 Tarjan 算法是一种基于 DFS 的图遍历算法，主要用于：
@@ -2751,97 +2845,6 @@ dfs增广路径
 #### 树的直径
 #### 树的重心
 
-### 最小生成树
-
-
-#### Kruskal
-```python
-def kruskal(n, edges):
-    # edges = [(w, u, v), ...]
-    edges.sort()
-    parent = list(range(n))
-    def find(x):
-        while parent[x] != x:
-            parent[x] = parent[parent[x]]
-            x = parent[x]
-        return x
-    mst_weight = 0
-    for w, u, v in edges:
-        ru, rv = find(u), find(v)
-        if ru != rv:
-            parent[ru] = rv
-            mst_weight += w
-    return mst_weight
-
-# 带边集的kruskal
-class UnionFind:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.rank = [0]*n  # 用于优化合并树的深度
-
-    def find(self, x):
-        if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])  # 路径压缩
-        return self.parent[x]
-
-    def union(self, x, y):
-        rx, ry = self.find(x), self.find(y)
-        if rx == ry:
-            return False  # 已经在同一个集合，加入会成环
-        # 按秩合并
-        if self.rank[rx] < self.rank[ry]:
-            self.parent[rx] = ry
-        elif self.rank[rx] > self.rank[ry]:
-            self.parent[ry] = rx
-        else:
-            self.parent[ry] = rx
-            self.rank[rx] += 1
-        return True
-        
-def kruskal(n, edges):
-    # edges: List of (u, v, w)
-    edges.sort(key=lambda x: x[2])  # 按权重排序
-    uf = UnionFind(n)
-    mst = []
-    total_weight = 0
-
-    for u, v, w in edges:
-        if uf.union(u, v):
-            mst.append((u, v, w))
-            total_weight += w
-            if len(mst) == n - 1:
-                break
-
-    return total_weight, mst
-```
-
-
-对图所有边按权值排序，依次选取不构成环的最小边
-
-
-
-#### Prim
-```python
-import heapq
-def prim(n, adj, src=0):
-    visited = [False]*n
-    visited[src] = True
-    hq = []
-    for v, w in adj[src]:
-        heapq.heappush(hq, (w, v))
-    mst_weight = 0
-    while hq:
-        w, u = heapq.heappop(hq)
-        if visited[u]: continue
-        visited[u] = True
-        mst_weight += w
-        for v, w2 in adj[u]:
-            if not visited[v]:
-                heapq.heappush(hq, (w2, v))
-    return mst_weight
-```
-
-Prim（最小生成树Prim算法）：从一个起点开始，逐步向树中添加到外部节点的最小权边
 
 
 ### LCA
