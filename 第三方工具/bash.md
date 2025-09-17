@@ -18,7 +18,7 @@ bash:
         remove:
         update:
         upgrade:    
-    awk: # Aho, Weinberger, Kernighan	基于字段的文本分析与报告
+    awk: # Aho, Weinberger, Kernighan 基于字段的文本分析与报告
         -f: # 从脚本文件中读取 awk 命令
         -v: # 向 awk 传入 shell 变量
         -F: # 指定字段分隔符

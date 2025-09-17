@@ -1,6 +1,6 @@
 # Django
 
-`Django REST Framework series: P10`
+`Django REST Framework series: P15`
 
 ## 基础介绍
 
@@ -456,6 +456,7 @@ rest_framework:
             queryset:
             serializer_class:
             as_view():
+            get_permissions():
             get_queryset():
         ListCreateAPIView:
             queryset:
