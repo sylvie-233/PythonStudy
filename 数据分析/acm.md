@@ -1125,11 +1125,6 @@ class Stack:
 ```
 
 #### 单调栈
-
-找每个数第一个比它小的数
-- 维护一个递增的单调栈
-- 栈中维护数组索引
-- 栈中元素被弹出时即找到了第一个比它小的数
 ```python
 def next_smaller_elements(nums):
     n = len(nums)
@@ -1145,6 +1140,13 @@ def next_smaller_elements(nums):
 
     return res
 ```
+
+
+
+找每个数第一个比它小的数
+- 维护一个递增的单调栈
+- 栈中维护数组索引
+- 栈中元素被弹出时即找到了第一个比它小的数
 
 
 

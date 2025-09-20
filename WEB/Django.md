@@ -1,6 +1,6 @@
 # Django
 
-`Django REST Framework series: P15`
+`Django REST Framework series: P28`
 
 ## 基础介绍
 
@@ -46,6 +46,11 @@ settings.py:
     AUTH_USER_MODEL:
     AUTHENTICATION_BACKENDS: # 认证后端
         django.contrib.auth.backends.ModelBackend:
+    CACHES: # 缓存
+        default:
+            BACKEND:
+            LOCATION:
+            OPTIONS:
     DATABASE_ROUTERS: # 数据库路由器（基于规则切换数据源）
     DATABASES: # 数据库配置（可动态切换）
         default: # 默认数据库
@@ -117,6 +122,7 @@ manage.py:
     makemigrations: # 生成数据库迁移文件
     migrate: # 数据库迁移
     runserver: # 开发服务器运行
+    spectacular: # 
     startapp: # 生成项目app
 ```
 
@@ -205,6 +211,9 @@ django:
         sessions:
         staticfiles:
     core: # 核心
+        cache: # 缓存
+            cache:
+                delete_pattern():
         exceptions: # 异常
         mail:
             backends:
@@ -414,14 +423,21 @@ django:
         reverse(): # 路由反向引用
             kwargs:
     utils:
+        decorators: # 装饰器
+            @method_decorator:
         lorem_ipsum:
     views: # 视图函数
         decorators:
+            cache:
+                @cache_page(): # 
             csrf:
                 @csrf_exempt():
                 @csrf_protect():
             http:
                 @require_http_methods():
+            vary:
+                @vary_on_cookie():
+                @vary_on_headers():
         View:
     VERSION: # 版本
     get_version():
@@ -438,6 +454,9 @@ rest_framework:
         views:
             obtain_auth_token:
     decorators:
+        @action(): # viewsets url标注
+            detail:
+            method:
         @api_view(): # 视图函数
         @authentication_classes():
         @permission_classes():
@@ -448,12 +467,23 @@ rest_framework:
         PermissionDenied:
         ValidationError:
     filters: # 过滤
+        BaseFilterBackend: # 过滤器基类
+            filter_queryset(): # (request,queryset,view)
         OrderingFilter:
         SearchFilter:
     generics: # 通用视图
         ListAPIView:
+            filter_backends:
+            filterset_class:
+            ordering_fields:
+            pagination_class:
+                max_page_size:
+                page_query_param:
+                page_size:
+                page_size_query_param:
             permission_classes:
             queryset:
+            search_fields:
             serializer_class:
             as_view():
             get_permissions():
@@ -524,6 +554,10 @@ rest_framework:
             validate_field():
         ValidationError: # 字段校验异常
     status: # 状态码
+    throttling: # 限流
+        AnonRateThrottle:
+        ScopedRateThrottle:
+        UserRateThrottle:
     urls:
     validators: # 
         RegexValidator:
@@ -538,13 +572,29 @@ rest_framework:
             post():
     viewsets: # 视图集
         ModelViewSet: # 视图集基类
+            Meta:
+                extra_kwargs:
+                fields:
+                model:
             queryset:
             serializer_class:
             as_view():
                 get:
                 post:
+            create(): # 创建
+            destroy(): # 删除
+            get_queryset():
+            list():
+            partial_update():
             perform_create():
                 serializer:
+            retrieve(): # 根据主键获取详情
+            update(): # 更新
+django_filters:
+    FilterSet:
+django_redis:
+    cache:
+        RedisCache:
 ```
 
 
@@ -578,10 +628,6 @@ urls嵌套 -> include()引入 （实现路由嵌套）
 
 
 
-<br />
-<br />
-
-
 ### 参数校验
 
 Form可实现表单参数校验、ModelForm自定义表单字典校验：`Form.clean_[field]()`
@@ -611,8 +657,6 @@ ModelForm: 根据模型（Model）自动生成表单字段，并支持直接保�
 {% csrf_token %}
 ```
 
-<br />
-<br />
 
 
 ### 异常处理
@@ -793,11 +837,25 @@ ModelForm：将Form和Model结合起来的模型
 
 ### 第三方库
 
+#### django-celery
+
+定时任务
+
+#### django-extensions
 
 #### django-filter
 
+字段过滤查询
+View视图查询功能增强
+
+
+#### django-redis
+
+redis缓存
 
 #### django-silk
+
+接口性能检查
 
 
 
@@ -823,7 +881,8 @@ Django Rest API
 ### Serializer
 
 序列化器
-可实现字段校验
+- 可实现字段校验
+- 响应结果封装
 
 ModelSerializer
 
@@ -886,6 +945,10 @@ urlpatterns = [
 ]
 ```
 
+### Filter
+
+查询过滤
+
 
 ### Authentication
 
@@ -895,10 +958,17 @@ authtoken、中间件
 
 ### Permission
 
+权限
 `permissions.BasePermission::has_object_permission()`
 
 
 
-### API Documetation
+### Third Party Library
 
+
+#### drf-spectacular
 api文档
+`drf-spectacular` openapi文档
+
+
+
