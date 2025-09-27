@@ -356,7 +356,7 @@ std:
             pop():
             remove():
             update():
-        slice:
+        slice: # 切片
         str: # 字符串
             encode(): # 编码
             format(): # 格式化字符串
@@ -554,13 +554,16 @@ std:
     copyreg:
     csv:
     ctypes:
-    dataclasses:
+    dataclasses: # 数据类
         @dataclass(): # 数据类dataclass
-            order:
+            order: # 字段排序
             __post_init():
         asdict():
-        field():
-            default_factory:
+        field(): # 数据类 字段定义
+            compare:
+            default:
+            default_factory: # 默认值工厂
+            repr: # 打印字段
     datetime: # 日期相关
         date: # 日期
             day:
@@ -1257,7 +1260,7 @@ std:
         Set: # 集合
         Tuple: # 元组
         TypeAlias: # 类型别名
-        TypeVar: # 类型变量T
+        TypeVar: # 类型变量T 泛型
         TypedDict:
         Union: # 联合类型
     unicodedata:
@@ -1603,6 +1606,49 @@ Control Flow:
 列表推导式、字典推导式、集合推导式
 
 参数解构：`*args`、`**kwargs`
+
+
+#### Match
+```python
+# 条件匹配
+x = 5
+
+match x:
+    case n if n > 0:
+        print("Positive")
+    case n if n < 0:
+        print("Negative")
+
+
+# 类型匹配
+data = [1, 2, 3]
+
+match data:
+    case list():
+        print("It's a list")
+    case dict():
+        print("It's a dict")
+
+
+# 解构匹配
+point = (1, 2)
+
+match point:
+    case (0, 0):
+        print("Origin")
+    case (x, 0):
+        print(f"X={x} on X-axis")
+    case (0, y):
+        print(f"Y={y} on Y-axis")
+    case (x, y):
+        print(f"Point ({x}, {y})")
+```
+
+
+模式匹配
+- 条件匹配
+- 匹配类型
+- 解构列表/元组
 
 
 
@@ -2245,6 +2291,7 @@ print(pair1.get_second())  # 输出：Hello
 
 
 支持绝对路径、相对路径
+- 使用相对路径导入的脚本不能直接运行（`__package__`为None）
 
 
 module -> package -> library （模块、包、库、框架 逐渐变大）

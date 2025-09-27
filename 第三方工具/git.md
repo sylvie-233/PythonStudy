@@ -422,14 +422,20 @@ SubModule进阶版
 
 ## github
 
+### github pages
+
+
+静态页面托管
+- user
+- project
+
+
+
 ### github desktop
 
 github官方GUI工具
 
 ### github workflow
-
-
-.github目录结构
 ```yaml
 /.github:
     /workflows: # GitHub Actions 工作流 (CI/CD 配置)
@@ -446,6 +452,10 @@ github官方GUI工具
 ```yaml
 Actions.yaml:
     name: # 工作流名
+    env: # 环境变量 ${{ }}
+        github:
+            events:
+                inputs:
     on: # 工作流触发条件
         push:
             branches:
@@ -453,16 +463,39 @@ Actions.yaml:
         schedule:
             cron:
         workflow_dispatch:
-    jobs: # 定义多个任务
-        _:
+            inputs:
+                _arg:
+                    description:
+                    required:
+    jobs: # 工作流中 定义多个任务
+        _job:
             if: # 条件触发
             needs: # 任务依赖关系
+            permissions:
+                contents:
+                    write:
             runs-on: # 运行环境
+                ubantu-latest:
+                windows-latest:
             steps: # 任务执行步骤
-                name: # 直接运行命令
-                run:
+                name: 
+                env: # 环境变量 
+                run: # 直接运行命令
                 uses:
-                with:
+                    actions/checkout@v4: # 拉取仓库
+                    actions/download-artifact@v4:
+                    actions/setup-go@v4:
+                    actions/upload-artifact@v4:
+                    docker/build-push-action@v5: # docker构建推送
+                    docker/login-action@v3: # docker登录
+                    docker/setup-buildx-action@v2:
+                    JamesIves/github-pages-deploy-action@v4: # github pages发布
+                    oven-sh/setup-bun@v2:
+                    softprops/action-gh-release@v1:
+                with: # 额外参数
+                    branch:
+                    folder:
+
 ```
 
 
