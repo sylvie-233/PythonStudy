@@ -11,10 +11,27 @@
 ## 核心内容
 ```yaml
 docx:
-    Document:
+    oxml:
+        ns:
+        OxmlElement:
+    section:
+        Sections: # 章节
+    shared:
+        Cm:
+    table:
+        Table: # 表格
+            cell(): # 获取单元格
+                paragraphs:
+    text:
+        paragraph:
+            Paragraph: # 段落
+    Document: # 文档
         paragraphs: 
             text:
+            add_run():
+            clear(): # 清理
         add_heading():
+        add_page_break(): # 插入分页
         add_paragraph():
         add_picture():
         add_run():
