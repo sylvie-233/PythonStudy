@@ -17,9 +17,10 @@ gRPC核心功能：
 - 使用生成的Stub客户端存根绑定Channel连接，调用Server rpc服务
 
 
+`pip install grpcio grpcio-tools`
 pip依赖：
-- grpcio
-- grpc-tools
+- grpcio: gRPC 核心库
+- grpc-tools: 用于从 .proto 文件生成 Python 文件
 - protobuf
 
 

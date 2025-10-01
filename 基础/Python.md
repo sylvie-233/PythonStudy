@@ -120,7 +120,13 @@ pdb:
 python调试工具
 
 
-
+### ipython 
+```yaml
+ipython:
+    profile:
+        crete: 
+        locate:
+```
 
 
 ### pyproject.toml

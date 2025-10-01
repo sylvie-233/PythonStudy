@@ -32,7 +32,7 @@ pylint:
         indent-string:
     MAIN: # 主配置
     MESSAGES CONTROL: # 消息控制
-        disable:
+        disable: # 经用
             trailing-whitespace:
     TYPECHECK: # 类型检查
         ignored-modules:

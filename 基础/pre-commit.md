@@ -13,14 +13,14 @@ pre-commit:
     install: # 安装脚本到.git目录下
     run: # 手动运行脚本
         --all-files:
-    uninstall:
+    uninstall: # 卸载脚本
 ```
 
 
 #### .pre-commit-config.yaml
 ```yaml
 .pre-commit-config.yaml:
-    repos: # 仓库，可配置多个repo
+    repos: # 脚本仓库，可配置多个repo
         repo:
         rev: # 版本
         hooks: # hooks

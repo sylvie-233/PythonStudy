@@ -16,10 +16,10 @@
 ```yaml
 setup.py:
     --formats: # 压缩格式
-    bdist: # 二进制打包（）
+    bdist: # 二进制打包
         bdist_egg:
         bdist_wheel:
-    build:
+    build: # 构建build
     build_ext:
     check: # 配置错误检查
     clean:
