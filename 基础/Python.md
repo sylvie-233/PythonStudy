@@ -82,6 +82,7 @@ pip:
     freeze: # 输出已安装包（requirements format）
     hash:
     install: # 安装包
+        -e: # 编辑模式安装（软连接）
     list: # 列出已安装包
     search: # 搜索包
     show:
@@ -919,6 +920,7 @@ std:
             iterdir(): # 目录迭代
             joinpath():
             mkdir():
+            open(): # 打开文件
             read_bytes():
             read_text(): # 读取文本内容
             rglob(): # 文件匹配
@@ -1259,15 +1261,15 @@ std:
         Literal: # 字面量
         Mapping:
         NamedTuple:
-        NewType: # 自定义类型
+        NewType: # 自定义类型（新建）
         NoReturn:
         Optional: # 可选参数
         Sequence: # 只读列表
         Set: # 集合
         Tuple: # 元组
         TypeAlias: # 类型别名
-        TypeVar: # 类型变量T 泛型
-        TypedDict:
+        TypeVar: # 类型变量T 泛型（新建）（原生支持泛型语法了）
+        TypedDict: # 类型字典基类
         Union: # 联合类型
     unicodedata:
     unittest: # 单元测试 test*.py
@@ -2512,8 +2514,8 @@ site 模块是 Python 启动时自动导入的模块，负责设置环境路径�
 
 #### pyi
 
-.pyi文件声明c扩展库中有哪些函数
-
+.pyi类型文件声明
+`types-xxx`类型声明库
 
 
 #### pyd

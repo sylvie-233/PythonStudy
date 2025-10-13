@@ -19,6 +19,8 @@ uv:
     export: # 导出lock文件
     help:
     init: # 新建项目脚手架
+        --app:
+        --lib:
     lock: # 生成 第三方包 版本文件
     pip: # pip包管理
         check:
@@ -33,7 +35,7 @@ uv:
     publish:
     python: # python解释器
         install: # 安装其它python版本
-        list:
+        list: # 列出可安装python
     remove: # 移除依赖
     run: # 运行
     self: # 自更新 uv 本身
@@ -41,8 +43,12 @@ uv:
         --system:
     tool: # uv 工具链
         dir: # 工具链安装目录
-        install:
-        run: # 运行工具
+        install: # 安装工具
+        run: # 运行工具 
+            ruff:
+        uninstall:
+        update-shell:
+        upgrade:
     tree: # 依赖树
     venv: # 虚拟环境
         --python:
