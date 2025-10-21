@@ -1,5 +1,7 @@
 # Grafana
 
+`k8s + loki 日志解决方案: P6`
+
 
 ## 基础介绍
 
@@ -18,8 +20,10 @@
 ## Loki
 
 
-日志聚合系统
+日志聚合系统、支持集群部署
 index + chunk
+
+![Loki架构图.png](../.assets/Loki架构图.png)
 
 
 
@@ -29,6 +33,7 @@ index + chunk
 日志收集器
 
 
+## AlertManager
 
 
 
