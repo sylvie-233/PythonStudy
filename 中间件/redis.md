@@ -5,6 +5,39 @@
 ## 基础介绍
 
 
+内容k-v数据库
+
+
+Docker Compose安装：
+```yaml
+name: sylvie233-pythontest
+
+services:
+  redis:
+    image: redis:7.4.5
+    container_name: redis
+    ports:
+      - "6379:6379"    # 映射本地端口
+    environment:
+      REDIS_PASSWORD: "123456"  # 设置访问密码
+    command: ["redis-server", "--requirepass", "123456"]  # 强制密码访问
+    volumes:
+      - redis_data:/data   # 持久化数据
+    restart: unless-stopped
+    networks: 
+      - sylvie233-network
+
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  sylvie233-network:
+    driver: bridge
+```
+
+
+
 ### redis-server
 ```yaml
 redis-server:

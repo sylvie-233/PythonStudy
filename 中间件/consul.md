@@ -30,6 +30,40 @@ Consul架构：
 - Datacenter：逻辑上的一个 Consul 集群
 
 
+Docker Compose安装：
+```yaml
+name: sylvie233-consul
+
+version: '3.8'
+
+services:
+  consul:
+    image: hashicorp/consul:latest
+    container_name: consul
+    ports:
+      - "8500:8500"    # Web UI & HTTP API
+      - "8600:8600/udp" # DNS
+    environment:
+      CONSUL_BIND_INTERFACE: ""       # Docker Desktop 不绑定具体接口
+      CONSUL_CLIENT_ADDR: 0.0.0.0    # 监听所有 IP
+      CONSUL_DATA_DIR: /consul/data
+      CONSUL_ENABLE_UI: "true"
+    command: "agent -server -bootstrap -ui -client=0.0.0.0"
+    volumes:
+      - consul_data:/consul/data
+    networks:
+      - sylvie233-network
+
+volumes:
+  consul_data:
+    driver: local
+
+networks:
+  sylvie233-network:
+    driver: bridge
+```
+
+
 - Consul服务域名规则：`服务名.service.consul`
 - 自己的应用是直接连接Agent Client就行
 - 每台机器都要运行一个Agent（Client 模式）

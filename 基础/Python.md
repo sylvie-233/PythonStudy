@@ -227,7 +227,7 @@ std:
             result(): # 同步获取结果
             set_exception():
             set_result():
-        TaskGroup:
+        TaskGroup: # 任务组，结合上下文管理使用，自动等待组内所有task完成
         @coroutine: # 装饰器定义协程函数
         all_tasks():
         as_completed():
@@ -244,6 +244,7 @@ std:
             create_future():
             create_task(): # 根据co对象创建task
             run_forever():
+            run_in_executor():
             run_until_complete(): # 运行所有任务
             stop():
         new_event_loop(): # 新建事件循环
@@ -344,7 +345,7 @@ std:
         list: # 列表
             append(): # 添加元素
             clear():
-            copy():
+            copy(): # 拷贝
             count():
             extend():
             index():
@@ -355,22 +356,28 @@ std:
             sort(): # 排序
         object:
         set:
-            add():
-            clear():
+            add(): # 添加元素
+            clear(): # 清空元素
             difference():
+            difference_update(): # 差集替换
             intersection():
-            issubset():
+            isdisjoint(): # 无交集
+            issubset(): # 子集
+            issuperset(): # 超集
             pop():
             remove():
-            update():
+            symmetric_difference(): # 异或
+            update(): # 替换集合
         slice: # 切片
         str: # 字符串
+            count(): # 统计计数
             encode(): # 编码
+            find(): # 索引查找
             format(): # 格式化字符串
             isalpha(): # 字符判断
             isdigit(): # 数字字符判断
             join(): # 以指定字符串拼接字符串数组
-            replace():
+            replace(): # 替换
             split(): # 字符串分隔
             startswith():
             strip(): # 剔除空白符
@@ -403,7 +410,7 @@ std:
         eval(): # 执行字符串表达式，有返回值
         exce(): # 执行字符串脚本，无返回值
         exit(): # 程序退出
-        filter(): # 元素过滤
+        filter(): # 元素过滤 filter(func, seq)
         format():
         getattr(): # 反射，访问属性
         globals():
@@ -417,7 +424,7 @@ std:
         iter(): # 可迭代对象转迭代器
         len():
         max():
-        map(): # 数组转换
+        map(): # 数组转换 map(func, seq)
         next(): # 取出迭代器下一个元素
         open(): # 打开文件
             encoding: # 编码
@@ -486,8 +493,10 @@ std:
         deque: # 双端队列
             append():
             appendleft():
+            extendleft(): # 
             pop():
             popleft():
+            rotate(): # 尾部元素放到首部 
         namedtuple: # 结构化元组，轻量版类，支持自定义索引key
             _asdict():
             _fields():
@@ -498,6 +507,7 @@ std:
             most_common(): # 输出出现次数最多的n个
             subtract():
             update():
+            values():
         Generator: # 生成器
         Iterable: # 可迭代对象
         OrderedDict: # 保持插入顺序的字典
@@ -557,6 +567,7 @@ std:
         @contextmanager:
     contextvars: # 上下文变量
     copy: # 拷贝
+        copy(): # 浅拷贝
         deepcopy(): # 深拷贝
     copyreg:
     csv:
@@ -667,7 +678,7 @@ std:
         cmp_to_key(): # 常用于sorted排序中，将旧式比较函数转为 key
         partial(): # 偏函数，函数绑定
         partialmethod(): # 偏函数，类方法版本的 partial
-        reduce(): # 迭代计数
+        reduce(): # 迭代计数 reduce(func, seq, init)
         update_wrapper(): # wraps 的底层函数，用于自定义保留哪些属性
             assigned:
             updated:
@@ -761,12 +772,12 @@ std:
         ip_address():
             version:
     itertools: # 迭代工具库
-        accumulate(): # 累积和（可自定义函数）
+        accumulate(): # 前缀累积和（可自定义函数）
         chain(): # 合并，链接多个可迭代对象
         combinations(): # 组合
         combinations_with_replacement(): # 允许重复的组合
         compress(): # 按选择器布尔值过滤数据
-        count(): # 计数器，可迭代，无限
+        count(): # 计数器，可迭代，无限 
             start:
         cycle(): # 无限重复一个序列
         dropwhile(): # 条件为 True 时丢弃元素
@@ -820,7 +831,7 @@ std:
                 threadName:
             level:
         critical():
-        debug():
+        debug(): # debug info warning error critical
         error():
         getLogger(): # 返回日志记录器Logger
             addHandler(): # 添加日志处理器
@@ -853,18 +864,26 @@ std:
                 join():
                 map():
                 map_async():
+        Array:
+        Lock: # 互斥锁
+            acquire():
+            release():
         Process: # 进程
             target:
             join():
             start():
         Queue: # 进程通信队列
+            empty():
+            get():
+            put():
         Value: # 共享内存
             value:
         cpu_count(): # cpu个数
     netrc:
     numbers:
-    operator: # 运算符
+    operator: # 运算符，常与itertools库联用
         attrgetter:
+        mul: # 
         itemgetter:
     optparse:
     os: # 操作系统相关（文件、路径）
@@ -942,15 +961,22 @@ std:
     	profile:
     pydoc:
     queue: # 队列
-        Queue: # 线程通信队列
+        Queue: # 线程通信队列，类似golang中的channel
+            get():
+            join():
+            put():
+            task_down():
     random: # 随机数
         SystemRandom:
-        choice(): # 随机返回一个字符
+        choice(): # 随机返回序列元素
+        normalvariate():
         randint(): # 随机整数
         randrange():
-        random(): # 随机浮点数
-        sample(): # 采样（随机返回多个字符）
+        random(): # 随机浮点数 0~1
+        sample(): # 采样（随机返回多个元素）
+        seed(): # 设置随机种子
         shuffle(): # 随机排列
+        uniform():
     re: # 正则表达式
         I: # 忽略大小写
         M: # 多行模式
@@ -983,6 +1009,10 @@ std:
     reprlib:
     runpy:
     sched:
+    secrets:
+        choice():
+        randbelow():
+        randbits():
     select:
     selectors:
     shelve:
@@ -1126,12 +1156,15 @@ std:
             clear():
             set():
             wait():
-        Lock:
+        Lock: # 互斥锁，可使用上下文管理
+            acquire():
+            release():
         RLock:
         Semaphore: # 信号量
             acquire():
             release():
         Thread: # 线程对象
+            daemon: # 守护线程
             name: # 线程名
             getName():
             is_alive():
@@ -1169,6 +1202,8 @@ std:
             %Y: # 年
         time(): # 获取时间戳（1970.1.1）
         time_ns(): # 纳秒时间戳
+    timeit: # 执行时间测量
+        default_timer:
     tkinter:
         colorchooser:
         font:
@@ -1693,10 +1728,17 @@ except MyCustomError as e:
 #### Context Manager
 
 with语句（类中），`__enter__()`、`__exit__()`
-`@contextmanager`+生成器函数
+```python
+class Manage:
+    def __enter__(self):
+        pass
 
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        pass
+```
 
 上下文管理可以与装饰器结合起来
+`@contextmanager`+生成器函数
 ```python
 @contextmanager
 def change_dir(path: str):

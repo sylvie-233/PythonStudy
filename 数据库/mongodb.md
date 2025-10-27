@@ -10,6 +10,37 @@
 - 27017
 
 
+Docker Compose安装：
+```yaml
+name: sylvie233-mongodb
+
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"   # 默认 MongoDB 端口
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sylvie233
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: mydb  # 可选，初始化数据库
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - sylvie233-network
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  sylvie233-network:
+    driver: bridge
+```
+
+
 ### mongo
 ```yaml
 mongo:
@@ -25,7 +56,7 @@ mongo:
 mongodb客户端命令
 
 
-#### mongod
+### mongod
 ```yaml
 mongod:
     --config: # 配置文件
@@ -36,26 +67,26 @@ mongod:
 mongodb服务端命令
 
 
-#### bsondump
+### bsondump
 
-#### mongodump
+### mongodump
 ```yaml
 mongodump:
 
 ```
 
 
-#### mongoexport
+### mongoexport
 
-#### mongoimport
-
-
-#### mongostat
-
-#### mongotop
+### mongoimport
 
 
-#### mongofiles
+### mongostat
+
+### mongotop
+
+
+### mongofiles
 
 ## 核心内容
 ```yaml

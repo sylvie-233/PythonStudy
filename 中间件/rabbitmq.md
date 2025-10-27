@@ -67,6 +67,30 @@ RabbitMQ核心问题：
 
 
 
+Docker Compose安装：
+```yaml
+name: sylvie233-pythontest
+
+services:
+  rabbitmq:
+    image: rabbitmq:4.1.4-management   # 使用 4.x 版本
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: 123456
+    ports:
+      - "5672:5672"     # AMQP 客户端连接
+      - "15672:15672"   # 管理控制台
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq  # 本地 volume 持久化
+
+volumes:
+  rabbitmq_data:
+    driver: local
+```
+
+
+
 
 ### rabbitmq-server
 ```yaml

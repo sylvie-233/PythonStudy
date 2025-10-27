@@ -6,6 +6,47 @@
 
 分布式搜索引擎
 
+Docker Compose安装：
+```yaml
+name: sylvie233-pythontest
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: elasticsearch
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"         # 设置 JVM 堆 2GB
+      - ELASTIC_PASSWORD=123456              # Elasticsearch 登录密码
+      - xpack.security.enabled=true           # 开启账号密码认证
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    command: >
+      bash -c "
+      elasticsearch-plugin install https://release.infinilabs.com/analysis-ik/stable/elasticsearch-analysis-ik-8.11.0.zip --batch &&
+      /usr/local/bin/docker-entrypoint.sh"
+    networks:
+      - sylvie233-network
+
+volumes:
+  esdata:
+    driver: local
+
+networks:
+  sylvie233-network:
+    driver: bridge
+```
+
 
 
 ## 核心内容

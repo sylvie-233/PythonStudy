@@ -19,7 +19,68 @@ Kafka核心概念：
 
 
 Docker Compose安装：
+```yaml
+name: sylvie233-pythontest
 
+version: '3.8'
+
+services:
+  kafka:
+    image: confluentinc/cp-kafka:8.1.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      # 启用 KRaft 模式（不依赖 Zookeeper）
+      KAFKA_KRAFT_MODE: "true"
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_NODE_ID: 1
+
+      # 监听器配置
+      KAFKA_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@localhost:9093"
+
+      # 基本参数
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+      # 允许明文访问
+      KAFKA_ALLOW_PLAINTEXT_LISTENER: "yes"
+
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - sylvie233-network
+
+  kafka-ui:
+    image: rootpublic/kafka-ui:0.7.2_rootio
+    container_name: kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+    networks:
+      - sylvie233-network
+
+
+volumes:
+  kafka_data:
+    driver: local
+
+networks:
+  sylvie233-network:
+    driver: bridge
+```
 
 
 

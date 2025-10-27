@@ -33,4 +33,6 @@ consul:
         kv: # KV
             get():
                 index:
+                wait:
+            put():
 ```
