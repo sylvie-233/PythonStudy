@@ -3,7 +3,7 @@
 
 ## 基础介绍
 
-Python HTTP 客户端库，它支持同步和异步请求，是 requests 库的一个强大替代品
+Python HTTP 新一代客户端库，它支持同步和异步请求，是 requests 库的一个强大替代品
 
 ## 核心内容
 ```yaml
@@ -12,6 +12,7 @@ httpx:
         base_url:
         headers:
         timeout:
+        ---
         get():
         post():
     Client:

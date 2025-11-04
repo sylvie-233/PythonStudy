@@ -4,12 +4,45 @@
 ## 基础介绍
 
 分布式服务注册、发现、配置管理中心
+一个高可用的、强一致的树形节点ZNode存储系统
 
 依赖Java运行环境
-默认只有一个根节点 /、默认持久节点
+默认只有一个根节点、默认持久节点
 
 
+Docker Compose安装：
+```yaml
+version: '3.8'
+name: sylvie233-zookeeper
 
+services:
+  zookeeper:
+    image: zookeeper:3.9.3
+    container_name: zookeeper
+    restart: unless-stopped
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+      # 移除 ZOO_PORT，使用默认值
+      # 单机模式不需要 ZOO_SERVERS，或者正确配置
+      ZOO_STANDALONE_ENABLED: "true"
+      # 或者完全移除 ZOO_SERVERS 对于单机模式
+    volumes:
+      - zookeeper_data:/data
+      - zookeeper_datalog:/datalog
+    healthcheck:
+      test: ["CMD", "zkServer.sh", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  zookeeper_data:
+    driver: local
+  zookeeper_datalog:
+    driver: local
+```
 
 
 树状节点系统：
@@ -59,6 +92,20 @@ Leader 选举：
 - ZK 集群使用 ZAB 协议（Zookeeper Atomic Broadcast）
 - 集群启动时会自动选出一个 Leader，其他是 Follower
 - 所有写请求都由 Leader 处理，读请求可由任意节点处理
+
+
+
+- Zookeeper端口：如果是单节点，只需要映射 2181 即可；集群模式要暴露 2888 与 3888
+    - 2181：客户端连接
+    - 2888：集群中 leader 与 follower 通信
+    - 3888：集群选举端口
+- 默认节点zookeeper、持久化节点
+    - config
+    - quota
+- zookeeper实现服务注册常使用临时顺序节点
+    - 服务名为父节点
+    - 服务实例为子节点（临时、顺序）
+    - 子节点的值为服务实例的ip:port
 
 
 
@@ -127,12 +174,12 @@ zookeeper:
     delete: # 删除节点
     exists: # 检查节点是否存在
         watch:
-    get: # 	获取节点内容
+    get: # 获取节点内容
         watch: # 监听节点
     help: # 显示所有支持命令
     history: # 查看命令历史记录
     ls: # 列出子节点
-    ls2: # 	同 ls，但带上状态信息
+    ls2: # 同 ls，但带上状态信息
     quit: # 退出客户端
     redo: # 重复执行历史命令
     rmr: # 递归删除节点及其子节点

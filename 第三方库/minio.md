@@ -5,6 +5,8 @@
 
 MinIO SDK
 
+- 创建的Bucket桶默认是private私有的，得设置公共访问策略
+
 
 ## 核心内容
 ```yaml

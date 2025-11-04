@@ -10,6 +10,38 @@
 - TCL：事务控制语言
 
 
+Docker Compose安装：
+```yaml
+name: sylvie233
+
+services:
+  # MySQL数据库服务
+  mysql:
+    # 使用官方MySQL镜像
+    image: mysql:8.0
+    container_name: sylvie233-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-123456}
+      MYSQL_DATABASE: ${DB_NAME:-testms}
+      MYSQL_USER: ${DB_USER:-sylvie233}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-123456}
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/scripts/init-database.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sylvie233-network
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+```
+
+
 系统默认库
 - information_schema
 - mysql
