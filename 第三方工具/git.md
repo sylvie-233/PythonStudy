@@ -510,12 +510,91 @@ Actions.yaml:
 可本地搭建
 
 
+Docker Compose安装：
+```yaml
+version: '3.8'
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    restart: always
+    hostname: 'gitlab'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://192.168.60.188'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2224
+    ports:
+      - '80:80'
+      - '2224:22'
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+    networks:
+      - gitlab-net
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    restart: always
+    depends_on:
+      - gitlab
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - gitlab-runner-config:/etc/gitlab-runner
+    networks:
+      - gitlab-net
+
+volumes:
+  gitlab-config:
+    driver: local
+  gitlab-logs:
+    driver: local
+  gitlab-data:
+    driver: local
+  gitlab-runner-config:
+    driver: local
+
+networks:
+  gitlab-net:
+    driver: bridge
+```
+
+
+- 默认账号：root、密码从`docker exec -it gitlab cat /etc/gitlab/initial_root_password`中获取
+- runner注册：`docker exec -it gitlab-runner gitlab-runner register`，从gitlab中拿token
+
+
 
 ### gitlab-ctl
 ```yaml
 gitlab-ctl:
+    reconfigure:
     start:
+    status:
+    stop:
 ```
+
+gitlab控制命令
+
+
+### gitlab-runner
+```yaml
+gitlab-runner:
+    list: # 列出所有可用runner
+```
+
+
+
+### gitlab-rails
+```yaml
+gitlab-rails:
+
+```
+
+
+内部控制命令
 
 
 ### Commit
@@ -532,27 +611,90 @@ gitlab-ctl:
 ### WorkFlow
 
 
+流水线
+Pipeline -> Stage -> Job
+
 
 #### gitlab-ci.yml
 ```yaml
 gitlab-ci.yml:
-    stages: # 定义流水线的阶段
-    _: # 一个 Job
-        except:
-        only: # 条件触发
-        rules: # 
+    include: # 文件导入
+        local:
+        remote:
+    workflow:
+        rules: # 工作流条件运行
+    variables: # 定义流水线 变量
+        CI_COMMIT_BRANCH:
+        CI_COMMIT_REF_NAME: # 分支或标签名称
+        CI_COMMIT_TAG:
+        CI_ENVIRONMENT_NAME:
+        CI_JOB_ID:
+        CI_JOB_NAME:
+        CI_JOB_STAGE:
+        CI_JOB_STARTED_AT:
+        CI_PIPELINE_ID:
+        CI_PIPELINE_SOURCE:
+        CI_PIPELINE_URL:
+        CI_PROJECT_NAME:
+        CI_RUNNER_ID:
+        CI_SERVER_NAME:
+    cache: # 全局缓存
+        paths:
+    before_script:
+    after_script:
+    stages: # 定义流水线 阶段
+    _job: # 一个 Job
+        extends: # job继承
+        when: # 运行方式
+            always:
+            manual:
+            never:
+            delayed:
+            on_failure: # 当前面阶段出现失败时执行。
+            on_success: # 前面阶段中的所有作业都成功时才执行作业，默认值。
+        except: # 分支/标签排除条件
+        only: # 分支/标签触发条件
+            master:
+        rules: # 构建规则（动态条件）顺序逐条判断、第一条匹配的规则生效
             if:
             when:
-        stage:
-        script:
+            changes: # 文件变化
+        stage: # 在哪个阶段运行
+        tags: # 在哪个runner上运行
+        before_script:
+        script: # job 脚本
+        environment: # 环境变量
+        after_script:
+        allow_failure: # 允许失败
+        retry: # 重试次数
+        timeout: # 超时
+        parallel: # 并行执行
+        needs: # 阶段并行
+        trigger: # 多项目触发
+        cache: # 缓存
+            policy:
+        artifacts: # 成品制作
+            when: # 制作条件
+            name:
+            expose_as:
+            paths:
+            reports: # 测试报告
 ```
 
 
 #### Runner
 
 
+任务运行器
+Runner类型：
+- shared共享类型，I运行整个平台项目的作业（gitlab）
+- group项目组类型，运行特定group"下的所有项目的作业(group).
+- specific项目类型，运行指定的项目作业(project)
 
 
+#### Image
+
+job镜像
 
 
 ### 用户管理
