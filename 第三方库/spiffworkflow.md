@@ -4,7 +4,7 @@
 ## 基础介绍
 
 
-`pip install SpiffWorkflow[bpmn]`
+`pip install spiffworkflow`
 
 
 核心概念：
@@ -19,38 +19,24 @@
 SpiffWorkflow:
     bpmn:
         parser:
-            BpmnParser: # 解析 BPMN 文件
-                parse_bpmn(): # 
-        workflow:
-            BpmnWorkflow: # BPMN 工作流实例
-    workflow: # 
-        Task: # 任务实例（运行态，包含任务状态、数据等）
-            data: # 任务数据
-        TaskState: # 任务的状态
-        Workflow: # 工作流实例
-            complete_task_from_id():
-            do_engine_steps(): # 任务前进
-            get_ready_user_tasks():
-            get_task_from_id():
-            get_tasks(): # 获取所有任务
-            is_completed():
-    specs:
-        ExclusiveChoice:
-        Parallel:
-        ServiceTask:
-        SubWorkflow:
-        TaskSpec: # 任务定义
-            name:
-            ---
-            connect(): # 连接任务
-        UserTask:
-        WorkflowSpec: # 工作流定义
-            name:
-            ---
-            create_workflow(): # 创建工作流
-    storage:
-        JSONSerializer:
-        WorkflowSerializer:
+            BpmnParser:
+                BpmnParser: # bpmn文件解析
+                    add_bpmn_file(): # 加载 BPMN 文件
+                    get_spec(): # 获取流程定义
+    specs: # 流程定义
+        WorkflowSpec: # 流程定义
+    task: # 任务
+        Task: # 任务实例
+            id:
+            state: # 
+            task_spec: # 任务定义
+                name:
+            complete(): # 完成任务
+        TaskState: # 任务状态
+            READY:
+    Workflow: # 工作流程（传入定义spec）
+        get_tasks(): # 获取任务列表
+        is_completed(): # 查询流程是否结束
 ```
 
 

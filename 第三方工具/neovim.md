@@ -3,23 +3,46 @@
 
 ## 基础介绍
 
+现代化vim编辑器
 控制台代码编辑器
 
 config目录：`C:\Users\~\AppData\Local\nvim"`
 data目录：`C:\Users\~\AppData\Local\nvim-data`
 
+- Neovim 在启动时，会自动将用户配置目录（$XDG_CONFIG_HOME/nvim）下的 lua/目录添加到Lua的搜索路径中
+- Neovim会在runtimepath路径下依次查找目录：（`C:\Users\~\AppData\Local\nvim`是默认的runtimepath）
+    - plugin：自动加载插件
+    - lua：可 require 的 Lua 模块
+    - colors：主题
+    - after：延迟加载文件
+- 默认runtimepath：
+    - ~\AppData\Local\nvim
+    - ~\AppData\Local\nvim-data/site
+    - ~/AppData/Local/nvim-data/lazy/lazy.nvim
+    - $DOWNLOAD_DIR\nvim
+    - $DOWNLOAD_DIR\share/nvim/runtime
+    - $DOWNLOAD_DIR\share\nvim\runtime\pack\dist\opt\netrw
+    - $DOWNLOAD_DIR\share\nvim\runtime\pack\dist\opt\matchit
+    - $DOWNLOAD_DIR/lib/nvim
+    - ~\AppData\Local\nvim/after
+    - ~/AppData/Local/nvim-data/lazy/readme
+- 插件需要安装Nerd Font字体（`JetBrainsMono Nerd Font`）
+- neovim默认！终端使用的是cmd，通过vim.opt.shell显示指定
+- 使用Mason插件安装 LSP服务
+
 
 ### 配置目录
 ```yaml
 配置目录: # C:\Users\用户名\AppData\Local
-    /nvim: # 核心配置目录
+    /nvim: # 核心配置目录（默认runtimepath）
         /lua:
             /config:
             /plugins:
+                init.lua: # 插件入口，在根init.lua中引入
         init.lua:
         lazyvim.json:
     /nvim-data: # 插件安装目录
-        /lazy:
+        /lazy: # lazy.nvim安装目录
         mason.log:
 ```
 
@@ -136,6 +159,9 @@ vim: # Neovim Lua API
     keymap: # 快捷键
         set(): # (mode, lhs, rhs, opts)
     loop: # 异步 IO api（LibUV 封装）
+    lsp: # lsp配置
+        enable:
+    notify: # 通知
     o:
         expandtab:
         number:
@@ -153,6 +179,10 @@ vim: # Neovim Lua API
         relativenumber: # 相对行号（相对当前行）
         rtp: # lua模块搜索路径，自动将路径下的/lua目录添加到，lua的模块搜索路径中package.path
             prepend():
+        shell: # 指定默认 shell
+        shellcmdflag:
+        shellquote:
+        shellxquote:
         shiftwidth: # 缩进占几个空格
         splitright:
         tabstop: # 一个tab占几个空格space
@@ -169,9 +199,11 @@ cmdline:
     close: # 关闭当前栏
     e: # 打开文件
     help:
+    Lazy: # lazy 插件管理
     LspStart:
     lua: # 执行lua 脚本
     luafile: # 执行lua文件
+    Mason: # lsp管理
     q: # 退出 quit
     saveas: # 另存为
     sp: 
@@ -184,6 +216,7 @@ cmdline:
     tabonly: # fjeajw
     tabprevious:
     tabp:
+    terminal: # 切换到终端
     undo: # 撤销
     vsp: # 垂直分屏
     w: # 写入 write
@@ -397,6 +430,10 @@ nvim插件管理工具
 ### akinsho/bufferline.nvim
 
 buffer tab栏
+
+### folke/snacks.nvim
+
+启动界面
 
 
 ### folke/tokyonight.nvim

@@ -177,6 +177,7 @@ std:
                 nargs: # 多值参数
                 type: # 参数类型 
             add_mutually_exclusive_group(): # 添加互斥参数组
+                add_argument():
             add_subparsers: # 添加子命令
             parse_args(): # 参数解析返回args
     array: # 相同元素数组
@@ -582,7 +583,7 @@ std:
             default:
             default_factory: # 默认值工厂
             repr: # 打印字段
-    datetime: # 日期相关
+    datetime: # 日期时间相关
         date: # 日期
             day:
             month:
@@ -615,7 +616,7 @@ std:
                 %H: # 时
                 %M: # 分
                 %S: # 秒
-            strptime(): # 日期事件解析
+            strptime(): # 日期时间解析
             timestamp(): # 时间戳
             timetuple(): 
             today(): # 今天
@@ -1190,6 +1191,7 @@ std:
         localtime(): # 获取本地时间 struct_time
         mktime(): # 标准时间转时间戳
         perf_counter(): # 执行计数（秒）
+        process_time():
         sleep(): # 线程睡眠，秒
         strftime(): # 格式化显示时间
         strptime(): # 格式化转换时间

@@ -72,7 +72,6 @@ services:
     networks:
       - sylvie233-network
 
-
 volumes:
   kafka_data:
     driver: local

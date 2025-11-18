@@ -225,6 +225,15 @@ Redis:
 ### PubSub
 
 
+发布订阅
+
+
+
+### Stream
+
+流式，消息队列模拟
+
+
 
 
 ### Persistent
