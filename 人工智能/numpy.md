@@ -1,4 +1,4 @@
-# Numpy & Pandas & Matplotlib
+# Numpy
 
 
 ## 基础介绍
