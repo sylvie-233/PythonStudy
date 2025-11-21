@@ -6,6 +6,9 @@
 py文件打包为exe程序
 
 
+- 构建生成build、dist目录
+
+
 ### pyinstaller
 ```yaml
 pyinstaller:
@@ -65,6 +68,27 @@ main.spec:
 ```
 
 pyinstaller打包配置
+
+
+### build
+```yaml
+build:
+    /localpycs: # 包含PyInstaller运行时所需的编译Python文件(.pyc)
+        pyimod01_archive.pyc: # 处理归档文件的模块
+        pyimod02_importers.pyc: # 自定义导入器模块
+        pyimod03_ctypes.pyc: # 处理ctypes模块的支持
+        pyimod04_pywin32.pyc: # Windows平台特定支持
+        struct.pyc: # 处理数据结构的模块
+    Analysis-00.toc: # 包含PyInstaller分析过程中收集的信息，记录了程序的依赖关系、模块和资源文件等
+    base_library.zip: # Python标准库的压缩包，包含了Python运行所需的基础库文件
+    EXE-00.toc: # 记录了生成可执行文件(EXE)过程中的配置信息和文件列表。
+    PKG-00.toc: # 包含打包文件(PKG)的目录信息，记录了打包内容的索引
+    PYZ-00.pyz: # Python模块的压缩包，是一个包含所有Python模块的ZIP格式归档文件，程序运行时会从中加载模块
+    PYZ-00.toc: # PYZ文件的目录信息，记录了压缩包内的模块索引
+    _xxx.pkg: # 打包的数据文件，包含了程序所需的资源文件和依赖
+    warn-student-manager.txt: # 警告信息文件，记录了打包过程中产生的警告和可能的问题
+    xref-student-manager.html: # 交叉引用HTML报告，提供了程序中模块间依赖关系的可视化视图，可用于调试
+```
 
 
 ## 核心内容

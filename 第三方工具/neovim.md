@@ -10,11 +10,12 @@ config目录：`C:\Users\~\AppData\Local\nvim"`
 data目录：`C:\Users\~\AppData\Local\nvim-data`
 
 - Neovim 在启动时，会自动将用户配置目录（$XDG_CONFIG_HOME/nvim）下的 lua/目录添加到Lua的搜索路径中
-- Neovim会在runtimepath路径下依次查找目录：（`C:\Users\~\AppData\Local\nvim`是默认的runtimepath）
+- Neovim会在runtimepath路径下依次查找目录：（`C:\Users\~\AppData\Local\nvim`是默认的runtimepath），默认导入init.lua文件
     - plugin：自动加载插件
     - lua：可 require 的 Lua 模块
     - colors：主题
     - after：延迟加载文件
+- 默认加载配置文件：`C:\Users\用户名\AppData\Local\nvim\init.lua`、`~/.config/nvim/init.lua`
 - 默认runtimepath：
     - ~\AppData\Local\nvim
     - ~\AppData\Local\nvim-data/site
@@ -98,8 +99,7 @@ init.lua:
 ```
 
 nvim核心配置文件
-默认加载配置文件：`C:\Users\用户名\AppData\Local\nvim\init.lua`
-`~/.config/nvim/init.lua`
+
 
 
 ## 核心内容
@@ -171,7 +171,8 @@ vim: # Neovim Lua API
         termguicolors:
     opt: # 设置 Neovim 选项（替代 vim.o, vim.bo 等）
         autoread: # 自动同步文件修改
-        clipboard:
+        clipboard: # 剪贴板
+            unnamedplus: # 使用系统剪贴板
         colorcolumn: # 高亮第n列
         cursorline: # 高亮当前行
         expandtab: # tab转空格space
@@ -233,6 +234,7 @@ cmdline:
         U: # Update
         X:
     Mason: # LSP 服务器
+    MasonInstall: # lsp安装
 
 edit: # Normal、Insert、Visual
     0: # 行首
@@ -431,9 +433,13 @@ nvim插件管理工具
 
 buffer tab栏
 
+### folke/noice.nvim
+
+仿vscode的命令输入面板
+
 ### folke/snacks.nvim
 
-启动界面
+插件集合库
 
 
 ### folke/tokyonight.nvim
@@ -450,7 +456,7 @@ buffer tab栏
 
 ### neovim/nvim-lspconfig
 
-lsp默认配置
+nvim lsp默认配置
 
 ### nvim-lualine/lualine.nvim
 

@@ -1,6 +1,6 @@
 # playwright
 
-`Playwright web自动化：P11`
+``
 
 ## 基础介绍
 
@@ -11,6 +11,7 @@ Playwright -> Browser -> BrowserContext -> Page -> Locator
 
 
 - 支持css selector和xpath两种元素定位方式
+- 元素定位locator缺省等待时间为30s
 
 ### playwright
 ```yaml
@@ -39,16 +40,38 @@ playwright:
             close(): # 关闭
             new_context():
         BrowserContext: # 浏览器上下文
+            pages:
             tracing: # 上下文跟踪
                 start():
                 stop():
             new_page():
         ElementHandle:
         Locator: # 元素定位
-            all():
+            all(): # 获取所有匹配的元素
+            all_inner_texts():
+            check():
+            clear(): # 元素清空
             click(): # 元素点击
+            drag_to(): # 元素拖拽
             fill(): # 元素填充
+            get_attribute(): # 获取属性
+            hover():
+            inner_html():
             inner_text(): # 元素文本内容
+                timeout: # 等待时间（默认30s）
+            input_value(): # 输入框内容
+            is_checked():
+            is_visible():
+            screenshot(): # 节点截屏保存
+            select_option():
+                index:
+                label:
+                value:
+            select_text(): # 选中文本
+            set_input_files(): # 设置文件输入内容
+            text_contents(): # 元素文本内容（包含隐藏元素）
+            uncheck():
+            wait_for(): # 等待元素出现
         Page: # 页面
             keyboard:
             mouse:
@@ -56,19 +79,34 @@ playwright:
             click(): # 元素点击
             close(): # 关闭
             content():
+            drag_and_drop(): # 元素拖拽
             expect_download():
             expect_response():
             expect_popup():
             eval_on_selector(): # 选中元素执行eval脚本
             fill():
+            frame_locator():
+            get_by_label():
+            get_by_placeholder():
+                exact:
+            get_by_role(): # aria role属性获取元素
+                level:
+                name:
             goto(): # 页面跳转
+            go_back():
             hover():
             locator(): # 元素定位
+            on(): # 事件监听
+                dialog: # 弹出框
+                    message: 
+                    accept():
             query_selector_all():
-            screenshot():
+            reload():
+            screenshot(): # 屏幕截屏
             select_option():
             set_input_files():
-            title():
+            set_viewport_size():
+            title(): # 页面标题
             wait_for_load_state():
             wait_for_selector():
             wait_for_timeout(): # 等待指定时间

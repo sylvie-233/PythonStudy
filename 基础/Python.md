@@ -49,6 +49,12 @@ python标准库索引：
 
 
 
+
+- `python install .`默认会执行根目录下的setup.py文件
+- `os.path.dirname(sys.executable)`常用来获取打包后的exe可执行文件所在目录
+
+
+
 ### python
 ```yaml
 python:
@@ -893,6 +899,7 @@ std:
             basename(): # 基础文件名
             dirname(): # 获取目录名
             exists(): # 文件存在
+            expanduser(): # 获取用户目录~
             getatime():
             getsize(): # 获取文件大小
             isabs(): # 绝对路径判断
