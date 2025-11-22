@@ -47,6 +47,7 @@ git:
     backfill:
     bisect:
     blame: # 查看文件的修改历史
+        --rot:
     branch: # 分支查看
         -d: # 删除分支
         -D:
@@ -57,6 +58,7 @@ git:
         -p: # 查看对象内容
         -s: # 查看文件长度
         -t: # 查看对象类型
+    check-ignore:
     checkout: # 切换分支（也可切换到commit中，分离头指针状态）
         --: # 丢弃未暂存修改
         -b: # 指定分支
@@ -89,6 +91,7 @@ git:
         --cached: # 显示暂存区（index 文件）和最近一次提交（也可指定某一次提交）之间的差异
     fetch: # 仅下拉（下拉到本地仓库）,修改本地远程仓库信息
         --prune: # 清空悬空垃圾objects对象
+    for-each-ref:
     format-patch: # 创建patch补丁
     fsck: # 查看悬空垃圾objects对象
     gc: # objects对象压缩

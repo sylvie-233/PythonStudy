@@ -299,7 +299,10 @@ logstash-plugin:
 
 客户端命令
 
+## Fluentd
 
+
+tag、time、record
 
 
 ## Filebeat

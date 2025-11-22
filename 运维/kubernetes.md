@@ -1,6 +1,6 @@
 # Kubernetes
 
-``
+`【Udemy付费课程】 Docker and Kubernetes：P36`
 
 
 ## 基础介绍
@@ -1393,56 +1393,6 @@ Kubernetes 生态系统中还有许多扩展资源，通常由第三方工具或
 
 
 
-### Helm
-```yaml
-helm:
-    create:
-    dependency:
-    history:
-    install: # 安装
-        --set: # 修改参数
-    lint:
-    list: # ls
-    package:
-    pull:
-    repo: # 仓库管理
-        add:
-        list:
-    rollback:
-    search: # 搜索
-        hub: # 官方仓库
-        repo: # 第三方仓库
-    show:
-        readme:
-    uninstall:
-    upgrade:
-```
-
-
-k8s包管理工具
-基于K8s的一整套项目解决方案
-
-
-#### 项目结构
-```yaml
-项目结构:
-    /charts:
-    /templates:
-    .helmignore:
-    Chart.yaml: # .Chart
-    values.yaml: # 变量定义.Values
-```
-
-
-#### Chart
-
-Helm包
-
-
-
-#### Release
-
-helm包实例
 
 
 
@@ -1491,3 +1441,55 @@ Fluent Bit
 
 
 ### Kuboard
+
+
+## Helm
+```yaml
+helm:
+    create:
+    dependency:
+    history:
+    install: # 安装
+        --set: # 修改参数
+    lint:
+    list: # ls
+    package:
+    pull:
+    repo: # 仓库管理
+        add:
+        list:
+    rollback:
+    search: # 搜索
+        hub: # 官方仓库
+        repo: # 第三方仓库
+    show:
+        readme:
+    uninstall:
+    upgrade:
+```
+
+
+k8s包管理工具
+基于K8s的一整套项目解决方案
+
+
+### 项目结构
+```yaml
+项目结构:
+    /charts:
+    /templates:
+    .helmignore:
+    Chart.yaml: # .Chart
+    values.yaml: # 变量定义.Values
+```
+
+
+### Chart
+
+Helm包
+
+
+
+### Release
+
+helm包实例
