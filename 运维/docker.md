@@ -31,6 +31,7 @@ docker:
         stop:
         top:
         up:
+            --build: # 先构建、后运行镜像 
     create: # 创建容器
     exec: # 在运行中的Docker容器内执行命令
         -d: # 后台执行命令

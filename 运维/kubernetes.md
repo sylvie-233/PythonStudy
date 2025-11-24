@@ -1,6 +1,6 @@
 # Kubernetes
 
-`【Udemy付费课程】 Docker and Kubernetes：P36`
+`【Udemy付费课程】 Docker and Kubernetes：P77`
 
 
 ## 基础介绍
