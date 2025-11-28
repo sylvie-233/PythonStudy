@@ -9,6 +9,14 @@
 - DCL：数据控制语言
 - TCL：事务控制语言
 
+内置函数
+- 字符串函数
+- 数学函数
+- 日期时间函数
+- 聚合函数
+- 条件函数
+- 类型转换函数
+
 
 Docker Compose安装：
 ```yaml
@@ -48,7 +56,7 @@ services:
 - performance_schema
 - sys
 
-MySQL架构：连接管理 → SQL 解析 → 查询优化 → 执行器 → 存储引擎 → 结果返回
+MySQL架构：Client连接管理 → Parser SQL 解析 → Optimizer查询优化 → Executor执行器 → 存储引擎 → 日志系统 → 结果返回
 - Server层：主要处理SQL解析、优化、执行、缓存、日志管理等
     - 连接管理（用户认证、权限管理）
     - 查询解析器（SQL 解析、语法分析、语义分析）
@@ -63,12 +71,23 @@ MySQL架构：连接管理 → SQL 解析 → 查询优化 → 执行器 → 存
     - Memory（内存存储，适用于临时数据）
 
 
+MySQL 权限控制由以下三部分组成：
+1. 认证（Authentication）：你是谁？
+2. 授权（Authorization）：你能做什么？
+3. 访问控制（Access Control）：对库/表/列/例程的权限检查
+    - user: 用户账号信息（用户名、密码、全局权限）
+    - db: 库级权限
+    - tables_priv: 表级权限
+    - columns_priv: 列级权限
+    - procs_priv: 存储过程和函数权限
+    - global_grants: 8.0 新增，全局角色与动态权限
 
 
-用户定义变量以@符号开头，可以在查询中直接使用
+- 用户定义变量以@符号开头，可以在查询中直接使用
+- 创建用户`CREATE USER 'app'@'%' IDENTIFIED BY 'pwd123';`后面的`%`为用户允许登录的主机，mysql的登录账号使用 用户名 + 主机名（IP）作为联合主键，登录时默认使用最精确的那个
 
 
-### 目录结构
+### 安装目录
 ```yaml
 目录结构:
     /bin:
@@ -356,72 +375,6 @@ SQL:
 
 
 
-### 内置数据库
-```yaml
-mysql内置数据库:
-    information_schema: # 元数据、数据库结构
-        innodb_locks:
-        innodb_trx:
-        processlist: # 显示正在执行的sql
-    mysql: # 核心权限、用户管理、执行日志
-        columns_priv:
-        db:
-        general_log:
-        procs_priv:
-        slow_log:
-        tables_priv:
-        uesr: # 存储用户账户信息、认证方式、权限等
-            localhost:
-            user:
-    performance_schema:
-        events_statements_summary_by_digest:
-        file_summary_by_instance:
-        table_io_waits_summary_by_table:
-        threads:
-    sys:
-        io_global_by_file_by_bytes:
-        memory_global_by_current_bytes:
-        schema_table_statistics:
-        statement_analysis:
-```
-
-
-#### information_schema
-
-提供MySQL数据库、表、列、索引等对象的元数据，是一个只读的虚拟数据库
-
-
-
-#### mysql
-
-
-存储MySQL服务器运行所需的核心数据，如用户权限、数据库定义、存储过程等
-
-
-#### performance_schema
-
-监控MySQL服务器的性能，包括SQ 语句执行时间、锁等待、I/O 统计等。
-
-
-#### sys
-
-基于performance_schema，提供更易读的性能分析视图，帮助DBA进行调优
-
-
-
-
-
-
-
-### 内置函数
-- 字符串函数
-- 数学函数
-- 日期时间函数
-- 聚合函数
-- 条件函数
-- 类型转换函数
-
-
 ### 函数
 ```sql
 -- 使用动态库注册函数
@@ -499,6 +452,136 @@ END;
 
 
 ## MySQL原理
+
+
+### 内置数据库
+```yaml
+mysql内置数据库:
+    information_schema: # 元数据、数据库结构
+        innodb_locks:
+        innodb_trx:
+        processlist: # 显示正在执行的sql
+    mysql: # 核心权限、用户管理、执行日志
+        columns_priv:
+        db:
+        general_log:
+        procs_priv:
+        slow_log:
+        tables_priv:
+        uesr: # 存储用户账户信息、认证方式、权限等
+            localhost:
+            user:
+    performance_schema:
+        events_statements_summary_by_digest:
+        file_summary_by_instance:
+        table_io_waits_summary_by_table:
+        threads:
+    sys:
+        io_global_by_file_by_bytes:
+        memory_global_by_current_bytes:
+        schema_table_statistics:
+        statement_analysis:
+```
+
+
+#### information_schema
+
+提供MySQL数据库、表、列、索引等对象的元数据，是一个只读的虚拟数据库
+
+
+##### columns
+字段信息
+
+##### key_column_usage
+
+主键、外键
+
+
+##### schemata
+数据库列表
+
+
+##### statistics
+
+索引信息
+
+##### tables
+表列表、行数估计等
+
+
+#### mysql
+
+
+存储MySQL服务器运行所需的核心数据，如用户权限、数据库定义、存储过程等
+
+##### columns_priv
+
+更细粒度，对单个字段做权限控制
+
+##### db
+
+限制用户对某个数据库的操作权限
+##### global_priv
+
+8.0 以后权限存储整合到了 global_priv JSON 字段中
+部分系统已废弃 user 表内的权限列
+
+##### procs_priv
+
+存储过程与函数权限
+##### proxies_priv
+
+代理用户权限（Proxy 权限）,A 用户可代理 B 用户执行操作
+
+##### roles_mapping
+
+用户 → 角色
+MySQL 8 加入了角色（Role）能力
+
+
+##### ssl_rsa
+
+存储 SSL/TLS 所需的密钥与证书信息
+
+##### tables_priv
+
+存储用户对具体表的访问权限
+
+##### user
+
+
+存储用户的账号、密码、全局权限（对整个实例生效）。
+
+
+
+#### performance_schema
+
+监控MySQL服务器的性能，包括SQ 语句执行时间、锁等待、I/O 统计等。
+
+##### events_statements_history
+
+最近 SQL 执行
+
+##### events_transactions_summary_by_account_by_event_name
+
+事务耗时
+
+##### events_waits_summary_by_instance
+
+锁等待
+
+
+#### sys
+
+基于performance_schema，提供更易读的性能分析视图，帮助DBA进行调优
+
+
+
+
+
+
+
+
 
 ### InnoDB
 

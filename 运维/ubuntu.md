@@ -1,23 +1,68 @@
-# bash
+# ubuntu
 
 
 ## 基础介绍
 
-linux shell脚本
+
+Ubuntu 是基于 Debian 的 Linux 发行版
 
 
+
+
+- Ubuntu 下所有用户记录在`/etc/passwd`，`用户名:x:UID:GID:描述:家目录:默认shell`
+- 所有组记录在`/etc/group`，`组名:组密码:组ID(GID):组成员列表`
+- 用户密码在：`/etc/shadow` 存放用户密码（加密）`
+
+
+### 安装目录
+```yaml
+ubuntu:
+    /bin:
+    /boot:
+    /cdrom:
+    /data:
+    /dev:
+    /etc:
+        /apt:
+            /sources.list.d:
+                ubuntu.sources: # ubuntu apt 包安装镜像
+            sources.list:
+        passwd: # 所有用户信息
+    /home:
+        /<user>:
+    /lib:
+    /lib64:
+    /lost+found:
+    /media:
+    /mnt:
+    /opt:
+    /porc:
+    /root:
+    /run:
+    /sbin:
+    /snap:
+    /srv:
+    /sys:
+    /tmp:
+    /usr:
+    /var:
+```
 
 
 
 ## 核心内容
 ```yaml
-bash:
-    alias: # 命令别名
-    apt: # ubantu包管理工具
+ubuntu:
+    apt: # 内置包管理工具
+        download:
         install:
+            --reinstall:
         remove:
+        search:
+        show:
         update:
-        upgrade:    
+        upgrade:
+    alias: # 命令别名
     awk: # Aho, Weinberger, Kernighan 基于字段的文本分析与报告
         -f: # 从脚本文件中读取 awk 命令
         -v: # 向 awk 传入 shell 变量
@@ -52,13 +97,15 @@ bash:
     history: # 历史命令
     ln: # 链接
         -s:
-    ip:
+    ip: # ip地址查看
+        addr:
     iptables:
     kill:
     less:
     ls: # 查看目录
         -l:
     lsblk:
+    netplan: # 
     netstat: # 网络状态
     man: # 帮助文档
     mkdir: # 创建目录
@@ -82,7 +129,15 @@ bash:
     ssh: # ssh连接
     stat: # 查看文件属性
     sudo: # 提升权限执行命令
-    tail:
+    systemctl: # 服务管理
+        disable:
+        enable:
+        start:
+        status:
+        stop:
+        restart:
+        reload:
+    tail: # 查看文件尾部
     tar: # tar压缩包
         -c: # 创建归档文件
         -f: # 指定归档文件名
@@ -95,6 +150,9 @@ bash:
     touch: # 创建文件
     traceroute: # 路由跟踪
     ufw: # ubantu 防火墙
+        allow:
+        enable:
+        status:
     uniq: # 去重
     unmount:
     uptime:
@@ -111,7 +169,43 @@ bash:
 
 
 
-### 控制流程
+### Command
+
+#### apt
+
+`.deb`
+apt只能用于基于Debian的系统 
+
+
+
+#### systemctl
+
+service服务管理
+
+
+#### ufw
+
+
+防火墙
+
+
+
+
+
+### Bash
+
+
+#### DataTypes
+
+##### Array
+
+数组
+
+
+
+
+
+#### ControlFlow
 ```yaml
 Control Flow:
     !!: # 运行上条命令
@@ -119,12 +213,11 @@ Control Flow:
     \>>: # 追加 
     (( )): # 表达式计算
     $(expr ...): # 表达式计算
-    let: # 变量初始化
-    =: # 变量定义
     $#: # 参数个数
     $@: # 所有参数
     $0: # 脚本名
     $1: # 第一个参数
+    let: # 变量初始化
     case in ... esac: # case 条件判断
         1): # 
         *): # default
@@ -143,162 +236,4 @@ Control Flow:
 ```
 
 
-#### 变量
-
-
-##### 数字
-##### 字符串
-##### 数组
-```bash
-arr=(apple banana cherry)
-
-# 元素索引
-${arr[0]}
-
-# 数组长度
-${#arr[@]}
-
-
-```
-
-
-##### 关联数组
-```bash
-declare -A person
-
-person[name]="Alice"
-
-${person[name]}   # Alice
-```
-
-
-#### 函数
-```bash
-# 函数定义
-my_func() {
-    echo "Hello, $1"
-    return 0
-}
-
-# 函数调用
-my_func "Alice"
-
-# 函数参数
-$@	# 所有参数列表（分别展开）
-$*	# 所有参数（整体当成一个字符串）
-$#	# 参数个数
-$?  # 上个函数返回值
-
-# 函数局部变量
-local x=10 
-
-# 函数调用，获取返回值，返回值配合echo使用
-$(myfunc "xxx") # echo + $(...) 是 Bash 中的主流“函数返回值”写法
-```
-
-
-
-### 软件包管理
-
-
-### 系统管理
-
-
-### 网络命令
-
-### 用户与权限
-
-### 文件与目录
-
-
-### 字符串处理
-
-#### awk
-```yaml
-awk: # awk [选项] 'pattern { action }' 文件
-    $0: # 当前整行文本
-```
-
-
-#### cut
-
-
-#### grep
-
-
-
-#### sed
-```yaml
-sed: # sed [选项] '地址范围 命令' 文件
-    s/old/new/g: # 替换
-    /pattern/d: # 删除匹配的行
-    /errorpattern/p: # 打印匹配的行
-    N a 内容: # 在第 N 行前插入
-    N c 内容: # 替换整行
-    N i 内容: # 在第 N 行后追加
-```
-
-
-
-基础字符串操作
-```bash
-name="Sylvie"
-
-# 模板字符串
-greeting="Hello, ${name}!"
-
-# 字符串长度
-${#str}
-
-# 字符串查找
-$(expr index "$str" "w")
-
-# 字符串截取 
-${var:start:length}
-
-# 字符串替换
-${str/old/new}	# 替换第一个
-${str//old/new}	# 替换全部
-${str/#old/new}	# 替换开头
-${str/%old/new}	# 替换结尾
-
-# 去除前缀/后缀
-${str#pattern}	# 去掉最短前缀	
-${str##pattern}	# 去掉最长前缀	
-${str%pattern}	# 去掉最短后缀	
-${str%%pattern}	# 去掉最长后缀
-
-# 大小写转换
-${str^^} # 全大写
-${str^}  # 首字母大写
-${str,,} # 全小写
-```
-
-
-
-
-
-
-
-## 第三方命令
-
-
-### curl
-```yaml
-curl:
-    -b: # 使用cookie（文件）
-    -c: # 保存cookie
-    -d: # 请求数据
-    -o: # 输出文件
-    -r: # 分段下载
-    -v:
-    -x: # 使用代理服务器发送请求
-    -A: # 请求代理
-    -D: # 保存响应头
-    -H: # 请求头设置
-    -L: # 自动重定向
-    -X: # 请求方法
-```
-
-Request url 请求
-
+#### Function
