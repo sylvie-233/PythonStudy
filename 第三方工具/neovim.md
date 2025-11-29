@@ -1,5 +1,6 @@
 # neovim
 
+``
 
 ## 基础介绍
 
@@ -11,8 +12,8 @@ data目录：`C:\Users\~\AppData\Local\nvim-data`
 
 - Neovim 在启动时，会自动将用户配置目录（$XDG_CONFIG_HOME/nvim）下的 lua/目录添加到Lua的搜索路径中
 - Neovim会在runtimepath路径下依次查找目录：（`C:\Users\~\AppData\Local\nvim`是默认的runtimepath），默认导入init.lua文件
-    - plugin：自动加载插件
     - lua：可 require 的 Lua 模块
+    - plugin：自动加载插件
     - colors：主题
     - after：延迟加载文件
 - 默认加载配置文件：`C:\Users\用户名\AppData\Local\nvim\init.lua`、`~/.config/nvim/init.lua`
@@ -30,6 +31,7 @@ data目录：`C:\Users\~\AppData\Local\nvim-data`
 - 插件需要安装Nerd Font字体（`JetBrainsMono Nerd Font`）
 - neovim默认！终端使用的是cmd，通过vim.opt.shell显示指定
 - 使用Mason插件安装 LSP服务
+- Tabpage(Tab 页，里面可以有多个 window) -> Window(显示 buffer 的界面窗口，可以有多个 window 显示同一个 buffer) -> Buffer(存储文本内容，可有多个，存在于内存中)
 
 
 ### 配置目录
@@ -40,7 +42,7 @@ data目录：`C:\Users\~\AppData\Local\nvim-data`
             /config:
             /plugins:
                 init.lua: # 插件入口，在根init.lua中引入
-        init.lua:
+        init.lua: # 配置主入口文件
         lazyvim.json:
     /nvim-data: # 插件安装目录
         /lazy: # lazy.nvim安装目录
@@ -57,49 +59,6 @@ nvim:
 ```
 
 
-#### init.lua
-```yaml
-init.lua:
-    lazy:
-        setup():
-            opts:
-            plugins:
-    lspconfig:
-        lua_ls:
-            setup():
-    vim:
-        api:
-            nvim_create_autocmd():
-        fn:
-            argc():
-            remove():
-            stdpath():
-                config: # `~/AppData/Local/nvim`
-                data: # `~/AppData/Local/nvim-data`
-            sysytem(): # 执行系统命令
-        g:
-            mapleader:
-        keymap:
-            set(): # 快捷键注册
-                n:
-        loop:
-            fs_stat():
-        lsp:
-            buf:
-                code_action():
-                definition():
-                hover():
-        opt:
-            number:
-            rtp:
-                prepend():
-        cmd(): # 执行shell命令（设置属性）
-            colorscheme:
-        print():
-```
-
-nvim核心配置文件
-
 
 
 ## 核心内容
@@ -109,11 +68,13 @@ vim: # Neovim Lua API
         nvim_buf_delete():
         nvim_buf_get_lines(): # 获取当前 buffer 的第 xxx 行
         nvim_buf_get_name(): # 获取当前 buffer 的文件名
+        nvim_buf_set_keymap():
         nvim_buf_set_lines():
         nvim_buf_set_name():
         nvim_command():
         nvim_create_augroup():
         nvim_create_autocmd(): # 设置自动命令，自动监听执行
+        nvim_create_user_command(): # 注册自定义命令 
         nvim_del_autocmd():
         nvim_echo():
         nvim_err_write():
@@ -128,6 +89,12 @@ vim: # Neovim Lua API
         nvim_list_wins():
         nvim_out_write():
         nvim_set_current_line():
+        nvim_set_keymap(): # 设置快捷键(mode模式, keymap快捷键, command命令, option配置)
+            mode:
+                n:
+            keymap:
+            command:
+            option:
         nvim_win_get_cursor():
         nvim_win_get_height():
         nvim_win_get_width():
@@ -152,16 +119,17 @@ vim: # Neovim Lua API
         getline(): # 获取当前行内容
         stdpath(): # 获取标准路径
             config: # 配置文件标准路径
+            data: # 数据文件标准路径
         strftime(): # 获取当前时间
         system(): # 运行 shell 命令并获取输出
     g:
-        mapleader: # leader key <leader>
+        mapleader: # 主键leader key <leader>设置
+        maplocalleader:
     keymap: # 快捷键
         set(): # (mode, lhs, rhs, opts)
     loop: # 异步 IO api（LibUV 封装）
     lsp: # lsp配置
         enable:
-    notify: # 通知
     o:
         expandtab:
         number:
@@ -169,57 +137,75 @@ vim: # Neovim Lua API
         shiftwidth:
         tabstop:
         termguicolors:
-    opt: # 设置 Neovim 选项（替代 vim.o, vim.bo 等）
+    opt: # 设置 Neovim 选项（替代 vim.o, vim.bo 等）可通过:help options查看配置项
         autoread: # 自动同步文件修改
+        backup: # 文件备份
         clipboard: # 剪贴板
             unnamedplus: # 使用系统剪贴板
         colorcolumn: # 高亮第n列
         cursorline: # 高亮当前行
+        encoding: # 文件编码
         expandtab: # tab转空格space
+        fileencodings: # 文件编码
         number: # 行号
         relativenumber: # 相对行号（相对当前行）
         rtp: # lua模块搜索路径，自动将路径下的/lua目录添加到，lua的模块搜索路径中package.path
             prepend():
         shell: # 指定默认 shell
-        shellcmdflag:
+        shellcmdflag: # shell参数
         shellquote:
         shellxquote:
         shiftwidth: # 缩进占几个空格
         splitright:
+        termguicolors:
         tabstop: # 一个tab占几个空格space
+        wrap: # 单行换行显示
     uv: # 异步 IO api
         fs_stat(): 
     cmd(): # 执行 Vim 命令
     inspect(): # 用于调试、打印 lua 的 table
+    notify(): # 消息通知
 
 cmdline:
     =: # 执行lua表达式
-    bd: # 关闭插件
-    buffers: # 文件缓冲区，打开文件（可切换buffer n）
+    \<<: # 调整代码缩进
+    \>>: # 调整代码缩进
+    bdelete: # bd 删除指定 buffer
+    bnext: # bn 切换下一个缓冲区 
+    bprev: # bp 切换上一个缓冲区
+    buffer: # b 切换缓冲区
+        n: # 切换文件缓冲区
+    buffers: # 列出所有的文件缓冲区，打开文件（可切换buffer n）
     checkhealth: # 检查nvim配置环境
     close: # 关闭当前栏
+    colorschema:
     e: # 打开文件
+    echo: # 控制台输出
+        b:
+        bufnr():
     help:
     Lazy: # lazy 插件管理
+    ls: # 列出所有 buffer
     LspStart:
     lua: # 执行lua 脚本
     luafile: # 执行lua文件
-    Mason: # lsp管理
+    map: # 查看快捷键map映射
+    q:: # cmdline历史
     q: # 退出 quit
+    resize: # 设置分栏高度 n 行
     saveas: # 另存为
-    sp: 
-    split: # # 水平分屏
-    tabclose:
-    tabedit:
-    tabn: # tab -> window -> buffer
-    tabnew: # 新建tab
-    tabnext:
-    tabonly: # fjeajw
-    tabprevious:
-    tabp:
-    terminal: # 切换到终端
+    split: # sp水平分屏
+    tabclose: # tabc 关闭tab
+    tabedit: # tabe编辑tab 
+    tabnew: # 新建tab，tab -> window -> buffer
+    tabnext: # tabn 下一个tab
+    tabonly: # 
+    tabprevious: # tabp 上一个tab
+    terminal: # term 切换到终端
     undo: # 撤销
-    vsp: # 垂直分屏
+    vertical:
+        resize: # 设置分栏宽度 n 列
+    vsplit: # vsp 垂直分屏
     w: # 写入 write
     Lazy: # lazy.nvim 设置面板（插件管理）
         ?:
@@ -260,7 +246,7 @@ edit: # Normal、Insert、Visual
         o: # go back
         u: # 向上翻半页
         v: # 列选择模式
-        w: # 切换分栏
+        w: # 切换分栏 
             h: # 向左
             j: # 向下
             k: # 向上
@@ -278,12 +264,21 @@ edit: # Normal、Insert、Visual
         a: # arround
         c: # 改变当前行
         i: # inner
-            w: # 改变整段单词，进入插入模式
+            b: # 选中小括号中内容
+            e: # 整个文件
+            t: # tag 标签内容
+            w: # 选中整个单词
+            B: # 选中大括号中内容
         j: # 改变当前行
         w: # 改变整个单词，并进入插入模式
     d: # 删除
         d: # 删除当前行
-        iw: # 删除整个单词
+        i: # 删除整个单词
+            b: # 选中小括号中内容
+            e: # 整个文件
+            t: # tag 标签内容
+            w: # 选中整个单词
+            B: # 选中大括号中内容
         s: # 删除包裹
         w: # 删除单词
     e: # 下一个单词结尾,end
@@ -383,7 +378,30 @@ Config:
 ### Plugin
 
 
-安装 lazy.nvim: `git clone https://github.com/LazyVim/starter $env:LOCALAPPDATA\nvim`
+
+Neovim 插件主要有两种方式：
+- Lua 插件：Lua
+- Vimscript 插件：VimL
+
+
+NewVim插件目录结构
+```txt
+myplugin/
+├── lua/
+│   └── myplugin/
+│       └── init.lua       # 插件核心逻辑、主要功能入口（定义M对象、提供setup函数）
+├── plugin/
+│   └── myplugin.lua       # 自动加载插件
+├── README.md
+└── lua/myplugin/config.lua  # 可选，配置文件
+```
+- 自定义插件使用`vim.api.nvim_create_user_command`注册自定义命令
+
+
+
+
+
+
 
 
 #### lazy.nvim
@@ -403,8 +421,10 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(plugins, opts)
 ```
-nvim插件管理工具
 
+
+nvim插件管理工具
+安装 lazy.nvim: `git clone https://github.com/LazyVim/starter $env:LOCALAPPDATA\nvim`
 
 插件安装完后还要进行setup()配置
 
@@ -425,17 +445,46 @@ nvim插件管理工具
 事件机制
 
 
+
+
+### Tabpage
+
+#### Window
+
+
+
+#### Buffer
+
+
+
+
+
 ## 常用插件
 
 
 
 ### akinsho/bufferline.nvim
+```yaml
+bufferline:
+    BufferLineCycleNext: # 跳转下一个buffer tab 
+    BufferLineCyclePrev: # 跳转前一个buffer tab
+    BufferLineGoToBuffer: # 跳转指定buffer tab
+    BufferLinePickClose: # 选择关闭buffer tab
+```
 
 buffer tab栏
+
+
+### ful1e5/onedark.nvim
+
+One Dark主题
+
 
 ### folke/noice.nvim
 
 仿vscode的命令输入面板
+
+
 
 ### folke/snacks.nvim
 
@@ -446,6 +495,7 @@ buffer tab栏
 
 暗色主题
 
+
 ### kylechui/nvim-surround
 
 编辑环绕添加
@@ -454,6 +504,11 @@ buffer tab栏
 
 缩进层级显示
 
+### matze/vim-move
+
+代码块移动
+`alt + j/k`
+
 ### neovim/nvim-lspconfig
 
 nvim lsp默认配置
@@ -461,6 +516,15 @@ nvim lsp默认配置
 ### nvim-lualine/lualine.nvim
 
 底部状态栏
+
+
+### nvim-telescope/telescope.nvim
+```yaml
+Telescope: # 搜索框
+    find_files: # 文件查找
+```
+
+搜索框集合插件
 
 
 ### nvim-tree/nvim-tree.lua
@@ -490,6 +554,11 @@ nvim lsp默认配置
 ### smoka7/hop.nvim
 
 热键快速跳转
+
+
+### terrortylor/nvim-comment
+
+代码注释
 
 
 ### williamboman/mason.nvim

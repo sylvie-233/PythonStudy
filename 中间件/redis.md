@@ -254,6 +254,24 @@ redis持久化
 - 重启时 Redis 逐条执行日志恢复数据
 
 
+
+### Lua
+
+Redis 内置了 Lua 脚本引擎，可以通过 EVAL 或 EVALSHA 命令执行 Lua 脚本
+```lua
+EVAL [[
+  if redis.call('EXISTS', KEYS[1]) == 0 then
+      return redis.call('SET', KEYS[1], ARGV[1])
+  else
+      return 'EXISTS'
+  end
+]] 1 mykey "value123"
+```
+- n 键值对个数
+- KEYS获取键
+- ARGV获取值
+
+
 ### 集群
 
 

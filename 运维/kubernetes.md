@@ -1447,25 +1447,30 @@ Fluent Bit
 ```yaml
 helm:
     create:
-    dependency:
+    dependency: # 依赖管理
+        update:
     history:
     install: # 安装
         --set: # 修改参数
     lint:
-    list: # ls
+    list: # 查看 release 列表
     package:
     pull:
     repo: # 仓库管理
         add:
         list:
-    rollback:
+    rollback: # 回滚
     search: # 搜索
         hub: # 官方仓库
         repo: # 第三方仓库
+    secrets: # 
     show:
         readme:
-    uninstall:
-    upgrade:
+    template: # 
+    uninstall: # 删除
+    upgrade: # 升级
+        -f:
+    version: # 版本
 ```
 
 
@@ -1476,17 +1481,38 @@ k8s包管理工具
 ### 项目结构
 ```yaml
 项目结构:
-    /charts:
-    /templates:
+    /charts: # chart 依赖包
+    /templates: # Kubernetes YAML 模板
+        _helpers.tpl: # 放置公共模板函数
+            define: # 定义
+            include: # 引入
+            printf: # 字符串模板
+        NOTES.txt: # helm install 完成后给用户输出的信息
     .helmignore:
-    Chart.yaml: # .Chart
-    values.yaml: # 变量定义.Values
+    Chart.yaml: # chart 的元信息（名称、版本、依赖）
+    values.yaml: # 变量定义 .Values使用
 ```
-
 
 ### Chart
 
 Helm包
+包含模板的包（类似 npm 包）
+
+#### Helm Hooks
+
+生命周期钩子
+- pre-install
+- post-install
+- pre-upgrade
+- post-upgrade
+- pre-delete
+- post-delete
+
+
+### Values
+
+
+配置文件，用于给模板传参
 
 
 
