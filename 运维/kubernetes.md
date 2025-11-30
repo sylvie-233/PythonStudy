@@ -1,6 +1,6 @@
 # Kubernetes
 
-`【Udemy付费课程】 Docker and Kubernetes：P77`
+``
 
 
 ## 基础介绍
@@ -23,7 +23,7 @@ Google(SpringCloud版PM2工具)
 
 
 K8s集群划分:
-Namespace(环境隔离) -> Ingress(网关) -> Service(服务注册、负载均衡) -> Deployment(pod副本、扩缩容) -> Pod -> Container
+Cluster(集群) -> Namespace(环境隔离) -> Ingress(网关) -> Service(服务注册、负载均衡) -> Deployment(pod副本、扩缩容) -> Pod -> Container
 
 K8S集群搭建：
 - minikube：
@@ -101,6 +101,7 @@ k3d自动启动的容器：
 - registry：镜像仓库
 - tools：辅助工具容器
 
+- apply根据配置文件生成、describe查看详细信息、delete根据配置文件删除
 - Controller控制器通过label标签关联Pods
 - `k3d cluster create dev`创建轻量级k8s集群，要修改集群ip为127.0.0.1（要不然无法访问）
 - k3d临时配置目录：`.config\k3d/kubeconfig-dev.yaml`，k8s配置目录：`~/.kube/config`
@@ -113,6 +114,8 @@ k3d自动启动的容器：
 - 每个 Pod 在创建时都会默认绑定一个 ServiceAccount，Pod 内的应用就会以这个身份与 Kubernetes API 交互
     - 在每个命名空间（Namespace）都会自动创建一个名为 default 的 ServiceAccount。
     - 如果你没有手动指定 Pod 的 ServiceAccount，Pod 默认就使用这个 default
+- k8s内部用的docker不是宿主机的docker-server
+- Secret 不是为了“加密”，内容默认只是简单的base64编码，而是为了管理敏感信息的标准化工具，便于共享、更新、权限控制
 
 
 
@@ -137,7 +140,8 @@ kubectl: # 本质是向api-server发送REST请求
             --image:
         namespace: # ns，命名空间
         secret:
-            generic:
+            --from-literal: # 命令行输入
+            generic: # 通用secret
     debug:
     delete: # 删除
         -f: # 指定配置文件删除
@@ -207,7 +211,7 @@ kubectl: # 本质是向api-server发送REST请求
         nodes: # 节点打标签
         pods: # po 修改pod标签
     logs: # 日志查看
-        -f: # 指pod
+        -f: # 指定配置文件
     patch: # 修改配置
     port-farward: # 端口转发（常用于测试）
     replace:
@@ -230,7 +234,7 @@ kubectl: # 本质是向api-server发送REST请求
             --replicas: # 副本数
         statefulset: # sts
     set: # 直接修改配置
-        image: # 修改镜像
+        image: # 直接修改容器镜像
     taint: # 设置污点
         nodes: # 给节点设置污点
     top: # 资源使用信息
@@ -544,8 +548,9 @@ pod.yaml:
                 httpGet:
             volumeMounts: # 数据卷挂载
                 mountPath: # 容器内需要挂载路径
-                name: # 挂载的数据卷
+                name: # 挂载的数据卷（关联pvc）
                 readOnly:
+                subPath: # pvc中的子路径 
             workingDir: # 工作目录
         hostNetwork:
         imagePullSecrets: # image拉取密钥
@@ -1075,6 +1080,9 @@ persistentvolume.yaml:
         name: # pv名称
     spec:
         accessModes: # PV访问模式
+            ReadWriteOnce: # 单节点读写
+            ReadOnlyMany: # 多节点读
+            ReadWriteMany: # 多节点读写
         capacity: # 容量
             storage:
         local: # 本地存储
@@ -1107,8 +1115,10 @@ storageClass.yaml:
     volumeBindingMode:
 ```
 
+存储类实现
 定义存储类型和配置，支持动态创建 PV。
 依赖制备器策略：具体底层使用哪种存储（自定义容器）
+- HostPaht：主机路径
 
 
 
