@@ -74,6 +74,7 @@ vim: # Neovim Lua API
         nvim_command():
         nvim_create_augroup():
         nvim_create_autocmd(): # 设置自动命令，自动监听执行
+            DiagnosticChanged: # 错误状态变化事件
         nvim_create_user_command(): # 注册自定义命令 
         nvim_del_autocmd():
         nvim_echo():
@@ -105,6 +106,7 @@ vim: # Neovim Lua API
         config():
             update_in_insert:
             virtual_text:
+        setloclist(): # 设置location信息
     fn: # 调用 VimScript 原生函数
         cmd():
         expand(): # 获取允许环境信息
@@ -184,9 +186,9 @@ cmdline:
         b:
         bufnr():
     help:
-    Lazy: # lazy 插件管理
+    lclose:
+    lopen:
     ls: # 列出所有 buffer
-    LspStart:
     lua: # 执行lua 脚本
     luafile: # 执行lua文件
     map: # 查看快捷键map映射
@@ -207,6 +209,7 @@ cmdline:
         resize: # 设置分栏宽度 n 列
     vsplit: # vsp 垂直分屏
     w: # 写入 write
+    DapContinue: # dap运行
     Lazy: # lazy.nvim 设置面板（插件管理）
         ?:
         C: # Check
@@ -219,8 +222,11 @@ cmdline:
         S:
         U: # Update
         X:
+    LspInfo: # LSP 信息
+    LspStart:
     Mason: # LSP 服务器
     MasonInstall: # lsp安装
+        cpptools:
 
 edit: # Normal、Insert、Visual
     0: # 行首
@@ -508,6 +514,107 @@ One Dark主题
 
 代码块移动
 `alt + j/k`
+
+
+### mfussenegger/nvim-dap
+```lua
+return {
+  -- DAP 核心
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "rcarriga/nvim-dap-ui",
+      "theHamsta/nvim-dap-virtual-text",
+      "williamboman/mason.nvim",
+      "jay-babu/mason-nvim-dap.nvim",
+    },
+    config = function()
+      local dap = require("dap")
+      local dapui = require("dapui")
+
+      -- UI 初始化
+      dapui.setup()
+      require("nvim-dap-virtual-text").setup()
+
+      -- Mason 自动安装调试器
+      require("mason-nvim-dap").setup({
+        ensure_installed = { "codelldb", "cpptools" }, -- 可用 gdb, codelldb, cpptools
+        automatic_installation = true,
+      })
+
+      -------------------------
+      -- C / C++ 调试配置 GDB
+      -------------------------
+
+      dap.adapters.cppdbg = {
+        id = 'cppdbg',
+        type = 'executable',
+        command = vim.fn.stdpath("data") .. '\\mason\\bin\\OpenDebugAD7.cmd',
+        options = {
+          detached = false
+        }
+      }
+      dap.configurations.cpp = {
+        {
+          name = "Launch (GDB)",
+          type = "cppdbg",
+          request = "launch",
+          program = function()
+            return vim.fn.input('可执行文件路径: ', vim.fn.getcwd() .. '/', 'file')
+          end,
+          args = {},
+          stopAtEntry = true,
+          cwd = '${workspaceFolder}',
+          environment = {},
+          externalConsole = false,
+          console = "integratedTerminal",
+          MIMode = "gdb",
+          setupCommands = {
+            {
+              text = "-enable-pretty-printing",
+              description = "启用 gdb 的 pretty-printing",
+              ignoreFailures = true
+            }
+          }
+        }
+      }
+
+      dap.configurations.c = dap.configurations.cpp
+
+      -- 自动打开关闭 UI
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
+
+      -- 快捷键（LazyVim 风格）
+      vim.keymap.set("n", "<F5>", dap.continue, { desc = "Debug: Continue" })
+      vim.keymap.set("n", "<F6>", dap.step_over, { desc = "Debug: Step Over" })
+      vim.keymap.set("n", "<F7>", dap.step_into, { desc = "Debug: Step Into" })
+      vim.keymap.set("n", "<F8>", dap.step_out, { desc = "Debug: Step Out" })
+
+      -- ==== 断点操作 ====
+      vim.keymap.set("n", "<leader>d", dap.toggle_breakpoint, { desc = "Debug: Toggle Breakpoint" })
+      vim.keymap.set("n", "<leader>D", function()
+        dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+      end, { desc = "Debug: Conditional Breakpoint" })
+
+      -- ==== 其他操作 ====
+      vim.keymap.set("n", "<leader>uu", function() require("dapui").toggle() end, { desc = "Debug: Toggle UI" })
+    end,
+  },
+}
+```
+
+可视化调试器
+cppdbg支持vscode的launch.json配置
+
 
 ### neovim/nvim-lspconfig
 

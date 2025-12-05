@@ -46,7 +46,7 @@ git:
     archive: # 创建文件归档
     backfill:
     bisect:
-    blame: # 查看文件的修改历史
+    blame: # 查看文件的修改历史(追踪文件中每一行最后一次修改的作者和提交信息)
         --rot:
     branch: # 分支查看
         -d: # 删除分支
@@ -62,7 +62,7 @@ git:
     checkout: # 切换分支（也可切换到commit中，分离头指针状态）
         --: # 丢弃未暂存修改
         -b: # 指定分支
-    cherry-pick: # 选择并应用指定的commit修改，多分支操作
+    cherry-pick: # 选择并应用指定的commit修改，多分支操作（将某次提交应用到当前分支）
     clean: # 从工作区中移除未跟踪的文件
     clone: # 克隆仓库
         --recursive: # 递归克隆子模块
@@ -91,7 +91,7 @@ git:
         --cached: # 显示暂存区（index 文件）和最近一次提交（也可指定某一次提交）之间的差异
     fetch: # 仅下拉（下拉到本地仓库）,修改本地远程仓库信息
         --prune: # 清空悬空垃圾objects对象
-    for-each-ref:
+    for-each-ref: # 获取每一个分支指针
     format-patch: # 创建patch补丁
     fsck: # 查看悬空垃圾objects对象
     gc: # objects对象压缩
@@ -100,10 +100,14 @@ git:
     init: # 仓库初始化
         --bare:
     log: # commit日志
-        -n:
+        -n: # 指定日志条数
         --graph:
         --oneline:
-        --pretty-format: # 自定义格式输出
+        --pretty=format: # 自定义格式输出
+            %h: # 提交的短哈希（前几位 commit ID）
+            %s: # 提交信息（commit message）
+            %ad: # 作者日期（author date），显示格式可自定义
+            %an: # 作者名字（author name）
         --source: # 详细commit信息
     ls-files: # 查看index索引文件,列出所有文件
         -s: # staged的文件
@@ -148,18 +152,20 @@ git:
         show: # 显示远程仓库信息
     reset: # commit回滚
         --hard: # 切换commit记录
+            HEAD: # 回滚到最近一次提交
         --mix: # 删除最近的 commit，并保留文件修改（不保留 staged 状态）
         --soft: # 删除最近的 commit，但保留文件修改,会将变更保留在暂存区（staging area） 
         HEAD: # 取消暂存区缓存（变回未缓存状态）
         ORIG_HEAD:
     restore: # 去除文件修改
         --staged: # 移除暂存区文件
-    revert: # 撤销指定提交的修改
+    revert: # 撤销指定提交的修改（生成新提交撤销指定 commit）
     rm: # 直接从工作区和暂存区中删除指定的文件（删除修改会被纳入到暂存区）
         -r: # 递归
         --cached: # 移除暂存区文件(从暂存区中删除文件，但保留工作区中的文件，绿色变成红色)
     shortlog:
     show: # 查看提交的详细信息(hash、tag)
+        --name-status:
     show-branch:
     stash: # 暂存所有修改（临时保存）
         apply: # 取出临时保存的修改（不删除这个临时保存）
